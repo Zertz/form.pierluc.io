@@ -1,10 +1,11 @@
 .App {
   display: flex;
   flex-direction: column;
+  background-color: #fefefe;
   height: 100%;
 }
 
 .AppContent {
-  height: 100%;
+  flex-basis: 100%;
   padding: 1em;
 }
