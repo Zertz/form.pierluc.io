@@ -11,11 +11,11 @@ class AddItem extends Component {
 
   render () {
     return (
-      <div className='col-sm-12 text-center'>
+      <div className='AddItem'>
         <input
           type='text'
           ref='newItem'
-          className='form-control'
+          className='AddItemInput'
           placeholder='New Item'
           onKeyDown={this.handleSubmit.bind(this)} />
       </div>

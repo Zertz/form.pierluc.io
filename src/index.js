@@ -1,18 +1,18 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Rebase from 're-base'
-import App from './App'
+import { Router, Route, IndexRoute, browserHistory } from 'react-router'
+
 import './index.css'
 
-const base = Rebase.createClass({
-  apiKey: 'AIzaSyBH3i6QPS7Dd1Bjs-fdO-Q5oUPMhPtYiPM',
-  authDomain: 'form-pierluc-io-1642a.firebaseapp.com',
-  databaseURL: 'https://form-pierluc-io-1642a.firebaseio.com',
-  storageBucket: 'form-pierluc-io-1642a.appspot.com',
-  messagingSenderId: '1040118765063'
-})
+import App from './App'
+import Home from './Home'
+import Login from './Login'
 
-ReactDOM.render(
-  <App base={base} />,
-  document.getElementById('root')
-)
+ReactDOM.render((
+  <Router history={browserHistory}>
+    <Route path='/' component={App}>
+      <IndexRoute component={Home} />
+      <Route path='login' component={Login} />
+    </Route>
+  </Router>
+), document.getElementById('root'))

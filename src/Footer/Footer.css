@@ -1,0 +1,10 @@
+.Footer {
+  background-color: #222;
+  padding: 1em;
+  text-align: center;
+  height: 50px;
+}
+
+.FooterCopyright {
+  color: white;
+}
