@@ -3,7 +3,7 @@ import React, {Component} from 'react'
 import './Logout.css'
 
 class Logout extends Component {
-  componentDidMount() {
+  componentDidMount () {
     const { base } = this.props
 
     base.auth().signOut().then(() => {

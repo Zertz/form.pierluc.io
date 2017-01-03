@@ -2,7 +2,7 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Home from './Menu'
+import Menu from './Menu'
 
 it('renders without crashing', () => {
   const div = document.createElement('div')

@@ -10,7 +10,7 @@ class Menu extends Component {
     return (
       <ul className='Menu'>
         <li className='MenuItem'>
-          { user ? <Link to="/logout">Log out</Link> : <Link to="/login">Log in</Link> }
+          { user ? <Link to='/logout'>Log out</Link> : <Link to='/login'>Log in</Link> }
         </li>
       </ul>
     )
