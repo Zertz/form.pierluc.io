@@ -11,6 +11,7 @@ import Logout from './Logout'
 
 import Browse from './Browse'
 import Create from './Create'
+import Profile from './Profile'
 
 ReactDOM.render((
   <Router history={browserHistory}>
@@ -18,8 +19,9 @@ ReactDOM.render((
       <IndexRoute component={Home} />
       <Route path='browse' component={Browse} />
       <Route path='create' component={Create} />
-      <Route path='login' component={Login} />
-      <Route path='logout' component={Logout} />
+      <Route path='me' component={Profile} />
+      <Route path='connect' component={Login} />
+      <Route path='disconnect' component={Logout} />
     </Route>
   </Router>
 ), document.getElementById('root'))

@@ -1,0 +1,9 @@
+.HeaderLink {
+  color: #444;
+  font-size: 1.5em;
+  text-decoration: none;
+}
+
+.HeaderLinkActive {
+  font-weight: 300;
+}

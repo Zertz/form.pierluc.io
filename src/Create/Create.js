@@ -16,7 +16,6 @@ class Create extends Component {
   render () {
     return (
       <div className='Create'>
-        <div className='CreateTitle Title'>Create</div>
         <form className='CreateForm' onSubmit={this.onSubmit}>
           <input type='submit' />
         </form>

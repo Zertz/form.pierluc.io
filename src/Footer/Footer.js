@@ -5,7 +5,7 @@ import './Footer.css'
 function Footer () {
   return (
     <div className='Footer'>
-      <p className='FooterCopyright'>&copy; pierluc.io 2017</p>
+      <div className='Text'>&copy; pierluc.io 2017</div>
     </div>
   )
 }

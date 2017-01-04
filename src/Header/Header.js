@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-import { Link } from 'react-router'
 
 import logo from '../logo.svg'
 
 import './Header.css'
+
+import HeaderLink from '../HeaderLink'
 
 class Header extends Component {
   render () {
@@ -11,19 +12,19 @@ class Header extends Component {
 
     return (
       <div className='Header'>
-        <Link to='/'>
+        <HeaderLink to='/'>
           <img src={logo} className='HeaderLogo' alt='logo' />
-        </Link>
+        </HeaderLink>
         <div className='HeaderTitle Title'>Form</div>
         <ul className='HeaderMenu'>
           <li className='HeaderMenuItem'>
-            <Link to='/browse'>Browse</Link>
+            <HeaderLink to='/browse'>Browse</HeaderLink>
           </li>
           <li className='HeaderMenuItem'>
-            <Link to='/create'>Create</Link>
+            <HeaderLink to='/create'>Create</HeaderLink>
           </li>
           <li className='HeaderMenuItem'>
-            { user ? <Link to='/logout'>Disconnect</Link> : <Link to='/login'>Connect</Link> }
+            { user ? <HeaderLink to='/me'>My Form</HeaderLink> : <HeaderLink to='/connect'>Connect</HeaderLink> }
           </li>
         </ul>
       </div>
