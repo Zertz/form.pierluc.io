@@ -4,7 +4,6 @@ import Rebase from 're-base'
 import './App.css'
 
 import Header from '../Header'
-import Menu from '../Menu'
 import Footer from '../Footer'
 
 class App extends Component {
@@ -35,8 +34,7 @@ class App extends Component {
 
     return (
       <div className='App'>
-        <Header />
-        <Menu user={user} />
+        <Header user={user} />
         <div className='AppContent'>
           {this.props.children && React.cloneElement(this.props.children, { base, user })}
         </div>

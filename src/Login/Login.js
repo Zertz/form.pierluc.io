@@ -41,6 +41,7 @@ class Login extends Component {
   render () {
     return (
       <div className='Login'>
+        <div className='LoginTitle Title'>Connect</div>
         <Button text='Facebook' onClick={this.onFacebook} />
         <Button text='Google' onClick={this.onGoogle} />
         <Button text='GitHub' onClick={this.onGithub} />

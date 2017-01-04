@@ -2,9 +2,9 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Menu from './Menu'
+import Browse from './Browse'
 
 it('renders without crashing', () => {
   const div = document.createElement('div')
-  ReactDOM.render(<Menu />, div)
+  ReactDOM.render(<Browse />, div)
 })

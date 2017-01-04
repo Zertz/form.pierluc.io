@@ -48,6 +48,7 @@ class Home extends Component {
 
     return (
       <div className='Home'>
+        <div className="HomeTitle Title">Featured</div>
         <AddItem add={this.handleAddItem.bind(this)} />
         <ul>
           { isLoading ? <li className='HomeLoading'>Loading...</li> : todos.map((todo, index) => <li key={index}>{todo}</li>) }

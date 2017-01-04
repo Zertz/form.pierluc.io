@@ -1,7 +1,6 @@
 .App {
   display: flex;
   flex-direction: column;
-  background-color: #fefefe;
   height: 100%;
 }
 
