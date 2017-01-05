@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {FormattedMessage} from 'react-intl'
 
 import './Login.css'
 
@@ -41,7 +42,9 @@ class Login extends Component {
   render () {
     return (
       <div className='Login'>
-        <div className='LoginTitle Title'>Connect</div>
+        <div className='LoginTitle Title'>
+          <FormattedMessage id='Connect' defaultMessage='Connect' />
+        </div>
         <Button text='Facebook' onClick={this.onFacebook} />
         <Button text='Google' onClick={this.onGoogle} />
         <Button text='GitHub' onClick={this.onGithub} />

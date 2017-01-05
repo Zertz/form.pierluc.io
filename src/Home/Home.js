@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {FormattedMessage} from 'react-intl'
 
 import './Home.css'
 
@@ -48,10 +49,16 @@ class Home extends Component {
 
     return (
       <div className='Home'>
-        <div className='HomeTitle Title'>Craft fantastic forms.</div>
+        <div className='HomeTitle Title'>
+          <FormattedMessage id='CraftFantasticForms' defaultMessage='Craft fantastic forms.' />
+        </div>
         <AddItem add={this.handleAddItem.bind(this)} />
         <ul>
-          { isLoading ? <li className='HomeLoading'>Loading...</li> : todos.map((todo, index) => <li key={index}>{todo}</li>) }
+          { isLoading
+            ? <li className='HomeLoading'>
+                <FormattedMessage id='Loading' defaultMessage='Loading' />
+              </li>
+            : todos.map((todo, index) => <li key={index}>{todo}</li>) }
         </ul>
       </div>
     )

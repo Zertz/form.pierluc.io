@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {FormattedMessage} from 'react-intl'
 
 import './Logout.css'
 
@@ -15,7 +16,9 @@ class Logout extends Component {
 
   render () {
     return (
-      <div className='Logout'>Log out!</div>
+      <div className='Logout'>
+        <FormattedMessage id='Disconnecting' defaultMessage='Disconnecting' />
+      </div>
     )
   }
 }
