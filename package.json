@@ -3,18 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-plugin-react-intl": "^2.3.0",
+    "babel-preset-react-app": "^2.0.1",
     "react-scripts": "0.8.4"
   },
   "dependencies": {
     "re-base": "^2.5.2",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
+    "react-intl": "^2.2.2",
     "react-router": "^3.0.0",
     "standard": "^8.6.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run translate && react-scripts build",
+    "translate": "NODE_ENV=production babel ./src >/dev/null && node translations",
     "lint": "standard --fix",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
