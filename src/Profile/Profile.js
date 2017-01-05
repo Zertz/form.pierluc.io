@@ -10,7 +10,7 @@ class Profile extends Component {
     return user ? (
       <div className='Profile'>
         <div className='Title'>{user.displayName}</div>
-        <div className="Subtitle">{user.email}</div>
+        <div className='Subtitle'>{user.email}</div>
         <Link to='/disconnect'>Disconnect</Link>
       </div>
     ) : null
