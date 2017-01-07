@@ -4,6 +4,8 @@ import {FormattedMessage} from 'react-intl'
 import './Home.css'
 
 import AddItem from '../AddItem.js'
+import Form from '../Form'
+import FormService from '../FormService'
 
 class Home extends Component {
   constructor (props) {
@@ -11,8 +13,11 @@ class Home extends Component {
 
     this.state = {
       todos: [],
-      isLoading: true
+      isLoading: true,
+      isDemoFormRendered: false
     }
+
+    this.onGetStartedClicked = this.onGetStartedClicked.bind(this)
   }
 
   componentDidMount () {
@@ -44,8 +49,14 @@ class Home extends Component {
     })
   }
 
+  onGetStartedClicked () {
+    this.setState({
+      isDemoFormRendered: true
+    })
+  }
+
   render () {
-    const { todos, isLoading } = this.state
+    const { todos, isLoading, isDemoFormRendered } = this.state
 
     return (
       <div className='Home'>
@@ -60,6 +71,13 @@ class Home extends Component {
             </li>
             : todos.map((todo, index) => <li key={index}>{todo}</li>) }
         </ul>
+        <div className='HomeSubtile Subtitle'>
+          <FormattedMessage id='Home.SoHowEasyIsit' defaultMessage='So, how easy is it?' />
+        </div>
+        <button onClick={this.onGetStartedClicked}>
+          <FormattedMessage id='Home.GetStarted' defaultMessage='Get started' />
+        </button>
+        { isDemoFormRendered && <Form inputs={FormService.getDefault()} /> }
       </div>
     )
   }
