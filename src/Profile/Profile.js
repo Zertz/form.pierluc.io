@@ -13,7 +13,7 @@ class Profile extends Component {
         <div className='Title'>{user.displayName}</div>
         <div className='Subtitle'>{user.email}</div>
         <Link to='/disconnect'>
-          <FormattedMessage id='Disconnect' defaultMessage='Disconnect' />
+          <FormattedMessage id='Profile.Disconnect' defaultMessage='Disconnect' />
         </Link>
       </div>
     ) : null

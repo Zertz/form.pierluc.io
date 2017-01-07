@@ -50,14 +50,14 @@ class Home extends Component {
     return (
       <div className='Home'>
         <div className='HomeTitle Title'>
-          <FormattedMessage id='CraftFantasticForms' defaultMessage='Craft fantastic forms.' />
+          <FormattedMessage id='Home.CraftFantasticForms' defaultMessage='Craft fantastic forms.' />
         </div>
         <AddItem add={this.handleAddItem.bind(this)} />
         <ul>
           { isLoading
             ? <li className='HomeLoading'>
-                <FormattedMessage id='Loading' defaultMessage='Loading' />
-              </li>
+              <FormattedMessage id='Home.Loading' defaultMessage='Loading' />
+            </li>
             : todos.map((todo, index) => <li key={index}>{todo}</li>) }
         </ul>
       </div>

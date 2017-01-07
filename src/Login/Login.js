@@ -43,7 +43,7 @@ class Login extends Component {
     return (
       <div className='Login'>
         <div className='LoginTitle Title'>
-          <FormattedMessage id='Connect' defaultMessage='Connect' />
+          <FormattedMessage id='Login.Connect' defaultMessage='Connect' />
         </div>
         <Button text='Facebook' onClick={this.onFacebook} />
         <Button text='Google' onClick={this.onGoogle} />

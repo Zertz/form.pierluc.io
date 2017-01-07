@@ -17,7 +17,7 @@ class Logout extends Component {
   render () {
     return (
       <div className='Logout'>
-        <FormattedMessage id='Disconnecting' defaultMessage='Disconnecting' />
+        <FormattedMessage id='Logout.Disconnecting' defaultMessage='Disconnecting' />
       </div>
     )
   }

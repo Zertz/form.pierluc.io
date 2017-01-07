@@ -20,21 +20,21 @@ class Header extends Component {
         <ul className='HeaderMenu'>
           <li className='HeaderMenuItem'>
             <HeaderLink to='/browse'>
-              <FormattedMessage id='Browse' defaultMessage='Browse' />
+              <FormattedMessage id='Header.Browse' defaultMessage='Browse' />
             </HeaderLink>
           </li>
           <li className='HeaderMenuItem'>
             <HeaderLink to='/create'>
-              <FormattedMessage id='Create' defaultMessage='Create' />
+              <FormattedMessage id='Header.Create' defaultMessage='Create' />
             </HeaderLink>
           </li>
           <li className='HeaderMenuItem'>
             { user
               ? <HeaderLink to='/me'>
-                <FormattedMessage id='My Form' defaultMessage='My Form' />
+                <FormattedMessage id='Header.MyForm' defaultMessage='My Form' />
               </HeaderLink>
               : <HeaderLink to='/connect'>
-                <FormattedMessage id='Connect' defaultMessage='Connect' />
+                <FormattedMessage id='Header.Connect' defaultMessage='Connect' />
               </HeaderLink> }
           </li>
         </ul>
