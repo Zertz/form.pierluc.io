@@ -9,6 +9,7 @@ import localeData from '../messages/data.json'
 
 addLocaleData([...en])
 
+import './reset.css'
 import './index.css'
 
 import App from './App'
