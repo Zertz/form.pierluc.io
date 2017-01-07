@@ -19,6 +19,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "npm run translate && react-scripts build",
+    "deploy": "npm run build && firebase deploy",
     "translate": "NODE_ENV=production babel ./src >/dev/null && node translations",
     "lint": "standard --fix",
     "test": "react-scripts test --env=jsdom",
