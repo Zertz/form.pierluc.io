@@ -2,9 +2,9 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import InputRenderer from './InputRenderer'
+import Dialog from './Dialog'
 
 it('renders without crashing', () => {
   const div = document.createElement('div')
-  ReactDOM.render(<InputRenderer />, div)
+  ReactDOM.render(<Dialog />, div)
 })
