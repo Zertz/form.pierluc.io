@@ -1,0 +1,39 @@
+.Modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.Modal > .ModalOverlay{
+  background-color: #ddd;
+  opacity: 0.75;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.Modal > .ModalWindow {
+  background-color: #eee;
+  width: 320px;
+  height: 568px;
+  z-index: 0;
+}
+
+.Modal > .ModalWindow .ModalWindowHeader {
+  background-color: #ccc;
+}
+
+.Modal > .ModalWindow .ModalWindowContent {
+  font-size: 1em;
+}
+
+.Modal > .ModalWindow .ModalWindowFooter {
+  background-color: #ccc;
+}
