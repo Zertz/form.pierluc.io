@@ -1,3 +1,13 @@
 .Create {
   height: 100%;
 }
+
+.Create > .CreateInputList {
+  list-style-type: none;
+}
+
+.Create > .CreateInputList > .CreateInputListItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1em;
+}
