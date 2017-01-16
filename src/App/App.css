@@ -4,7 +4,7 @@
   height: 100%;
 }
 
-.AppContent {
+.App > .AppContent {
   flex-basis: 100%;
   padding: 1em;
 }

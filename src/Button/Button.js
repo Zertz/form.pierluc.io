@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import classnames from 'classnames'
 
 import './Button.css'
 
@@ -12,14 +13,14 @@ class Button extends Component {
   onClick () {
     const { onClick } = this.props
 
-    if (onClick) {
+    if (typeof onClick === 'function') {
       onClick()
     }
   }
 
   render () {
     return (
-      <button className='Button' onClick={this.onClick}>{this.props.text}</button>
+      <button className={classnames('Button', this.props.classnames)} onClick={this.onClick}>{this.props.text}</button>
     )
   }
 }

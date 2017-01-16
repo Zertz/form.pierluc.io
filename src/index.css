@@ -46,3 +46,7 @@ body {
   letter-spacing: 1px;
   text-align: left;
 }
+
+input {
+  box-sizing: border-box;
+}
