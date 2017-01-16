@@ -20,7 +20,7 @@ class Form extends Component {
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { base, routeParams } = this.props
 
     base.database().ref('/forms/' + routeParams.form).once('value').then((form) => {
