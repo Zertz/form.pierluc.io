@@ -1,6 +1,12 @@
+import uuid from 'uuid'
+
 class AppService {
   isProduction () {
     return process.env.NODE_ENV === 'production'
+  }
+
+  getRandomId () {
+    return uuid.v4()
   }
 }
 
