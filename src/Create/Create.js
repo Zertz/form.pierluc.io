@@ -39,11 +39,13 @@ class Create extends Component {
     super(props)
 
     this.state = {
-      form: {},
+      form: null,
       inputs: FormService.getDefaultFields(),
       isModifyModalShown: false,
       isRemoveDialogShown: false
     }
+
+    this.onInputAdded = this.onInputAdded.bind(this)
 
     this.onModifyClicked = this.onModifyClicked.bind(this)
     this.onModifyModalSaveClicked = this.onModifyModalSaveClicked.bind(this)
@@ -54,26 +56,16 @@ class Create extends Component {
     this.onRemoveDialogConfirmClicked = this.onRemoveDialogConfirmClicked.bind(this)
     this.onRemoveDialogCancelClicked = this.onRemoveDialogCancelClicked.bind(this)
     this.onRemoveDialogOverlayClicked = this.onRemoveDialogOverlayClicked.bind(this)
+
+    this.onSaveClicked = this.onSaveClicked.bind(this)
   }
 
-  async onInputAdded (input) {
-    const { base } = this.props
+  onInputAdded (input) {
+    const { inputs } = this.state
 
     this.setState({
-      inputs: this.state.inputs.push(input)
+      inputs: inputs.push(input)
     })
-
-    try {
-      const form = await FormService.create(base, {
-        hello: 'world'
-      })
-
-      console.info(form)
-
-      this.setState({ form })
-    } catch (error) {
-      console.error(error)
-    }
   }
 
   onModifyClicked (index) {
@@ -115,7 +107,7 @@ class Create extends Component {
   onRemoveDialogConfirmClicked (index) {
     return () => {
       const { inputs } = this.state
-      const left = inputs.slice(0, index);
+      const left = inputs.slice(0, index)
       const right = inputs.slice(index + 1, inputs.length)
 
       this.setState({
@@ -135,6 +127,21 @@ class Create extends Component {
     this.setState({
       isRemoveDialogShown: false
     })
+  }
+
+  async onSaveClicked (input) {
+    const { base } = this.props
+    const { inputs } = this.state
+
+    try {
+      const form = await FormService.create(base, {
+        inputs
+      })
+
+      this.setState({ form })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   render () {
@@ -160,6 +167,7 @@ class Create extends Component {
                 <Modal
                   content={<FieldEditor input={input} />}
                   actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onModifyModalSaveClicked(index)} />}
+                  onCancelClicked={this.onModifyModalCancelClicked}
                   onOverlayClicked={this.onModifyModalOverlayClicked} />
               ) : null}
               {isRemoveDialogShown === index ? (
@@ -172,7 +180,7 @@ class Create extends Component {
             </li>
           )}
         </ul>
-        <Button text={intl.formatMessage(messages['save'])} />
+        <Button text={intl.formatMessage(messages['save'])} onClick={this.onSaveClicked} />
       </div>
     )
   }

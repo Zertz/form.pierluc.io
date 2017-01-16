@@ -3,7 +3,6 @@ import React, {Component, PropTypes} from 'react'
 import './Form.css'
 
 import FieldRenderer from '../FieldRenderer'
-
 import PaymentService from '../PaymentService'
 
 class Form extends Component {
@@ -11,6 +10,7 @@ class Form extends Component {
     super(props)
 
     this.state = {
+      isLoading: true,
       checkout: PaymentService.initialize({
         isLive: true,
         checkoutCallback: this.checkoutCallback
@@ -18,6 +18,19 @@ class Form extends Component {
     }
 
     this.onSubmit = this.onSubmit.bind(this)
+  }
+
+  componentDidMount() {
+    const { base, routeParams } = this.props
+
+    base.database().ref('/forms/' + routeParams.form).once('value').then((form) => {
+      this.setState({
+        isLoading: false,
+        form: form.val()
+      })
+    }).catch((error) => {
+      console.error(error)
+    })
   }
 
   async checkoutCallback (token) {
@@ -55,17 +68,18 @@ class Form extends Component {
 
   render () {
     const { inputs } = this.props
+    const { isLoading, form } = this.state
 
-    return (
+    return isLoading ? null : (
       <form className='Form' onSubmit={this.onSubmit}>
-        {inputs.map((input, index) => <FieldRenderer key={index} input={input} />)}
+        {(inputs || form.inputs).map((input, index) => <FieldRenderer key={index} input={input} />)}
       </form>
     )
   }
 }
 
 Form.propTypes = {
-  inputs: PropTypes.array.isRequired
+  inputs: PropTypes.array
 }
 
 export default Form

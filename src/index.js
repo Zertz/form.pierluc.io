@@ -18,7 +18,10 @@ import Login from './Login'
 import Logout from './Logout'
 
 import Browse from './Browse'
+import Form from './Form'
+
 import Create from './Create'
+
 import Profile from './Profile'
 
 const language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
@@ -30,7 +33,10 @@ ReactDOM.render((
     <Router history={browserHistory}>
       <Route path='/' component={App}>
         <IndexRoute component={Home} />
-        <Route path='browse' component={Browse} />
+        <Route path='browse'>
+          <IndexRoute component={Browse} />
+          <Route path=':form' component={Form} />
+        </Route>
         <Route path='create' component={Create} />
         <Route path='me' component={Profile} />
         <Route path='connect' component={Login} />

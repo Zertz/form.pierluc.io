@@ -13,10 +13,12 @@ class CheckboxGroup extends Component {
     this.onChange = this.onChange.bind(this)
   }
 
-  onChange (e) {
-    this.setState({
-      selectedValue: e.target.value
-    })
+  onChange (index) {
+    return (e) => {
+      this.setState({
+        selectedValue: e.target.value
+      })
+    }
   }
 
   render () {
@@ -25,12 +27,12 @@ class CheckboxGroup extends Component {
 
     return (
       <div className='CheckboxGroup'>
-        <label className='CheckboxGroupLabel'>{input.label}</label>
+        <div className='CheckboxGroupLabel'>{input.label}</div>
         {input.choices.map((choice, index) => (
-          <div className='CheckboxGroupButton' key={index}>
-            <input type='checkbox' value={choice.value} onChange={this.onChange} checked={String(choice.value) === selectedValue} />
+          <label className='CheckboxGroupButton' key={index}>
+            <input type='checkbox' value={choice.value} onChange={this.onChange(index)} checked={String(choice.value) === selectedValue} />
             <span>{choice.label}</span>
-          </div>
+          </label>
         ))}
       </div>
     )

@@ -7,7 +7,7 @@ import Button from '../Button'
 
 const messages = defineMessages({
   cancel: {
-    id: 'Dialog.Cancel',
+    id: 'Modal.Cancel',
     defaultMessage: 'Cancel'
   }
 })
@@ -41,7 +41,7 @@ class Modal extends Component {
 
 Modal.propTypes = {
   title: PropTypes.string,
-  content: PropTypes.string.isRequired,
+  content: PropTypes.element.isRequired,
   actionButton: PropTypes.element.isRequired,
   onCancelClicked: PropTypes.func.isRequired,
   onOverlayClicked: PropTypes.func
