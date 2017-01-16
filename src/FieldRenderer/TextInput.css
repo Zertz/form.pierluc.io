@@ -1,0 +1,26 @@
+.TextInput {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.TextInput > label {
+  order: 1;
+  display: block;
+  font-size: 1.125em;
+  padding-bottom: 0.5em;
+  width: 100%;
+}
+
+.TextInput > input {
+  order: 2;
+  border: 1px solid #ccc;
+  border-radius: 0.25em;
+  font-size: 1.25em;
+  padding: 0.35em 0.5em;
+  width: 100%;
+}
+
+.TextInput > input:focus + label {
+  font-weight: 700;
+}

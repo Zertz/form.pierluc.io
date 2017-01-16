@@ -1,0 +1,71 @@
+import React, {Component, PropTypes} from 'react'
+import {defineMessages, injectIntl, intlShape} from 'react-intl'
+
+import CheckboxGroup from './CheckboxGroup'
+import RadioGroup from './RadioGroup'
+import Select from './Select'
+import TextInput from './TextInput'
+
+const messages = defineMessages({
+  firstname: {
+    id: 'FieldRenderer.FirstName',
+    defaultMessage: 'First name'
+  },
+  lastname: {
+    id: 'FieldRenderer.LastName',
+    defaultMessage: 'Last name'
+  },
+  email: {
+    id: 'FieldRenderer.Email',
+    defaultMessage: 'Email'
+  },
+  plan: {
+    id: 'FieldRenderer.Plan',
+    defaultMessage: 'Plan'
+  },
+  color: {
+    id: 'FieldRenderer.Color',
+    defaultMessage: 'Color'
+  },
+  animals: {
+    id: 'FieldRenderer.Animals',
+    defaultMessage: 'Animals'
+  }
+})
+
+class FieldRenderer extends Component {
+  getComponent (type) {
+    switch (type) {
+      case 'text':
+      case 'email':
+        return TextInput
+      case 'radio':
+        return RadioGroup
+      case 'select':
+        return Select
+      case 'checkbox':
+        return CheckboxGroup
+      default:
+        return
+    }
+  }
+
+  render () {
+    const { intl, input } = this.props
+
+    const Component = this.getComponent(input.type)
+
+    input.label = messages[input.label] ? intl.formatMessage(messages[input.label]) : input.label
+
+    return Component ? (
+      <Component input={this.props.input} />
+    ) : null
+  }
+}
+
+FieldRenderer.propTypes = {
+  intl: intlShape.isRequired,
+  input: PropTypes.object.isRequired
+}
+
+export default injectIntl(FieldRenderer)
