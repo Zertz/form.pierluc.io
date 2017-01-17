@@ -21,32 +21,6 @@ body {
   height: 100%;
 }
 
-.Title {
-  color: #222;
-  font-size: 3em;
-  font-weight: 100;
-  letter-spacing: 3px;
-  margin-bottom: 0.5em;
-  text-align: center;
-}
-
-.Subtitle {
-  color: #444;
-  font-size: 2em;
-  font-weight: 100;
-  letter-spacing: 2px;
-  margin-bottom: 0.25em;
-  text-align: center;
-}
-
-.Text {
-  color: #444;
-  font-size: 1em;
-  font-weight: 100;
-  letter-spacing: 1px;
-  text-align: left;
-}
-
 input {
   box-sizing: border-box;
 }
