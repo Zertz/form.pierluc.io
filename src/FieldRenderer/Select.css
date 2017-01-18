@@ -4,9 +4,35 @@
   width: 100%;
 }
 
-.Select > .SelectLabel {
+.Select > label {
+  order: 0;
   display: block;
   font-size: 1.125em;
-  padding-bottom: 0.5em;
+  margin-bottom: 0.75em;
   width: 100%;
+}
+
+.Select .SelectDescription {
+  order: 1;
+  font-size: 1.1875em;
+  margin-bottom: 0.5em;
+}
+
+.Select > select {
+  order: 2;
+  border: 1px solid #ccc;
+  border-radius: 0.25em;
+  font-size: 1.25em;
+  margin-bottom: 0.25em;
+  padding: 0.35em 0.5em;
+  width: 100%;
+}
+
+.Select .SelectHelp {
+  order: 3;
+  font-size: 0.875em;
+}
+
+.Select > select:focus + label {
+  font-weight: 700;
 }

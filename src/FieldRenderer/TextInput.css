@@ -5,11 +5,17 @@
 }
 
 .TextInput > label {
-  order: 1;
+  order: 0;
   display: block;
   font-size: 1.125em;
-  padding-bottom: 0.5em;
+  margin-bottom: 0.75em;
   width: 100%;
+}
+
+.TextInput .TextInputDescription {
+  order: 1;
+  font-size: 1.1875em;
+  margin-bottom: 0.5em;
 }
 
 .TextInput > input {
@@ -19,6 +25,12 @@
   font-size: 1.25em;
   padding: 0.35em 0.5em;
   width: 100%;
+}
+
+.TextInput .TextInputHelp {
+  order: 3;
+  font-size: 0.875em;
+  margin-top: 0.5em;
 }
 
 .TextInput > input:focus + label {

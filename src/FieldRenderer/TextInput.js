@@ -3,6 +3,7 @@ import React, {Component, PropTypes} from 'react'
 import './TextInput.css'
 
 import AppService from '../AppService'
+import Text from '../Text'
 
 class TextInput extends Component {
   constructor (props) {
@@ -14,13 +15,15 @@ class TextInput extends Component {
   }
 
   render () {
-    const { input } = this.props
+    const { input, onChange } = this.props
     const { id } = this.state
 
     return (
       <div className='TextInput'>
-        <input id={id} {...input} />
+        <input id={id} type={input.type} value={input.value} onChange={onChange} />
         <label htmlFor={id}>{input.label}</label>
+        {input.description && <Text classnames='TextInputDescription' content={input.description} />}
+        {input.help && <Text classnames='TextInputHelp' content={input.help} />}
       </div>
     )
   }
@@ -28,9 +31,13 @@ class TextInput extends Component {
 
 TextInput.propTypes = {
   input: PropTypes.shape({
+    type: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired
-  })
+    description: PropTypes.string.isRequired,
+    help: PropTypes.string.isRequired
+  }),
+  onChange: PropTypes.func
 }
 
 export default TextInput

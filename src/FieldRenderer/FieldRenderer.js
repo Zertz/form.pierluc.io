@@ -51,21 +51,25 @@ class FieldRenderer extends Component {
   }
 
   render () {
-    const { intl, input } = this.props
+    const { intl, input, onChange } = this.props
 
     const Component = this.getComponent(input.type)
 
-    input.label = messages[input.label] ? intl.formatMessage(messages[input.label]) : input.label
+    input.value = input.value || ''
+    input.label = messages[input.label] ? intl.formatMessage(messages[input.label]) : input.label || ''
+    input.description = input.description || ''
+    input.help = input.help || ''
 
     return Component ? (
-      <Component input={this.props.input} />
+      <Component input={this.props.input} onChange={onChange} />
     ) : null
   }
 }
 
 FieldRenderer.propTypes = {
   intl: intlShape.isRequired,
-  input: PropTypes.object.isRequired
+  input: PropTypes.object.isRequired,
+  onChange: PropTypes.func
 }
 
 export default injectIntl(FieldRenderer)
