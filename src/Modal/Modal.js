@@ -16,21 +16,21 @@ class Modal extends Component {
   render () {
     const {
       intl,
-      title,
       content,
       actionButton,
       onCancelClicked,
       onOverlayClicked
     } = this.props
 
+    const componentName = content.type && content.type.name ? content.type.name : ''
+
     return (
-      <div className='Modal'>
-        <div className='ModalOverlay' onClick={onOverlayClicked} />
-        <div className='ModalWindow'>
-          <div className='ModalWindowHeader'>{title}</div>
-          <div className='ModalWindowContent'>{content}</div>
-          <div className='ModalWindowFooter'>
-            <Button classnames='Cancel' text={intl.formatMessage(messages['cancel'])} onClick={onCancelClicked} />
+      <div className={`Modal ${componentName}Modal`}>
+        <div className={`ModalOverlay ${componentName}ModalOverlay`} onClick={onOverlayClicked} />
+        <div className={`ModalWindow ${componentName}ModalWindow`}>
+          <div className={`ModalWindowContent ${componentName}ModalWindowContent`}>{content}</div>
+          <div className={`ModalWindowButtons ${componentName}ModalWindowButtons`}>
+            <Button cancel text={intl.formatMessage(messages['cancel'])} onClick={onCancelClicked} />
             {actionButton}
           </div>
         </div>
@@ -40,7 +40,6 @@ class Modal extends Component {
 }
 
 Modal.propTypes = {
-  title: PropTypes.string,
   content: PropTypes.element.isRequired,
   actionButton: PropTypes.element.isRequired,
   onCancelClicked: PropTypes.func.isRequired,
