@@ -160,7 +160,7 @@ class Create extends Component {
         <ul className='CreateInputList'>
           {inputs.map((input, index) =>
             <li className='CreateInputListItem' key={index}>
-              <FieldRenderer input={input} />
+              <FieldRenderer input={input} onChange={() => {}} />
               <Button text={intl.formatMessage(messages['modify'])} onClick={this.onModifyClicked(index)} />
               <Button text={intl.formatMessage(messages['remove'])} onClick={this.onRemoveClicked(index)} />
               {isModifyModalShown === index ? (

@@ -10,23 +10,47 @@ class FieldEditor extends Component {
     super(props)
 
     this.state = {
-      inputs: [{
+      input: props.input,
+      editorInputs: [{
         type: 'select',
-        label: 'fieldType',
+        label: 'type',
         value: props.input.type,
         choices: FormService.getFieldTypes().map((fieldType) => ({
           label: fieldType,
           value: fieldType
         }))
+      }, {
+        type: 'text',
+        label: 'label',
+        value: props.input.label
+      }, {
+        type: 'text',
+        label: 'description',
+        value: props.input.description
+      }, {
+        type: 'text',
+        label: 'help',
+        value: props.input.help
       }]
     }
 
-    this.onFieldTypeChanged = this.onFieldTypeChanged.bind(this)
+    this.onFieldChanged = this.onFieldChanged.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-  onFieldTypeChanged () {
-    // Stuff
+  onFieldChanged (index) {
+    return (e) => {
+      const { input, editorInputs } = this.state
+
+      editorInputs[index].value = e.target.value
+
+      this.setState({
+        input: Object.assign(input, {
+          [editorInputs[index].label]: e.target.value
+        }),
+        editorInputs
+      })
+    }
   }
 
   onSubmit (e) {
@@ -34,15 +58,30 @@ class FieldEditor extends Component {
   }
 
   render () {
-    const { input } = this.props
-    const { inputs } = this.state
+    const { input, editorInputs } = this.state
 
     return (
       <div className='FieldEditor'>
-        <form onSubmit={this.onSubmit}>
-          {inputs.map((input, index) => <FieldRenderer key={index} input={input} />)}
+        <form className='FieldEditorForm' onSubmit={this.onSubmit}>
+          {editorInputs.map((editorInput, index) => (
+            <FieldRenderer key={index} input={editorInput} onChange={this.onFieldChanged(index)} />
+          ))}
         </form>
-        <FieldRenderer input={input} />
+        <div className="FieldEditorChoices">
+          {(input.choices || []).map((choice, index) => {
+            const input = {
+              type: 'text',
+              value: choice.label
+            }
+
+            return (
+              <FieldRenderer key={index} input={input} onChange={() => {}} />
+            )
+          })}
+        </div>
+        <div className="FieldEditorPreview">
+          <FieldRenderer input={input} onChange={() => {}} />
+        </div>
       </div>
     )
   }

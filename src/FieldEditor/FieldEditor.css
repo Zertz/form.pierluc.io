@@ -3,3 +3,18 @@
   flex-direction: column;
   height: 100%;
 }
+
+.FieldEditor > .FieldEditorForm {
+  flex-basis: 100%;
+  margin-bottom: 2em;
+}
+
+.FieldEditor > .FieldEditorForm > *:not(:last-child) {
+  margin-bottom: 1em;
+}
+
+.FieldEditor > .FieldEditorPreview {
+  flex-shrink: 0;
+  border: 1px solid #eee;
+  padding: 1em;
+}
