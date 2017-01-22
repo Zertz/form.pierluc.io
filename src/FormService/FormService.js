@@ -54,9 +54,11 @@ class FormService {
   }
 
   create (base, form) {
-    const formRef = base.database().ref('forms').push()
+    const formsRef = base.database().ref('forms').push()
 
-    return formRef.set(form)
+    return formsRef.set(Object.assign(form, {
+      user: base.auth().currentUser.uid
+    }))
   }
 }
 

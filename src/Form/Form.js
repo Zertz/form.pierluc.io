@@ -20,17 +20,19 @@ class Form extends Component {
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-  componentDidMount () {
+  async componentDidMount () {
     const { base, routeParams } = this.props
 
-    base.database().ref('/forms/' + routeParams.form).once('value').then((form) => {
+    try {
+      const form = await base.database().ref('/forms/' + routeParams.form).once('value')
+
       this.setState({
         isLoading: false,
         form: form.val()
       })
-    }).catch((error) => {
+    } catch (error) {
       console.error(error)
-    })
+    }
   }
 
   async checkoutCallback (token) {
