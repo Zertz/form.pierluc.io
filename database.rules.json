@@ -1,6 +1,18 @@
 {
   "rules": {
-    ".read": "true",
-    ".write": "auth != null"
+    "forms": {
+      ".read": true,
+      ".write": "auth != null",
+      ".indexOn": "user",
+      "$uid": {
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "$uid === auth.uid"
+      }
+    }
   }
 }
