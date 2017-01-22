@@ -25,7 +25,25 @@ class App extends Component {
     const { base } = this.state
 
     base.auth().onAuthStateChanged((user) => {
-      this.setState({ user })
+      if (!user) {
+        return this.setState({
+          user: null
+        })
+      }
+
+      const userDetailsRef = base.database().ref(`users/${user.uid}`)
+
+      userDetailsRef.on('value', (userDetails) => {
+        if (!userDetails.val()) {
+          base.database().ref(`users/${user.uid}`).set({
+            country: false
+          })
+        }
+
+        this.setState({
+          user: Object.assign(user, userDetails.val() || {})
+        })
+      })
     })
   }
 
