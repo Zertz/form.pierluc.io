@@ -23,6 +23,7 @@ import Form from './Form'
 import Create from './Create'
 
 import Profile from './Profile'
+import Connect from './Connect'
 
 const language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
 const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0]
@@ -38,7 +39,11 @@ ReactDOM.render((
           <Route path=':form' component={Form} />
         </Route>
         <Route path='create' component={Create} />
-        <Route path='me' component={Profile} />
+        <Route path='me'>
+          <IndexRoute component={Profile} />
+          <Route path='connect' component={Connect} />
+          <Route path=':form' component={Form} />
+        </Route>
         <Route path='connect' component={Login} />
         <Route path='disconnect' component={Logout} />
       </Route>
