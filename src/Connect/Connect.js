@@ -15,7 +15,7 @@ class Connect extends Component {
     }
   }
 
-  async componentWillUpdate(nextProps, nextState) {
+  async componentWillUpdate (nextProps, nextState) {
     const { base, location, user } = nextProps
     const { isConnected } = nextState
 

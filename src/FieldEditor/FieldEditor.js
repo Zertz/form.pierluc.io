@@ -67,7 +67,7 @@ class FieldEditor extends Component {
             <FieldRenderer key={index} input={editorInput} onChange={this.onFieldChanged(index)} />
           ))}
         </form>
-        <div className="FieldEditorChoices">
+        <div className='FieldEditorChoices'>
           {(input.choices || []).map((choice, index) => {
             const input = {
               type: 'text',
@@ -79,7 +79,7 @@ class FieldEditor extends Component {
             )
           })}
         </div>
-        <div className="FieldEditorPreview">
+        <div className='FieldEditorPreview'>
           <FieldRenderer input={input} onChange={() => {}} />
         </div>
       </div>
