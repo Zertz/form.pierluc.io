@@ -13,6 +13,10 @@
         ".read": "auth != null && auth.uid == $uid",
         ".write": "$uid === auth.uid"
       }
+    },
+    "userSecrets": {
+      ".read": false,
+      ".write": false
     }
   }
 }

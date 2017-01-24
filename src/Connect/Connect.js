@@ -11,6 +11,7 @@ class Connect extends Component {
     super(props)
 
     this.state = {
+      isConnecting: false,
       isConnected: false
     }
   }
@@ -21,9 +22,11 @@ class Connect extends Component {
 
     const { code } = location.query
 
-    if (isConnected || !user) {
+    if (this.isConnecting || isConnected || !user) {
       return
     }
+
+    this.isConnecting = true
 
     try {
       const userToken = await base.auth().currentUser.getToken()
@@ -31,11 +34,13 @@ class Connect extends Component {
       const json = await response.json()
 
       this.setState({
-        isConnected: true,
+        isConnected: response.ok,
         json
       })
     } catch (error) {
       console.error(error)
+    } finally {
+      this.isConnecting = false
     }
   }
 
@@ -45,7 +50,9 @@ class Connect extends Component {
     return (
       <div className='Connect'>
         { isConnected ? (
-          <Text content={`Connected! ${JSON.stringify(json)}`} />
+          <Text content={'Connected!'} />
+        ) : json && json.error_description ? (
+          <Text content={json.error_description} />
         ) : (
           <Text content={'Connecting...'} />
         )}
