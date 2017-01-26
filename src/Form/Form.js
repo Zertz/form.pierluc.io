@@ -1,22 +1,28 @@
 import React, {Component, PropTypes} from 'react'
+import {defineMessages, injectIntl} from 'react-intl'
 
 import './Form.css'
 
+import Button from '../Button'
 import FieldRenderer from '../FieldRenderer'
 import PaymentService from '../PaymentService'
+
+const messages = defineMessages({
+  submit: {
+    id: 'Form.Submit',
+    defaultMessage: 'Submit'
+  }
+})
 
 class Form extends Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      isLoading: true,
-      checkout: PaymentService.initialize({
-        isLive: true,
-        checkoutCallback: this.checkoutCallback
-      })
+      isLoading: true
     }
 
+    this.checkoutCallback = this.checkoutCallback.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
@@ -24,11 +30,15 @@ class Form extends Component {
     const { base, routeParams } = this.props
 
     try {
-      const form = await base.database().ref('/forms/' + routeParams.form).once('value')
+      const form = await base.database().ref('forms/' + routeParams.form).once('value')
 
       this.setState({
         isLoading: false,
-        form: form.val()
+        form: form.val(),
+        checkout: PaymentService.initialize({
+          isLive: true,
+          checkoutCallback: this.checkoutCallback
+        })
       })
     } catch (error) {
       console.error(error)
@@ -36,20 +46,22 @@ class Form extends Component {
   }
 
   async checkoutCallback (token) {
-    const { base } = this.props
+    const { base, routeParams } = this.props
 
     try {
       const userToken = await base.auth().currentUser.getToken()
       const stripeToken = token.id
-      const formId = this.props.form.id
+      const formId = routeParams.form
 
-      const charge = await PaymentService.charge({
+      const response = await PaymentService.charge({
         formId,
         stripeToken,
         userToken
       })
 
-      console.info(charge)
+      const json = await response.json()
+
+      console.info(json)
     } catch (error) {
       console.error(error)
     }
@@ -69,12 +81,13 @@ class Form extends Component {
   }
 
   render () {
-    const { inputs } = this.props
+    const { intl } = this.props
     const { isLoading, form } = this.state
 
     return isLoading ? null : (
       <form className='Form' onSubmit={this.onSubmit}>
-        {(inputs || form.inputs).map((input, index) => <FieldRenderer key={index} input={input} />)}
+        {form.inputs.map((input, index) => <FieldRenderer key={index} input={input} />)}
+        <Button submit text={intl.formatMessage(messages['submit'])} />
       </form>
     )
   }
@@ -84,4 +97,4 @@ Form.propTypes = {
   inputs: PropTypes.array
 }
 
-export default Form
+export default injectIntl(Form)

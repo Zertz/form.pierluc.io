@@ -13,17 +13,15 @@ import './reset.css'
 import './index.css'
 
 import App from './App'
+import Browse from './Browse'
+import Connect from './Connect'
+import CreateForm from './CreateForm'
+import Form from './Form'
 import Home from './Home'
 import Login from './Login'
 import Logout from './Logout'
-
-import Browse from './Browse'
-import Form from './Form'
-
-import Create from './Create'
-
+import ModifyForm from './ModifyForm'
 import Profile from './Profile'
-import Connect from './Connect'
 
 const language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
 const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0]
@@ -38,11 +36,11 @@ ReactDOM.render((
           <IndexRoute component={Browse} />
           <Route path=':form' component={Form} />
         </Route>
-        <Route path='create' component={Create} />
+        <Route path='create' component={CreateForm} />
         <Route path='me'>
           <IndexRoute component={Profile} />
           <Route path='connect' component={Connect} />
-          <Route path=':form' component={Form} />
+          <Route path=':form' component={ModifyForm} />
         </Route>
         <Route path='connect' component={Login} />
         <Route path='disconnect' component={Logout} />

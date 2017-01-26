@@ -1,0 +1,13 @@
+.ModifyForm {
+  height: 100%;
+}
+
+.ModifyForm > .ModifyFormInputList {
+  list-style-type: none;
+}
+
+.ModifyForm > .ModifyFormInputList > .ModifyFormInputListItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1em;
+}

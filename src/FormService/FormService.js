@@ -54,11 +54,21 @@ class FormService {
   }
 
   create (base, form) {
-    const formsRef = base.database().ref('forms').push()
+    const formKey = base.database().ref('forms').push().key
+    const user = base.auth().currentUser.uid
 
-    return formsRef.set(Object.assign(form, {
-      user: base.auth().currentUser.uid
-    }))
+    return base.database().ref().update({
+      [`forms/${formKey}`]: Object.assign(form, {
+        user
+      }),
+      [`users/${user}/forms/${formKey}`]: true
+    }).then((data) => Promise.resolve(formKey))
+  }
+
+  update (base, key, form) {
+    return base.database().ref().update({
+      [`forms/${key}`]: form
+    })
   }
 }
 
