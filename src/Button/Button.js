@@ -19,7 +19,11 @@ class Button extends Component {
   }
 
   render () {
-    return (
+    const { submit } = this.props
+
+    return submit ? (
+      <input type='submit' className={classnames('Button', this.props.classnames)} onClick={this.onClick} value={this.props.text} />
+    ) : (
       <button className={classnames('Button', this.props.classnames)} onClick={this.onClick}>{this.props.text}</button>
     )
   }
