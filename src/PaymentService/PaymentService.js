@@ -9,8 +9,16 @@ class PaymentService {
     return user && user.isStripeDeferred === true
   }
 
+  getClientId () {
+    return AppService.isProduction() ? process.env.REACT_APP_STRIPE_CLIENT_ID_LIVE : process.env.REACT_APP_STRIPE_CLIENT_ID_TEST
+  }
+
+  getPaymentUrl () {
+    return AppService.isProduction() ? process.env.REACT_APP_PAYMENT_API_URL_LIVE : process.env.REACT_APP_PAYMENT_API_URL_TEST
+  }
+
   getConnectLink () {
-    return `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_STRIPE_CLIENT_ID}&scope=read_write`
+    return `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${this.getClientId()}&scope=read_write`
   }
 
   connect (options) {
@@ -30,7 +38,7 @@ class PaymentService {
       throw new Error('options.userToken must be a string')
     }
 
-    const request = new Request(`${process.env.REACT_APP_PAYMENT_API_URL}/connect`, {
+    const request = new Request(`${this.getPaymentUrl()}/connect`, {
       method: 'post',
       mode: 'cors',
       cache: 'no-cache',
@@ -80,18 +88,22 @@ class PaymentService {
       throw new Error('options.stripeToken must be a string')
     }
 
-    if (typeof userToken !== 'string') {
+    if (userToken && typeof userToken !== 'string') {
       throw new Error('options.userToken must be a string')
     }
 
-    const request = new Request(`${process.env.REACT_APP_PAYMENT_API_URL}/charge`, {
+    const headers = new Headers()
+
+    if (userToken) {
+      headers.set('Authorization', `Bearer ${userToken}`)
+    }
+
+    const request = new Request(`${this.getPaymentUrl()}/charge`, {
       method: 'post',
       mode: 'cors',
       cache: 'no-cache',
       credentials: 'omit',
-      headers: new Headers({
-        'Authorization': `Bearer ${userToken}`
-      }),
+      headers,
       body: JSON.stringify({ formId, stripeToken })
     })
 
