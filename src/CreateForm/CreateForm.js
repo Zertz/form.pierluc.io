@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import {defineMessages, injectIntl} from 'react-intl'
+import {browserHistory} from 'react-router'
 
-import './Create.css'
+import './CreateForm.css'
 
 import FormService from '../FormService'
 import FieldRenderer from '../FieldRenderer'
@@ -13,28 +14,28 @@ import Modal from '../Modal'
 
 const messages = defineMessages({
   addField: {
-    id: 'Create.AddField',
+    id: 'CreateForm.AddField',
     defaultMessage: 'Add field'
   },
   modify: {
-    id: 'Create.Modify',
+    id: 'CreateForm.Modify',
     defaultMessage: 'Modify'
   },
   remove: {
-    id: 'Create.Remove',
+    id: 'CreateForm.Remove',
     defaultMessage: 'Remove'
   },
   confirmRemove: {
-    id: 'Create.ConfirmRemove',
+    id: 'CreateForm.ConfirmRemove',
     defaultMessage: 'Are you sure you want to remove this field?'
   },
   save: {
-    id: 'Create.Save',
+    id: 'CreateForm.Save',
     defaultMessage: 'Save'
   }
 })
 
-class Create extends Component {
+class CreateForm extends Component {
   constructor (props) {
     super(props)
 
@@ -57,7 +58,7 @@ class Create extends Component {
     this.onRemoveDialogCancelClicked = this.onRemoveDialogCancelClicked.bind(this)
     this.onRemoveDialogOverlayClicked = this.onRemoveDialogOverlayClicked.bind(this)
 
-    this.onSaveClicked = this.onSaveClicked.bind(this)
+    this.onCreateClicked = this.onCreateClicked.bind(this)
   }
 
   onInputAdded (input) {
@@ -129,16 +130,16 @@ class Create extends Component {
     })
   }
 
-  async onSaveClicked (input) {
+  async onCreateClicked (input) {
     const { base } = this.props
     const { inputs } = this.state
 
     try {
-      const form = await FormService.create(base, {
+      const formId = await FormService.create(base, {
         inputs
       })
 
-      this.setState({ form })
+      browserHistory.push(`/me/${formId}`)
     } catch (error) {
       console.error(error)
     }
@@ -153,13 +154,13 @@ class Create extends Component {
     } = this.state
 
     return (
-      <div className='Create'>
-        <div className='CreateHeader'>
+      <div className='CreateForm'>
+        <div className='CreateFormHeader'>
           <Button text={intl.formatMessage(messages['addField'])} />
         </div>
-        <ul className='CreateInputList'>
+        <ul className='CreateFormInputList'>
           {inputs.map((input, index) =>
-            <li className='CreateInputListItem' key={index}>
+            <li className='CreateFormInputListItem' key={index}>
               <FieldRenderer input={input} onChange={() => {}} />
               <Button text={intl.formatMessage(messages['modify'])} onClick={this.onModifyClicked(index)} />
               <Button text={intl.formatMessage(messages['remove'])} onClick={this.onRemoveClicked(index)} />
@@ -180,10 +181,10 @@ class Create extends Component {
             </li>
           )}
         </ul>
-        <Button text={intl.formatMessage(messages['save'])} onClick={this.onSaveClicked} />
+        <Button text={intl.formatMessage(messages['save'])} onClick={this.onCreateClicked} />
       </div>
     )
   }
 }
 
-export default injectIntl(Create)
+export default injectIntl(CreateForm)
