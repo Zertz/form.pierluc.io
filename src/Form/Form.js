@@ -3,9 +3,11 @@ import {defineMessages, injectIntl} from 'react-intl'
 
 import './Form.css'
 
+import PaymentService from '../PaymentService'
+
 import Button from '../Button'
 import FieldRenderer from '../FieldRenderer'
-import PaymentService from '../PaymentService'
+import Title from '../Title'
 
 const messages = defineMessages({
   submit: {
@@ -85,10 +87,13 @@ class Form extends Component {
     const { isLoading, form } = this.state
 
     return isLoading ? null : (
-      <form className='Form' onSubmit={this.onSubmit}>
-        {form.inputs.map((input, index) => <FieldRenderer key={index} input={input} />)}
-        <Button submit text={intl.formatMessage(messages['submit'])} />
-      </form>
+      <div className="Form">
+        { form.name ? <Title content={form.name} /> : null }
+        <form className='FormForm' onSubmit={this.onSubmit}>
+          {form.inputs.map((input, index) => <FieldRenderer key={index} input={input} />)}
+          <Button submit text={intl.formatMessage(messages['submit'])} />
+        </form>
+      </div>
     )
   }
 }

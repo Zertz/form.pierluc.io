@@ -47,7 +47,7 @@ class Browse extends Component {
             </li>
             : forms.map(form => (
               <li key={form.key}>
-                <Link className='BrowseLink' activeClassName='BrowseLinkActive' to={`/browse/${form.key}`}>{form.key}</Link>
+                <Link className='BrowseLink' activeClassName='BrowseLinkActive' to={`/browse/${form.key}`}>{form.name || form.key}</Link>
               </li>
             ))}
         </ul>

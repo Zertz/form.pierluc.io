@@ -1,9 +1,24 @@
 import React, {Component} from 'react'
+import {defineMessages, injectIntl} from 'react-intl'
 
 import './FieldEditor.css'
 
 import FormService from '../FormService'
+
 import FieldRenderer from '../FieldRenderer'
+import Subtitle from '../Subtitle'
+import Title from '../Title'
+
+const messages = defineMessages({
+  field: {
+    id: 'FieldEditor.Field',
+    defaultMessage: 'Field'
+  },
+  choices: {
+    id: 'FieldEditor.Choices',
+    defaultMessage: 'Choices'
+  }
+})
 
 class FieldEditor extends Component {
   constructor (props) {
@@ -58,24 +73,36 @@ class FieldEditor extends Component {
   }
 
   render () {
+    const { intl } = this.props
     const { input, editorInputs } = this.state
 
     return (
       <div className='FieldEditor'>
+        <Title content={intl.formatMessage(messages['field'])} />
         <form className='FieldEditorForm' onSubmit={this.onSubmit}>
           {editorInputs.map((editorInput, index) => (
             <FieldRenderer key={index} input={editorInput} onChange={this.onFieldChanged(index)} />
           ))}
         </form>
         <div className='FieldEditorChoices'>
+          <Subtitle content={intl.formatMessage(messages['choices'])} />
           {(input.choices || []).map((choice, index) => {
-            const input = {
+            const inputs = [{
               type: 'text',
+              label: 'label',
               value: choice.label
-            }
+            }, {
+              type: 'number',
+              label: 'amount',
+              value: choice.amount
+            }]
 
             return (
-              <FieldRenderer key={index} input={input} onChange={() => {}} />
+              <div className="FieldEditorChoice" key={index}>
+                {inputs.map((input, index) => (
+                  <FieldRenderer key={index} input={input} onChange={() => {}} />
+                ))}
+              </div>
             )
           })}
         </div>
@@ -87,4 +114,4 @@ class FieldEditor extends Component {
   }
 }
 
-export default FieldEditor
+export default injectIntl(FieldEditor)

@@ -6,9 +6,9 @@ import './Profile.css'
 
 import PaymentService from '../PaymentService'
 
-import Title from '../Title'
 import Subtitle from '../Subtitle'
 import Text from '../Text'
+import Title from '../Title'
 
 const messages = defineMessages({
   paymentConnected: {
@@ -22,6 +22,14 @@ const messages = defineMessages({
   paymentNotConnected: {
     id: 'Profile.PaymentNotConnected',
     defaultMessage: "It looks like you haven't connected your account to our payment provider yet. We'll automatically create an account for you so you can start accepting payments instantly!"
+  },
+  modify: {
+    id: 'Profile.Modify',
+    defaultMessage: "Modify"
+  },
+  preview: {
+    id: 'Profile.Preview',
+    defaultMessage: "Preview"
   }
 })
 
@@ -105,9 +113,11 @@ class Profile extends Component {
             <li className='ProfileLoadingForms'>
               <FormattedMessage id='Profile.LoadingForms' defaultMessage='Loading your forms' />
             </li>
-          ) : forms.map(form => (
+          ) : forms.map((form, index) => (
             <li key={form.key}>
-              <Link className='ProfileLink' activeClassName='ProfileLinkActive' to={`/me/${form.key}`}>{form.key}</Link>
+              <Text content={form.name || ''} />
+              <Link className='ProfileLink' activeClassName='ProfileLinkActive' to={`/me/${form.key}`}>{intl.formatMessage(messages['modify'])}</Link>
+              <Link className='ProfileLink' activeClassName='ProfileLinkActive' to={`/browse/${form.key}`}>{intl.formatMessage(messages['preview'])}</Link>
             </li>
           ))}
         </ul>

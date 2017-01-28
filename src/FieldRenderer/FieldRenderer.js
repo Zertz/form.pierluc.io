@@ -36,8 +36,9 @@ const messages = defineMessages({
 class FieldRenderer extends Component {
   getComponent (type) {
     switch (type) {
-      case 'text':
       case 'email':
+      case 'number':
+      case 'text':
         return TextInput
       case 'radio':
         return RadioGroup

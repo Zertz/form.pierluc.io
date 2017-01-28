@@ -48,6 +48,7 @@ class ModifyForm extends Component {
       isRemoveDialogShown: false
     }
 
+    this.onFormNameChanged = this.onFormNameChanged.bind(this)
     this.onInputAdded = this.onInputAdded.bind(this)
 
     this.onModifyClicked = this.onModifyClicked.bind(this)
@@ -75,6 +76,14 @@ class ModifyForm extends Component {
         })
       }
     })
+  }
+
+  onFormNameChanged(e) {
+    const { form } = this.state
+
+    form.name = e.target.value
+
+    this.setState({ form })
   }
 
   onInputAdded (input) {
@@ -182,6 +191,7 @@ class ModifyForm extends Component {
     return isLoading ? null : (
       <div className='ModifyForm'>
         <div className='ModifyFormHeader'>
+          <FieldRenderer input={{ type: 'text', value: form.name || '' }} onChange={this.onFormNameChanged} />
           <Button text={intl.formatMessage(messages['addField'])} />
         </div>
         <ul className='ModifyFormInputList'>
