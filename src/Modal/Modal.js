@@ -13,6 +13,14 @@ const messages = defineMessages({
 })
 
 class Modal extends Component {
+  getWrappedComponentName (content) {
+    if (!content || !content.type) {
+      return ''
+    }
+
+    return content.type.WrappedComponent ? content.type.WrappedComponent.name : content.type.name
+  }
+
   render () {
     const {
       intl,
@@ -22,7 +30,7 @@ class Modal extends Component {
       onOverlayClicked
     } = this.props
 
-    const componentName = content.type && content.type.name ? content.type.name : ''
+    const componentName = this.getWrappedComponentName(content)
 
     return (
       <div className={`Modal ${componentName}Modal`}>
