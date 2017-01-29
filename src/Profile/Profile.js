@@ -6,6 +6,7 @@ import './Profile.css'
 
 import PaymentService from '../PaymentService'
 
+import Loading from '../Loading'
 import Subtitle from '../Subtitle'
 import Text from '../Text'
 import Title from '../Title'
@@ -109,11 +110,7 @@ class Profile extends Component {
         }
         <hr />
         <ul className='ProfileForms'>
-          { isLoadingForms ? (
-            <li className='ProfileLoadingForms'>
-              <FormattedMessage id='Profile.LoadingForms' defaultMessage='Loading your forms' />
-            </li>
-          ) : forms.map((form, index) => (
+          { isLoadingForms ? <Loading /> : forms.map((form, index) => (
             <li key={form.key}>
               <Text content={form.name || ''} />
               <Link className='ProfileLink' activeClassName='ProfileLinkActive' to={`/me/${form.key}`}>{intl.formatMessage(messages['modify'])}</Link>

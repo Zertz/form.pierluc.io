@@ -7,6 +7,7 @@ import PaymentService from '../PaymentService'
 
 import Button from '../Button'
 import FieldRenderer from '../FieldRenderer'
+import Loading from '../Loading'
 import Title from '../Title'
 
 const messages = defineMessages({
@@ -86,7 +87,7 @@ class Form extends Component {
     const { intl } = this.props
     const { isLoading, form } = this.state
 
-    return isLoading ? null : (
+    return isLoading ? <Loading /> : (
       <div className="Form">
         { form.name ? <Title content={form.name} /> : null }
         <form className='FormForm' onSubmit={this.onSubmit}>

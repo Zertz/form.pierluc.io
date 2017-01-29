@@ -9,6 +9,7 @@ import FieldRenderer from '../FieldRenderer'
 import Button from '../Button'
 import Dialog from '../Dialog'
 import FieldEditor from '../FieldEditor'
+import Loading from '../Loading'
 import Modal from '../Modal'
 
 const messages = defineMessages({
@@ -188,7 +189,7 @@ class ModifyForm extends Component {
       isRemoveDialogShown
     } = this.state
 
-    return isLoading ? null : (
+    return isLoading ? <Loading /> : (
       <div className='ModifyForm'>
         <div className='ModifyFormHeader'>
           <FieldRenderer input={{ type: 'text', value: form.name || '' }} onChange={this.onFormNameChanged} />
