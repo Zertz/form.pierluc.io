@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
 import {defineMessages, injectIntl} from 'react-intl'
+import update from 'immutability-helper'
 
 import './FieldEditor.css'
 
 import FormService from '../FormService'
 
+import Button from '../Button'
 import FieldRenderer from '../FieldRenderer'
 import Subtitle from '../Subtitle'
 import Title from '../Title'
@@ -17,6 +19,10 @@ const messages = defineMessages({
   choices: {
     id: 'FieldEditor.Choices',
     defaultMessage: 'Choices'
+  },
+  addChoice: {
+    id: 'FieldEditor.AddChoice',
+    defaultMessage: 'Add choice'
   }
 })
 
@@ -50,6 +56,7 @@ class FieldEditor extends Component {
     }
 
     this.onFieldChanged = this.onFieldChanged.bind(this)
+    this.onAddChoiceClicked = this.onAddChoiceClicked.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
@@ -68,6 +75,16 @@ class FieldEditor extends Component {
     }
   }
 
+  onAddChoiceClicked () {
+    const { input } = this.state
+
+    this.setState({
+      input: update(input, {
+        choices: { $push: [{}] }
+      })
+    })
+  }
+
   onSubmit (e) {
     e.preventDefault()
   }
@@ -84,28 +101,31 @@ class FieldEditor extends Component {
             <FieldRenderer key={index} input={editorInput} onChange={this.onFieldChanged(index)} />
           ))}
         </form>
-        <div className='FieldEditorChoices'>
-          <Subtitle content={intl.formatMessage(messages['choices'])} />
-          {(input.choices || []).map((choice, index) => {
-            const inputs = [{
-              type: 'text',
-              label: 'label',
-              value: choice.label
-            }, {
-              type: 'number',
-              label: 'amount',
-              value: choice.amount
-            }]
+        {FormService.isMultipleChoices(input.type) ? (
+          <div className='FieldEditorChoices'>
+            <Subtitle content={intl.formatMessage(messages['choices'])} />
+            <Button text={intl.formatMessage(messages['addChoice'])} onClick={this.onAddChoiceClicked}/>
+            {(input.choices || []).map((choice, index) => {
+              const inputs = [{
+                type: 'text',
+                label: 'label',
+                value: choice.label
+              }, {
+                type: 'number',
+                label: 'amount',
+                value: choice.amount
+              }]
 
-            return (
-              <div className="FieldEditorChoice" key={index}>
-                {inputs.map((input, index) => (
-                  <FieldRenderer key={index} input={input} onChange={() => {}} />
-                ))}
-              </div>
-            )
-          })}
-        </div>
+              return (
+                <div className="FieldEditorChoice" key={index}>
+                  {inputs.map((input, index) => (
+                    <FieldRenderer key={index} input={input} onChange={() => {}} />
+                  ))}
+                </div>
+              )
+            })}
+          </div>
+        ) : null}
         <div className='FieldEditorPreview'>
           <FieldRenderer input={input} onChange={() => {}} />
         </div>

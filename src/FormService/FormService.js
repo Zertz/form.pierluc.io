@@ -53,6 +53,10 @@ class FormService {
     }]
   }
 
+  isMultipleChoices (type) {
+    return ['radio', 'select', 'checkbox'].indexOf(type) >= 0
+  }
+
   create (base, form) {
     const formKey = base.database().ref('forms').push().key
     const user = base.auth().currentUser.uid
