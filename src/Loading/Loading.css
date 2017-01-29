@@ -1,0 +1,30 @@
+.Loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.Loading > .LoadingIndeterminate, .Loading > .LoadingIndeterminate:before {
+  border-radius: 50%;
+  content: '';
+  width: 5em;
+  height: 5em;
+}
+
+.Loading > .LoadingIndeterminate {
+  border-top: 1.25em solid #fff;
+  border-right: 0.5em solid #fff;
+  border-bottom: 0;
+  border-left: 0.75em solid #111;
+  font-size: 10px;
+  position: relative;
+  transform: translateZ(0);
+  animation: loadingIndeterminate 1s infinite linear;
+}
+
+@keyframes loadingIndeterminate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
