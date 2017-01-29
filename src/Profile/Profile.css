@@ -1,3 +1,19 @@
 .Profile {
   height: 100%;
 }
+
+.Profile > .ProfileFormList {
+  margin: 1em 0;
+}
+
+.Profile > .ProfileFormList > .ProfileFormListItem {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+}
+
+.Profile > .ProfileFormList > .ProfileFormListItem:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
