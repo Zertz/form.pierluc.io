@@ -2,22 +2,24 @@ import React, {Component, PropTypes} from 'react'
 
 import './Loading.css'
 
+import Text from '../Text'
+
 class Loading extends Component {
-  render() {
+  render () {
     const { percent, content } = this.props
 
     return (
-      <div className="Loading">
+      <div className='Loading'>
         {typeof percent === 'number' ? (
-          <div className="LoadingDeterminate"></div>
+          <div className='LoadingDeterminate' />
         ) : (
-          <div className="LoadingIndeterminate"></div>
+          <div className='LoadingIndeterminate' />
         )}
         {content ? (
           <Text content={content} />
         ) : null}
       </div>
-    );
+    )
   }
 }
 

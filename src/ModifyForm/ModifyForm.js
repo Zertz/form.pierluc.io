@@ -79,7 +79,7 @@ class ModifyForm extends Component {
     })
   }
 
-  onFormNameChanged(e) {
+  onFormNameChanged (e) {
     const { form } = this.state
 
     form.name = e.target.value

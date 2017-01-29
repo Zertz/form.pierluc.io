@@ -22,7 +22,7 @@ class Select extends Component {
       <div className='Select'>
         <select id={id} value={input.value} onChange={onChange}>
           {input.choices.map((choice, index) => (
-            <option key={index} value={choice.value}>{choice.label} {choice.amount ? `(${choice.amount})`: ''}</option>
+            <option key={index} value={choice.value}>{choice.label} {choice.amount ? `(${choice.amount})` : ''}</option>
           ))}
         </select>
         <label className='SelectLabel' htmlFor={id}>{input.label}</label>

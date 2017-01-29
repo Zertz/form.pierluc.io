@@ -104,7 +104,7 @@ class FieldEditor extends Component {
         {FormService.isMultipleChoices(input.type) ? (
           <div className='FieldEditorChoices'>
             <Subtitle content={intl.formatMessage(messages['choices'])} />
-            <Button text={intl.formatMessage(messages['addChoice'])} onClick={this.onAddChoiceClicked}/>
+            <Button text={intl.formatMessage(messages['addChoice'])} onClick={this.onAddChoiceClicked} />
             {(input.choices || []).map((choice, index) => {
               const inputs = [{
                 type: 'text',
@@ -117,7 +117,7 @@ class FieldEditor extends Component {
               }]
 
               return (
-                <div className="FieldEditorChoice" key={index}>
+                <div className='FieldEditorChoice' key={index}>
                   {inputs.map((input, index) => (
                     <FieldRenderer key={index} input={input} onChange={() => {}} />
                   ))}

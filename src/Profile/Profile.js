@@ -26,11 +26,11 @@ const messages = defineMessages({
   },
   modify: {
     id: 'Profile.Modify',
-    defaultMessage: "Modify"
+    defaultMessage: 'Modify'
   },
   preview: {
     id: 'Profile.Preview',
-    defaultMessage: "Preview"
+    defaultMessage: 'Preview'
   }
 })
 

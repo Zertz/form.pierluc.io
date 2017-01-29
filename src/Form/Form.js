@@ -88,7 +88,7 @@ class Form extends Component {
     const { isLoading, form } = this.state
 
     return isLoading ? <Loading /> : (
-      <div className="Form">
+      <div className='Form'>
         { form.name ? <Title content={form.name} /> : null }
         <form className='FormForm' onSubmit={this.onSubmit}>
           {form.inputs.map((input, index) => <FieldRenderer key={index} input={input} />)}
