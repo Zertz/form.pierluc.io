@@ -42,11 +42,15 @@ class CreateForm extends Component {
     this.state = {
       form: null,
       inputs: FormService.getDefaultFields(),
+      isAddModalShown: false,
       isModifyModalShown: false,
       isRemoveDialogShown: false
     }
 
-    this.onInputAdded = this.onInputAdded.bind(this)
+    this.onAddClicked = this.onAddClicked.bind(this)
+    this.onAddModalSaveClicked = this.onAddModalSaveClicked.bind(this)
+    this.onAddModalCancelClicked = this.onAddModalCancelClicked.bind(this)
+    this.onAddModalOverlayClicked = this.onAddModalOverlayClicked.bind(this)
 
     this.onModifyClicked = this.onModifyClicked.bind(this)
     this.onModifyModalSaveClicked = this.onModifyModalSaveClicked.bind(this)
@@ -61,11 +65,29 @@ class CreateForm extends Component {
     this.onCreateClicked = this.onCreateClicked.bind(this)
   }
 
-  onInputAdded (input) {
+  onAddClicked () {
+    this.setState({
+      isAddModalShown: true
+    })
+  }
+
+  onAddModalSaveClicked (input) {
     const { inputs } = this.state
 
     this.setState({
       inputs: inputs.push(input)
+    })
+  }
+
+  onAddModalCancelClicked () {
+    this.setState({
+      isAddModalShown: false
+    })
+  }
+
+  onAddModalOverlayClicked () {
+    this.setState({
+      isAddModalShown: false
     })
   }
 
@@ -149,6 +171,7 @@ class CreateForm extends Component {
     const { intl } = this.props
     const {
       inputs,
+      isAddModalShown,
       isModifyModalShown,
       isRemoveDialogShown
     } = this.state
@@ -156,7 +179,14 @@ class CreateForm extends Component {
     return (
       <div className='CreateForm'>
         <div className='CreateFormHeader'>
-          <Button text={intl.formatMessage(messages['addField'])} />
+          <Button text={intl.formatMessage(messages['addField'])} onClick={this.onAddClicked} />
+          {isAddModalShown ? (
+            <Modal
+              content={<FieldEditor input={{ type: 'text' }} />}
+              actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onAddModalSaveClicked} />}
+              onCancelClicked={this.onAddModalCancelClicked}
+              onOverlayClicked={this.onAddModalOverlayClicked} />
+          ) : null}
         </div>
         <ul className='CreateFormInputList'>
           {inputs.map((input, index) =>

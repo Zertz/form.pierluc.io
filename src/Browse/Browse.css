@@ -1,3 +1,47 @@
 .Browse {
   height: 100%;
 }
+
+.Browse > .BrowseList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.Browse > .BrowseList > .BrowseListItem {
+  box-shadow: 0 0 7.5px 0 #BDBDBD;
+  margin-bottom: 2em;
+  width: 100%;
+}
+
+.Browse > .BrowseList > .BrowseListItem > .BrowseListItemHeader {
+  background-color: #E91E63;
+  padding: 0.5em;
+  height: 100px;
+}
+
+.Browse > .BrowseList > .BrowseListItem > .BrowseListItemContent {
+  padding: 0.5em;
+  height: 100px;
+}
+
+@media (min-width: 667px) {
+  .Browse > .BrowseList > .BrowseListItem {
+    width: calc(50% - 1em);
+  }
+}
+
+@media (min-width: 1024px) {
+  .Browse > .BrowseList > .BrowseListItem {
+    width: calc(33.33% - 1em);
+  }
+}
+
+@media (min-width: 1440px) {
+  .Browse > .BrowseList > .BrowseListItem {
+    width: calc(25% - 1em);
+  }
+}

@@ -1,32 +1,28 @@
-import React, {Component} from 'react'
+import React, {Component, PropTypes} from 'react'
 import classnames from 'classnames'
 
 import './Button.css'
 
 class Button extends Component {
-  constructor (props) {
-    super(props)
-
-    this.onClick = this.onClick.bind(this)
-  }
-
-  onClick () {
-    const { onClick } = this.props
-
-    if (typeof onClick === 'function') {
-      onClick()
-    }
-  }
-
   render () {
-    const { submit } = this.props
+    const {
+      onClick,
+      text,
+      classNames,
+      submit
+    } = this.props
 
     return submit ? (
-      <input type='submit' className={classnames('Button', this.props.classnames)} onClick={this.onClick} value={this.props.text} />
+      <input type='submit' className={classnames('Button', classNames)} onClick={onClick} value={text} />
     ) : (
-      <button className={classnames('Button', this.props.classnames)} onClick={this.onClick}>{this.props.text}</button>
+      <button className={classnames('Button', classNames)} onClick={onClick}>{text}</button>
     )
   }
+}
+
+Button.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired
 }
 
 export default Button

@@ -2,10 +2,12 @@ import React from 'react'
 
 import './Footer.css'
 
+import Text from '../Text'
+
 function Footer () {
   return (
     <div className='Footer'>
-      <div className='Text'>&copy; pierluc.io 2017</div>
+      <Text content={'©️ pierluc.io'} />
     </div>
   )
 }

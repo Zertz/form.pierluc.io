@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
-import {FormattedMessage} from 'react-intl'
 import {Link} from 'react-router'
 
 import './Browse.css'
+
+import Loading from '../Loading'
 
 class Browse extends Component {
   constructor (props) {
@@ -40,16 +41,15 @@ class Browse extends Component {
 
     return (
       <div className='Browse'>
-        <ul>
-          { isLoading
-            ? <li className='BrowseLoading'>
-              <FormattedMessage id='Browse.Loading' defaultMessage='Loading' />
-            </li>
-            : forms.map(form => (
-              <li key={form.key}>
+        <ul className='BrowseList'>
+          { isLoading ? <Loading /> : forms.map(form => (
+            <li className='BrowseListItem' key={form.key}>
+              <div className='BrowseListItemHeader' />
+              <div className='BrowseListItemContent'>
                 <Link className='BrowseLink' activeClassName='BrowseLinkActive' to={`/browse/${form.key}`}>{form.name || form.key}</Link>
-              </li>
-            ))}
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
     )

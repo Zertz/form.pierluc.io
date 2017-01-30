@@ -10,7 +10,8 @@
 }
 
 .Dialog > .DialogOverlay{
-  background-color: #ddd;
+  animation: dialogFadeIn 0.25s ease;
+  background-color: #fefefe;
   opacity: 0.75;
   position: absolute;
   top: 0;
@@ -20,16 +21,40 @@
 }
 
 .Dialog > .DialogWindow {
-  background-color: #eee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: dialogZoomIn 0.25s ease;
+  background-color: #fefefe;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.05);
+  padding: 1em;
+  max-width: 75%;
+  max-height: 75%;
   width: 320px;
-  height: 320px;
+  height: 160px;
   z-index: 0;
 }
 
-.Dialog > .DialogWindow .DialogWindowContent {
+.Dialog > .DialogWindow > .DialogWindowContent {
+  margin-bottom: 1em;
+}
+
+.Dialog > .DialogWindow > .DialogWindowContent > .Text {
+  text-align: center;
+}
+
+.Dialog > .DialogWindow > .DialogWindowButtons {
   font-size: 1em;
 }
 
-.Dialog > .DialogWindow .DialogWindowFooter {
-  background-color: #ccc;
+@keyframes dialogFadeIn {
+  from { opacity: 0; }
+  to { opacity: 0.75; }
+}
+
+@keyframes dialogZoomIn {
+  0% { width: 0; height: 0; }
+  75% { width: 330px; height: 165px; }
+  100% { width: 320px; height: 160px; }
 }

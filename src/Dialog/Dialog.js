@@ -4,6 +4,7 @@ import {defineMessages, injectIntl} from 'react-intl'
 import './Dialog.css'
 
 import Button from '../Button'
+import Text from '../Text'
 
 const messages = defineMessages({
   cancel: {
@@ -26,7 +27,7 @@ class Dialog extends Component {
       <div className='Dialog'>
         <div className='DialogOverlay' onClick={onOverlayClicked} />
         <div className='DialogWindow'>
-          <div className='DialogWindowContent'>{content}</div>
+          <div className='DialogWindowContent'><Text content={content} /></div>
           <div className='DialogWindowButtons'>
             <Button classnames='Cancel' text={intl.formatMessage(messages['cancel'])} onClick={onCancelClicked} />
             {actionButton}

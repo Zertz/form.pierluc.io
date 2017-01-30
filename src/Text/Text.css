@@ -1,7 +1,6 @@
 .Text {
-  color: #444;
+  color: #212121;
   font-size: 1em;
   font-weight: 100;
-  letter-spacing: 1px;
-  text-align: left;
+  line-height: 1.4em;
 }

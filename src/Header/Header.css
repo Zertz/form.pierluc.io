@@ -1,21 +1,26 @@
 .Header {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #ddd;
+  flex-shrink: 0;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #BDBDBD;
   padding: 1em;
 }
 
-.HeaderLogo {
+.Header > a {
+  font-size: 0;
+}
+
+.Header > a > .HeaderLogo {
   margin-right: 1em;
   height: 50px;
 }
 
-.HeaderTitle {
-  margin: 0;
-  text-align: left;
+.Header > .Title {
+  margin: 0 0 0 0.25em;
 }
 
-.HeaderMenu {
+.Header > .HeaderMenu {
   display: flex;
   justify-content: flex-end;
   flex-basis: 100%;
@@ -24,12 +29,12 @@
   padding: 0;
 }
 
-.HeaderMenuItem {
+.Header > .HeaderMenu > .HeaderMenuItem {
   margin-left: 1em;
 }
 
-.HeaderMenuItem a {
-  color: #444;
+.Header > .HeaderMenu > .HeaderMenuItem a {
+  color: #212121;
   font-size: 1.5em;
   text-decoration: none;
 }
