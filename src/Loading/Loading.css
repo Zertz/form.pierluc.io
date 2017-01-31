@@ -1,5 +1,6 @@
 .Loading {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -22,6 +23,10 @@
   position: relative;
   transform: translateZ(0);
   animation: loadingIndeterminate 1s infinite linear;
+}
+
+.Loading > .Text {
+  margin-top: 1em;
 }
 
 @keyframes loadingIndeterminate {
