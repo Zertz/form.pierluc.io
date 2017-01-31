@@ -36,6 +36,12 @@ class Browse extends Component {
     base.removeBinding(this.ref)
   }
 
+  getHeaderStyle (form) {
+    return form.coverImage ? {
+      backgroundImage: `url(${form.coverImage})`
+    } : {}
+  }
+
   render () {
     const { forms, isLoading } = this.state
 
@@ -44,7 +50,7 @@ class Browse extends Component {
         <ul className='BrowseList'>
           { isLoading ? <Loading /> : forms.map(form => (
             <li className='BrowseListItem' key={form.key}>
-              <div className='BrowseListItemHeader' />
+              <div className='BrowseListItemHeader' style={this.getHeaderStyle(form)} />
               <div className='BrowseListItemContent'>
                 <Link className='BrowseLink' activeClassName='BrowseLinkActive' to={`/browse/${form.key}`}>{form.name || form.key}</Link>
               </div>

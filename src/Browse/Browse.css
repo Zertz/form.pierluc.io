@@ -19,6 +19,9 @@
 
 .Browse > .BrowseList > .BrowseListItem > .BrowseListItemHeader {
   background-color: #E91E63;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
   padding: 0.5em;
   height: 100px;
 }
