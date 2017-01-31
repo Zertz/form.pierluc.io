@@ -1,0 +1,8 @@
+.Uploader {
+  height: 100%;
+}
+
+.Uploader > .UploaderImage {
+  width: 100%;
+  height: 100%;
+}
