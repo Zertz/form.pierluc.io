@@ -11,11 +11,16 @@ import Button from '../Button'
 import Dialog from '../Dialog'
 import FieldEditor from '../FieldEditor'
 import Modal from '../Modal'
+import Uploader from '../Uploader'
 
 const messages = defineMessages({
   addField: {
     id: 'CreateForm.AddField',
     defaultMessage: 'Add field'
+  },
+  addCoverImage: {
+    id: 'CreateForm.AddCoverImage',
+    defaultMessage: 'Add cover image'
   },
   modify: {
     id: 'CreateForm.Modify',
@@ -40,17 +45,23 @@ class CreateForm extends Component {
     super(props)
 
     this.state = {
-      form: null,
       inputs: FormService.getDefaultFields(),
-      isAddModalShown: false,
+      isAddFieldModalShown: false,
+      isAddCoverImageModalShown: false,
       isModifyModalShown: false,
       isRemoveDialogShown: false
     }
 
-    this.onAddClicked = this.onAddClicked.bind(this)
-    this.onAddModalSaveClicked = this.onAddModalSaveClicked.bind(this)
-    this.onAddModalCancelClicked = this.onAddModalCancelClicked.bind(this)
-    this.onAddModalOverlayClicked = this.onAddModalOverlayClicked.bind(this)
+    this.onAddFieldClicked = this.onAddFieldClicked.bind(this)
+    this.onAddFieldModalSaveClicked = this.onAddFieldModalSaveClicked.bind(this)
+    this.onAddFieldModalCancelClicked = this.onAddFieldModalCancelClicked.bind(this)
+    this.onAddFieldModalOverlayClicked = this.onAddFieldModalOverlayClicked.bind(this)
+
+    this.onCoverImageUploaded = this.onCoverImageUploaded.bind(this)
+    this.onAddCoverImageClicked = this.onAddCoverImageClicked.bind(this)
+    this.onAddCoverImageModalSaveClicked = this.onAddCoverImageModalSaveClicked.bind(this)
+    this.onAddCoverImageModalCancelClicked = this.onAddCoverImageModalCancelClicked.bind(this)
+    this.onAddCoverImageModalOverlayClicked = this.onAddCoverImageModalOverlayClicked.bind(this)
 
     this.onModifyClicked = this.onModifyClicked.bind(this)
     this.onModifyModalSaveClicked = this.onModifyModalSaveClicked.bind(this)
@@ -65,13 +76,13 @@ class CreateForm extends Component {
     this.onCreateClicked = this.onCreateClicked.bind(this)
   }
 
-  onAddClicked () {
+  onAddFieldClicked () {
     this.setState({
-      isAddModalShown: true
+      isAddFieldModalShown: true
     })
   }
 
-  onAddModalSaveClicked (input) {
+  onAddFieldModalSaveClicked (input) {
     const { inputs } = this.state
 
     this.setState({
@@ -79,15 +90,45 @@ class CreateForm extends Component {
     })
   }
 
-  onAddModalCancelClicked () {
+  onAddFieldModalCancelClicked () {
     this.setState({
-      isAddModalShown: false
+      isAddFieldModalShown: false
     })
   }
 
-  onAddModalOverlayClicked () {
+  onAddFieldModalOverlayClicked () {
     this.setState({
-      isAddModalShown: false
+      isAddFieldModalShown: false
+    })
+  }
+
+  onCoverImageUploaded (coverImage) {
+    this.setState({
+      coverImage
+    })
+  }
+
+  onAddCoverImageClicked () {
+    this.setState({
+      isAddCoverImageModalShown: true
+    })
+  }
+
+  onAddCoverImageModalSaveClicked () {
+    this.setState({
+      isAddCoverImageModalShown: false
+    })
+  }
+
+  onAddCoverImageModalCancelClicked () {
+    this.setState({
+      isAddCoverImageModalShown: false
+    })
+  }
+
+  onAddCoverImageModalOverlayClicked () {
+    this.setState({
+      isAddCoverImageModalShown: false
     })
   }
 
@@ -154,10 +195,11 @@ class CreateForm extends Component {
 
   async onCreateClicked (input) {
     const { base } = this.props
-    const { inputs } = this.state
+    const { coverImage, inputs } = this.state
 
     try {
       const formId = await FormService.create(base, {
+        coverImage,
         inputs
       })
 
@@ -168,10 +210,11 @@ class CreateForm extends Component {
   }
 
   render () {
-    const { intl } = this.props
+    const { intl, base } = this.props
     const {
       inputs,
-      isAddModalShown,
+      isAddFieldModalShown,
+      isAddCoverImageModalShown,
       isModifyModalShown,
       isRemoveDialogShown
     } = this.state
@@ -179,13 +222,21 @@ class CreateForm extends Component {
     return (
       <div className='CreateForm'>
         <div className='CreateFormHeader'>
-          <Button text={intl.formatMessage(messages['addField'])} onClick={this.onAddClicked} />
-          {isAddModalShown ? (
+          <Button text={intl.formatMessage(messages['addField'])} onClick={this.onAddFieldClicked} />
+          {isAddFieldModalShown ? (
             <Modal
               content={<FieldEditor input={{ type: 'text' }} />}
-              actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onAddModalSaveClicked} />}
-              onCancelClicked={this.onAddModalCancelClicked}
-              onOverlayClicked={this.onAddModalOverlayClicked} />
+              actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onAddFieldModalSaveClicked} />}
+              onCancelClicked={this.onAddFieldModalCancelClicked}
+              onOverlayClicked={this.onAddFieldModalOverlayClicked} />
+          ) : null}
+          <Button text={intl.formatMessage(messages['addCoverImage'])} onClick={this.onAddCoverImageClicked} />
+          {isAddCoverImageModalShown ? (
+            <Modal
+              content={<Uploader base={base} onFileUploaded={this.onCoverImageUploaded} />}
+              actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onAddCoverImageModalSaveClicked} />}
+              onCancelClicked={this.onAddCoverImageModalCancelClicked}
+              onOverlayClicked={this.onAddCoverImageModalOverlayClicked} />
           ) : null}
         </div>
         <ul className='CreateFormInputList'>
