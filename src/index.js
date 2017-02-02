@@ -14,13 +14,15 @@ import './index.css'
 
 import App from './App'
 import Browse from './Browse'
+import BrowseForm from './BrowseForm'
 import Connect from './Connect'
 import CreateForm from './CreateForm'
 import Form from './Form'
+import FormList from './FormList'
 import Home from './Home'
 import Login from './Login'
 import Logout from './Logout'
-import ModifyForm from './ModifyForm'
+import Me from './Me'
 import Profile from './Profile'
 
 const language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
@@ -32,15 +34,18 @@ ReactDOM.render((
     <Router history={browserHistory}>
       <Route path='/' component={App}>
         <IndexRoute component={Home} />
-        <Route path='browse'>
-          <IndexRoute component={Browse} />
-          <Route path=':form' component={Form} />
+        <Route path='browse' component={Browse}>
+          <IndexRoute component={FormList} />
+          <Route path=':form' component={BrowseForm}>
+            <IndexRoute component={Form} />
+            <Route path='edit' component={CreateForm} />>
+          </Route>
         </Route>
         <Route path='create' component={CreateForm} />
-        <Route path='me'>
+        <Route path='me' component={Me}>
           <IndexRoute component={Profile} />
           <Route path='connect' component={Connect} />
-          <Route path=':form' component={ModifyForm} />
+          <Route path=':form' component={CreateForm} />
         </Route>
         <Route path='connect' component={Login} />
         <Route path='disconnect' component={Logout} />

@@ -1,17 +1,17 @@
 import React, {Component} from 'react'
 
-import './Browse.css'
+import './Me.css'
 
-class Browse extends Component {
+class Me extends Component {
   render () {
     const { base, user } = this.props
 
     return (
-      <div className='Browse'>
+      <div className='Me'>
         {this.props.children && React.cloneElement(this.props.children, { base, user })}
       </div>
     )
   }
 }
 
-export default Browse
+export default Me

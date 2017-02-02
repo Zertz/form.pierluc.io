@@ -1,8 +1,4 @@
-.Browse {
-  height: 100%;
-}
-
-.Browse > .BrowseList {
+.FormList {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -11,13 +7,13 @@
   justify-content: space-between;
 }
 
-.Browse > .BrowseList > .BrowseListItem {
+.FormList > .FormListItem {
   box-shadow: 0 0 7.5px 0 #BDBDBD;
   margin-bottom: 2em;
   width: 100%;
 }
 
-.Browse > .BrowseList > .BrowseListItem > .BrowseListItemHeader {
+.FormList > .FormListItem > .FormListItemHeader {
   background-color: #C2185B;
   background-position: center center;
   background-repeat: no-repeat;
@@ -26,25 +22,25 @@
   height: 150px;
 }
 
-.Browse > .BrowseList > .BrowseListItem > .BrowseListItemContent {
+.FormList > .FormListItem > .FormListItemContent {
   padding: 0.5em;
   height: 75px;
 }
 
 @media (min-width: 667px) {
-  .Browse > .BrowseList > .BrowseListItem {
+  .FormList > .FormListItem {
     width: calc(50% - 1em);
   }
 }
 
 @media (min-width: 1024px) {
-  .Browse > .BrowseList > .BrowseListItem {
+  .FormList > .FormListItem {
     width: calc(33.33% - 1em);
   }
 }
 
 @media (min-width: 1440px) {
-  .Browse > .BrowseList > .BrowseListItem {
+  .FormList > .FormListItem {
     width: calc(25% - 1em);
   }
 }

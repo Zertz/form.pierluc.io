@@ -112,8 +112,8 @@ class Profile extends Component {
         <ul className='ProfileFormList'>
           { isLoadingForms ? <Loading /> : forms.map((form, index) => (
             <li className='ProfileFormListItem' key={form.key}>
-              <Text content={form.name || ''} />
-              <Link className='ProfileLink' activeClassName='ProfileLinkActive' to={`/me/${form.key}`}>{intl.formatMessage(messages['modify'])}</Link>
+              <Text content={form.name || form.key} />
+              <Link className='ProfileLink' activeClassName='ProfileLinkActive' to={`/browse/${form.key}/edit`}>{intl.formatMessage(messages['modify'])}</Link>
               <Link className='ProfileLink' activeClassName='ProfileLinkActive' to={`/browse/${form.key}`}>{intl.formatMessage(messages['preview'])}</Link>
             </li>
           ))}

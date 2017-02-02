@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
 import {defineMessages, injectIntl} from 'react-intl'
 
 import './Form.css'
@@ -34,6 +34,10 @@ class Form extends Component {
 
     try {
       const form = await base.database().ref('forms/' + routeParams.form).once('value')
+
+      if (!form.val()) {
+        throw new Error("We can't find this form at the moment, please try again shortly!")
+      }
 
       this.setState({
         isLoading: false,
@@ -90,17 +94,13 @@ class Form extends Component {
     return isLoading ? <Loading /> : (
       <div className='Form'>
         { form.name ? <Title content={form.name} /> : null }
-        <form className='FormForm' onSubmit={this.onSubmit}>
+        <form onSubmit={this.onSubmit}>
           {form.inputs.map((input, index) => <FieldRenderer key={index} input={input} />)}
           <Button submit text={intl.formatMessage(messages['submit'])} />
         </form>
       </div>
     )
   }
-}
-
-Form.propTypes = {
-  inputs: PropTypes.array
 }
 
 export default injectIntl(Form)

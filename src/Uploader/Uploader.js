@@ -69,10 +69,6 @@ class Uploader extends Component {
     })
   }
 
-  onSubmit (e) {
-    e.preventDefault()
-  }
-
   render () {
     const {
       isUploading,
@@ -87,9 +83,7 @@ class Uploader extends Component {
         ) : uploadedImage ? (
           <img className='UploaderImage' src={uploadedImage} alt='Uploaded' />
         ) : (
-          <form className='UploaderForm' onSubmit={this.onSubmit}>
-            <input type='file' onChange={this.onFileChanged} multiple={false} />
-          </form>
+          <input type='file' onChange={this.onFileChanged} multiple={false} />
         )}
       </div>
     )

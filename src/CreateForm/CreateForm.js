@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {defineMessages, injectIntl} from 'react-intl'
 import {browserHistory} from 'react-router'
+import update from 'immutability-helper'
 
 import './CreateForm.css'
 
@@ -10,6 +11,7 @@ import FieldRenderer from '../FieldRenderer'
 import Button from '../Button'
 import Dialog from '../Dialog'
 import FieldEditor from '../FieldEditor'
+import Loading from '../Loading'
 import Modal from '../Modal'
 import Uploader from '../Uploader'
 
@@ -37,6 +39,10 @@ const messages = defineMessages({
   save: {
     id: 'CreateForm.Save',
     defaultMessage: 'Save'
+  },
+  saving: {
+    id: 'CreateForm.Saving',
+    defaultMessage: 'Saving'
   }
 })
 
@@ -45,12 +51,15 @@ class CreateForm extends Component {
     super(props)
 
     this.state = {
-      inputs: FormService.getDefaultFields(),
+      isLoading: true,
+      form: null,
       isAddFieldModalShown: false,
       isAddCoverImageModalShown: false,
       isModifyModalShown: false,
       isRemoveDialogShown: false
     }
+
+    this.onFormNameChanged = this.onFormNameChanged.bind(this)
 
     this.onAddFieldClicked = this.onAddFieldClicked.bind(this)
     this.onAddFieldModalSaveClicked = this.onAddFieldModalSaveClicked.bind(this)
@@ -73,7 +82,42 @@ class CreateForm extends Component {
     this.onRemoveDialogCancelClicked = this.onRemoveDialogCancelClicked.bind(this)
     this.onRemoveDialogOverlayClicked = this.onRemoveDialogOverlayClicked.bind(this)
 
+    this.onSubmit = this.onSubmit.bind(this)
     this.onCreateClicked = this.onCreateClicked.bind(this)
+    this.onUpdateClicked = this.onUpdateClicked.bind(this)
+  }
+
+  componentDidMount () {
+    const { base, routeParams } = this.props
+
+    if (routeParams.form) {
+      this.ref = base.bindToState(`forms/${routeParams.form}`, {
+        context: this,
+        state: 'form',
+        then () {
+          this.setState({
+            isLoading: false
+          })
+        }
+      })
+    } else {
+      this.setState({
+        isLoading: false,
+        form: {
+          name: '',
+          coverImage: '',
+          inputs: FormService.getDefaultFields()
+        }
+      })
+    }
+  }
+
+  onFormNameChanged (e) {
+    const { form } = this.state
+
+    form.name = e.target.value
+
+    this.setState({ form })
   }
 
   onAddFieldClicked () {
@@ -83,10 +127,12 @@ class CreateForm extends Component {
   }
 
   onAddFieldModalSaveClicked (input) {
-    const { inputs } = this.state
+    const { form } = this.state
 
     this.setState({
-      inputs: inputs.push(input)
+      form: update(form, {
+        inputs: { $push: [input] }
+      })
     })
   }
 
@@ -103,8 +149,12 @@ class CreateForm extends Component {
   }
 
   onCoverImageUploaded (coverImage) {
+    const { form } = this.state
+
     this.setState({
-      coverImage
+      form: update(form, {
+        coverImage: { $set: coverImage }
+      })
     })
   }
 
@@ -170,12 +220,14 @@ class CreateForm extends Component {
 
   onRemoveDialogConfirmClicked (index) {
     return () => {
-      const { inputs } = this.state
-      const left = inputs.slice(0, index)
-      const right = inputs.slice(index + 1, inputs.length)
+      const { form } = this.state
+      const left = form.inputs.slice(0, index)
+      const right = form.inputs.slice(index + 1, form.inputs.length)
 
       this.setState({
-        inputs: left.concat(right),
+        form: update(form, {
+          inputs: { $set: left.concat(right) }
+        }),
         isRemoveDialogShown: false
       })
     }
@@ -193,17 +245,45 @@ class CreateForm extends Component {
     })
   }
 
-  async onCreateClicked (input) {
+  onSubmit (e) {
+    const { routeParams } = this.props
+
+    e.preventDefault()
+
+    this.setState({
+      isSaving: true
+    })
+
+    if (routeParams.form) {
+      this.onUpdateClicked(e)
+    } else {
+      this.onCreateClicked(e)
+    }
+  }
+
+  async onCreateClicked (e) {
     const { base } = this.props
-    const { coverImage, inputs } = this.state
+    const { form } = this.state
 
     try {
-      const formId = await FormService.create(base, {
-        coverImage,
-        inputs
-      })
+      const formId = await FormService.create(base, form)
 
-      browserHistory.push(`/me/${formId}`)
+      browserHistory.push(`/browse/${formId}`)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async onUpdateClicked (e) {
+    const { base, routeParams } = this.props
+    const { form } = this.state
+
+    try {
+      await FormService.update(base, routeParams.form, form)
+
+      this.setState({
+        isSaving: false
+      })
     } catch (error) {
       console.error(error)
     }
@@ -212,16 +292,19 @@ class CreateForm extends Component {
   render () {
     const { intl, base } = this.props
     const {
-      inputs,
+      form,
+      isLoading,
+      isSaving,
       isAddFieldModalShown,
       isAddCoverImageModalShown,
       isModifyModalShown,
       isRemoveDialogShown
     } = this.state
 
-    return (
-      <div className='CreateForm'>
+    return isLoading ? <Loading /> : (
+      <form className='CreateForm' onSubmit={this.onSubmit}>
         <div className='CreateFormHeader'>
+          <FieldRenderer input={{ type: 'text', value: form.name || '' }} onChange={this.onFormNameChanged} />
           <Button text={intl.formatMessage(messages['addField'])} onClick={this.onAddFieldClicked} />
           {isAddFieldModalShown ? (
             <Modal
@@ -240,7 +323,7 @@ class CreateForm extends Component {
           ) : null}
         </div>
         <ul className='CreateFormInputList'>
-          {inputs.map((input, index) =>
+          {form.inputs.map((input, index) =>
             <li className='CreateFormInputListItem' key={index}>
               <FieldRenderer input={input} onChange={() => {}} />
               <Button text={intl.formatMessage(messages['modify'])} onClick={this.onModifyClicked(index)} />
@@ -262,8 +345,8 @@ class CreateForm extends Component {
             </li>
           )}
         </ul>
-        <Button text={intl.formatMessage(messages['save'])} onClick={this.onCreateClicked} />
-      </div>
+        <Button submit text={isSaving ? intl.formatMessage(messages['saving']) : intl.formatMessage(messages['save'])} />
+      </form>
     )
   }
 }
