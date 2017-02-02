@@ -1,9 +1,12 @@
 import React, {Component} from 'react'
 import {defineMessages, injectIntl} from 'react-intl'
+import {browserHistory} from 'react-router'
+import update from 'immutability-helper'
 
 import './Form.css'
 
 import PaymentService from '../PaymentService'
+import RegistrationService from '../RegistrationService'
 
 import Button from '../Button'
 import FieldRenderer from '../FieldRenderer'
@@ -52,8 +55,23 @@ class Form extends Component {
     }
   }
 
+  onInputChanged (index) {
+    return (e) => {
+      const { inputs } = this.state.form
+
+      inputs[index].value = e.target.value
+
+      this.setState({
+        form: update(this.state.form, {
+          inputs: { $set: inputs }
+        })
+      })
+    }
+  }
+
   async checkoutCallback (token) {
     const { base, routeParams } = this.props
+    const { form } = this.state
 
     try {
       const userToken = await base.auth().currentUser.getToken()
@@ -66,9 +84,15 @@ class Form extends Component {
         userToken
       })
 
-      const json = await response.json()
+      const charge = await response.json()
+      const registration = {
+        charge,
+        input: form.inputs
+      }
 
-      console.info(json)
+      await RegistrationService.create(base, registration)
+
+      browserHistory.push('/me')
     } catch (error) {
       console.error(error)
     }
@@ -95,7 +119,7 @@ class Form extends Component {
       <div className='Form'>
         { form.name ? <Title content={form.name} /> : null }
         <form onSubmit={this.onSubmit}>
-          {form.inputs.map((input, index) => <FieldRenderer key={index} input={input} />)}
+          {form.inputs.map((input, index) => <FieldRenderer key={index} input={input} onChange={this.onInputChanged(index)} />)}
           <Button submit text={intl.formatMessage(messages['submit'])} />
         </form>
       </div>
