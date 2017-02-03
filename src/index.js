@@ -38,7 +38,7 @@ ReactDOM.render((
           <IndexRoute component={FormList} />
           <Route path=':form' component={BrowseForm}>
             <IndexRoute component={Form} />
-            <Route path='edit' component={CreateForm} />>
+            <Route path='edit' component={CreateForm} />
           </Route>
         </Route>
         <Route path='create' component={CreateForm} />
