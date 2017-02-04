@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {defineMessages, injectIntl} from 'react-intl'
+import classnames from 'classnames'
 
 import './Modal.css'
 
@@ -24,6 +25,7 @@ class Modal extends Component {
   render () {
     const {
       intl,
+      isVisible,
       content,
       actionButton,
       onCancelClicked,
@@ -33,7 +35,7 @@ class Modal extends Component {
     const componentName = this.getWrappedComponentName(content)
 
     return (
-      <div className={`Modal ${componentName}Modal`}>
+      <div className={classnames('Modal', `${componentName}Modal`, typeof isVisible === 'undefined' ? null : isVisible ? "ModalVisible" : "ModalHidden")}>
         <div className={`ModalOverlay ${componentName}ModalOverlay`} onClick={onOverlayClicked} />
         <div className={`ModalWindow ${componentName}ModalWindow`}>
           <div className={`ModalWindowContent ${componentName}ModalWindowContent`}>{content}</div>

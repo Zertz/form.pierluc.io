@@ -53,7 +53,7 @@ class CreateForm extends Component {
     this.state = {
       isLoading: true,
       form: null,
-      isAddFieldModalShown: false,
+      isAddFieldModalShown: undefined,
       isAddCoverImageModalShown: false,
       isModifyModalShown: false,
       isRemoveDialogShown: false
@@ -306,13 +306,12 @@ class CreateForm extends Component {
         <div className='CreateFormHeader'>
           <FieldRenderer input={{ type: 'text', value: form.name || '' }} onChange={this.onFormNameChanged} />
           <Button text={intl.formatMessage(messages['addField'])} onClick={this.onAddFieldClicked} />
-          {isAddFieldModalShown ? (
-            <Modal
-              content={<FieldEditor input={{ type: 'text' }} />}
-              actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onAddFieldModalSaveClicked} />}
-              onCancelClicked={this.onAddFieldModalCancelClicked}
-              onOverlayClicked={this.onAddFieldModalOverlayClicked} />
-          ) : null}
+          <Modal
+            isVisible={isAddFieldModalShown}
+            content={<FieldEditor input={{ type: 'text' }} />}
+            actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onAddFieldModalSaveClicked} />}
+            onCancelClicked={this.onAddFieldModalCancelClicked}
+            onOverlayClicked={this.onAddFieldModalOverlayClicked} />
           <Button text={intl.formatMessage(messages['addCoverImage'])} onClick={this.onAddCoverImageClicked} />
           {isAddCoverImageModalShown ? (
             <Modal
