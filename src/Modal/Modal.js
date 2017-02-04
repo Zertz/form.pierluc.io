@@ -35,7 +35,7 @@ class Modal extends Component {
     const componentName = this.getWrappedComponentName(content)
 
     return (
-      <div className={classnames('Modal', `${componentName}Modal`, typeof isVisible === 'undefined' ? null : isVisible ? "ModalVisible" : "ModalHidden")}>
+      <div className={classnames('Modal', `${componentName}Modal`, typeof isVisible === 'undefined' ? null : isVisible ? 'ModalVisible' : 'ModalHidden')}>
         <div className={`ModalOverlay ${componentName}ModalOverlay`} onClick={onOverlayClicked} />
         <div className={`ModalWindow ${componentName}ModalWindow`}>
           <div className={`ModalWindowContent ${componentName}ModalWindowContent`}>{content}</div>
