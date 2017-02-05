@@ -20,14 +20,14 @@ class Select extends Component {
 
     return (
       <div className='Select'>
-        <select id={id} value={input.value} onChange={onChange}>
+        <select id={id} value={input.value || input.defaultValue || ''} onChange={onChange}>
           {input.choices.map((choice, index) => (
             <option key={index} value={choice.value}>{choice.label} {choice.amount ? `(${choice.amount})` : ''}</option>
           ))}
         </select>
         <label className='SelectLabel' htmlFor={id}>{input.label}</label>
-        <Text classnames='SelectDescription' content={input.description} />
-        <Text classnames='SelectHelp' content={input.help} />
+        {input.description && <Text classnames='SelectDescription' content={input.description} />}
+        {input.help && <Text classnames='SelectHelp' content={input.help} />}
       </div>
     )
   }

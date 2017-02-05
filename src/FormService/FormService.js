@@ -23,38 +23,55 @@ class FormService {
       type: 'radio',
       subtype: 'payment',
       label: 'plan',
+      defaultValue: 'free',
       choices: [{
-        label: 'free',
-        value: 0
+        label: 'Free',
+        amount: 0,
+        value: 'free'
       }, {
-        label: 'premium',
-        value: 10000
+        label: 'Premium',
+        amount: 50,
+        value: 'premium'
       }]
     }, {
       type: 'select',
       label: 'color',
+      defaultValue: 'red',
       choices: [{
-        label: 'red'
+        label: 'Red',
+        amount: 10,
+        value: 'red'
       }, {
-        label: 'green'
+        label: 'Green',
+        amount: 20,
+        value: 'green'
       }, {
-        label: 'blue'
+        label: 'Blue',
+        amount: 30,
+        value: 'blue'
       }]
     }, {
       type: 'checkbox',
       label: 'animals',
       choices: [{
-        label: 'bird'
+        label: 'Bird',
+        value: 'bird'
       }, {
-        label: 'cat'
+        label: 'Cat',
+        value: 'cat'
       }, {
-        label: 'dog'
+        label: 'Dog',
+        value: 'dog'
       }]
     }]
   }
 
   isMultipleChoices (type) {
     return ['radio', 'select', 'checkbox'].indexOf(type) >= 0
+  }
+
+  isMultipleValues (type) {
+    return ['checkbox'].indexOf(type) >= 0
   }
 
   create (base, form) {

@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
 import {defineMessages, injectIntl} from 'react-intl'
-import {browserHistory} from 'react-router'
+import {browserHistory, Link} from 'react-router'
 import update from 'immutability-helper'
 
 import './Form.css'
 
+import FormService from '../FormService'
 import PaymentService from '../PaymentService'
 import RegistrationService from '../RegistrationService'
 
@@ -14,6 +15,10 @@ import Loading from '../Loading'
 import Title from '../Title'
 
 const messages = defineMessages({
+  edit: {
+    id: 'Form.Edit',
+    defaultMessage: 'Edit'
+  },
   submit: {
     id: 'Form.Submit',
     defaultMessage: 'Submit'
@@ -59,7 +64,19 @@ class Form extends Component {
     return (e) => {
       const { inputs } = this.state.form
 
-      inputs[index].value = e.target.value
+      if (FormService.isMultipleValues(inputs[index].type)) {
+        inputs[index].values = inputs[index].values || []
+
+        const valueIndex = inputs[index].values.indexOf(e.target.value)
+
+        if (valueIndex === -1) {
+          inputs[index].values.push(e.target.value)
+        } else {
+          inputs[index].values.splice(valueIndex, 1)
+        }
+      } else {
+        inputs[index].value = e.target.value
+      }
 
       this.setState({
         form: update(this.state.form, {
@@ -111,16 +128,27 @@ class Form extends Component {
     e.preventDefault()
   }
 
+  getHeaderStyle (form) {
+    return form.coverImage ? {
+      backgroundImage: `url('${form.coverImage}')`
+    } : {}
+  }
+
   render () {
-    const { intl } = this.props
+    const { intl, routeParams, user } = this.props
     const { isLoading, form } = this.state
 
     return isLoading ? <Loading /> : (
       <div className='Form'>
+        <div className='FormHeader' style={this.getHeaderStyle(form)}>
+          {user && form.user === user.uid ? (
+            <Link className='Button' to={`/browse/${routeParams.form}/edit`}>{intl.formatMessage(messages['edit'])}</Link>
+          ) : null}
+        </div>
         { form.name ? <Title content={form.name} /> : null }
         <form onSubmit={this.onSubmit}>
           {form.inputs.map((input, index) => <FieldRenderer key={index} input={input} onChange={this.onInputChanged(index)} />)}
-          <Button submit text={intl.formatMessage(messages['submit'])} />
+          <Button text={intl.formatMessage(messages['submit'])} />
         </form>
       </div>
     )
