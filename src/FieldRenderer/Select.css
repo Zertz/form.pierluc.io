@@ -6,33 +6,47 @@
 
 .Select > label {
   order: 0;
-  display: block;
-  font-size: 1.125em;
-  margin-bottom: 0.75em;
-  width: 100%;
 }
 
-.Select .SelectDescription {
+.Select > .SelectDescription {
   order: 1;
-  font-size: 1.1875em;
+  color: #757575;
+  font-size: 1.125em;
   margin-bottom: 0.5em;
 }
 
-.Select > select {
+.Select > .SelectWrapper {
   order: 2;
-  border: 1px solid #ccc;
+  margin-bottom: 0.25em;
+  position: relative;
+}
+
+.Select > .SelectWrapper:after {
+  border-left: 0.6em solid transparent;
+  border-right: 0.6em solid transparent;
+  border-top: 0.75em solid #757575;
+  content: '';
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: calc(50% - 0.3em);
+  right: 0.6em;
+}
+
+.Select > .SelectWrapper > select {
+  background-color: #EEEEEE;
+  border: 1px solid #BDBDBD;
   border-radius: 0.25em;
   font-size: 1.25em;
-  margin-bottom: 0.25em;
-  padding: 0.35em 0.5em;
+  font-weight: 300;
+  padding: 0.25em 0.45em;
   width: 100%;
 }
 
 .Select .SelectHelp {
   order: 3;
-  font-size: 0.875em;
-}
-
-.Select > select:focus + label {
-  font-weight: 300;
+  color: #757575;
+  font-size: 0.85em;
+  font-weight: 100;
+  margin-top: 0.25em;
 }

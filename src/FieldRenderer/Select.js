@@ -3,6 +3,8 @@ import React, {Component, PropTypes} from 'react'
 import './Select.css'
 
 import AppService from '../AppService'
+
+import Label from '../Label'
 import Text from '../Text'
 
 class Select extends Component {
@@ -20,12 +22,14 @@ class Select extends Component {
 
     return (
       <div className='Select'>
-        <select id={id} value={input.value || input.defaultValue || ''} onChange={onChange}>
-          {input.choices.map((choice, index) => (
-            <option key={index} value={choice.value}>{choice.label} {choice.amount ? `(${choice.amount})` : ''}</option>
-          ))}
-        </select>
-        <label className='SelectLabel' htmlFor={id}>{input.label}</label>
+        <div className='SelectWrapper'>
+          <select id={id} value={input.value || input.defaultValue || ''} onChange={onChange}>
+            {input.choices.map((choice, index) => (
+              <option key={index} value={choice.value}>{choice.label} {choice.amount ? `(${choice.amount})` : ''}</option>
+            ))}
+          </select>
+        </div>
+        <Label htmlFor={id}>{input.label}</Label>
         {input.description && <Text classnames='SelectDescription' content={input.description} />}
         {input.help && <Text classnames='SelectHelp' content={input.help} />}
       </div>

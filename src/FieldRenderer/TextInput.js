@@ -3,6 +3,8 @@ import React, {Component, PropTypes} from 'react'
 import './TextInput.css'
 
 import AppService from '../AppService'
+
+import Label from '../Label'
 import Text from '../Text'
 
 class TextInput extends Component {
@@ -21,7 +23,7 @@ class TextInput extends Component {
     return (
       <div className='TextInput'>
         <input id={id} type={input.type} value={input.value || ''} onChange={onChange} />
-        <label htmlFor={id}>{input.label}</label>
+        <Label htmlFor={id} content={input.label} />
         {input.description && <Text classnames='TextInputDescription' content={input.description} />}
         {input.help && <Text classnames='TextInputHelp' content={input.help} />}
       </div>

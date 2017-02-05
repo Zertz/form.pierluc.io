@@ -4,17 +4,33 @@
   width: 100%;
 }
 
-.RadioGroup > .RadioGroupLabel {
-  display: block;
+.RadioGroup > .RadioGroupDescription {
+  color: #757575;
   font-size: 1.125em;
   margin-bottom: 0.5em;
-  width: 100%;
 }
 
-.RadioGroup > .RadioGroupButton:not(:last-child) {
+.RadioGroup > label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.RadioGroup > label:last-of-type {
   margin-bottom: 0.25em;
 }
 
-.RadioGroup > .RadioGroupButton > input {
+.RadioGroup > label > input {
   margin-right: 1em;
+}
+
+.RadioGroup > label > input:checked + span {
+  font-weight: 300;
+}
+
+.RadioGroup .RadioGroupHelp {
+  color: #757575;
+  font-size: 0.85em;
+  font-weight: 100;
+  margin-top: 0.25em;
 }

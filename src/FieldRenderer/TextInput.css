@@ -4,35 +4,33 @@
   width: 100%;
 }
 
-.TextInput > label {
+.TextInput > .TextInputLabel {
   order: 0;
-  display: block;
-  font-size: 1.125em;
-  margin-bottom: 0.75em;
-  width: 100%;
 }
 
 .TextInput .TextInputDescription {
   order: 1;
-  font-size: 1.1875em;
+  color: #757575;
+  font-size: 1.125em;
   margin-bottom: 0.5em;
 }
 
 .TextInput > input {
   order: 2;
-  border: 1px solid #ccc;
+  border: 1px solid #BDBDBD;
   border-radius: 0.25em;
+  color: #212121;
   font-size: 1.25em;
+  font-weight: 100;
+  letter-spacing: 1.5px;
   padding: 0.35em 0.5em;
   width: 100%;
 }
 
 .TextInput .TextInputHelp {
   order: 3;
-  font-size: 0.875em;
-  margin-top: 0.5em;
-}
-
-.TextInput > input:focus + label {
-  font-weight: 300;
+  color: #757575;
+  font-size: 0.85em;
+  font-weight: 100;
+  margin-top: 0.25em;
 }

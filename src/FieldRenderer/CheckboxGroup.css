@@ -4,17 +4,33 @@
   width: 100%;
 }
 
-.CheckboxGroup > .CheckboxGroupLabel {
-  display: block;
+.CheckboxGroup > .CheckboxGroupDescription {
+  color: #757575;
   font-size: 1.125em;
   margin-bottom: 0.5em;
-  width: 100%;
 }
 
-.CheckboxGroup > .CheckboxGroupButton:not(:last-child) {
+.CheckboxGroup > label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.CheckboxGroup > label:last-of-type {
   margin-bottom: 0.25em;
 }
 
-.CheckboxGroup > .CheckboxGroupButton > input {
+.CheckboxGroup > label > input {
   margin-right: 1em;
+}
+
+.CheckboxGroup > label > input:checked + span {
+  font-weight: 300;
+}
+
+.CheckboxGroup .CheckboxGroupHelp {
+  color: #757575;
+  font-size: 0.85em;
+  font-weight: 100;
+  margin-top: 0.25em;
 }

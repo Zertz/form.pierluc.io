@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 
 import './RadioGroup.css'
 
+import Label from '../Label'
 import Text from '../Text'
 
 class RadioGroup extends Component {
@@ -10,13 +11,13 @@ class RadioGroup extends Component {
 
     return (
       <radiogroup className='RadioGroup'>
-        <div className='RadioGroupLabel'>{input.label}</div>
+        <div className='Label'>{input.label}</div>
         {input.description && <Text classnames='RadioGroupDescription' content={input.description} />}
         {input.choices.map((choice, index) => (
-          <label className='RadioGroupButton' key={index}>
+          <Label key={index}>
             <input type='radio' value={choice.value} onChange={onChange} checked={input.value ? choice.value === input.value : choice.value === input.defaultValue} />
             <span>{choice.label}</span>
-          </label>
+          </Label>
         ))}
         {input.help && <Text classnames='RadioGroupHelp' content={input.help} />}
       </radiogroup>

@@ -21,6 +21,11 @@ body {
   height: 100%;
 }
 
-form, input {
+form, input, select {
   box-sizing: border-box;
+  margin: 0;
+}
+
+select {
+  appearance: none;
 }
