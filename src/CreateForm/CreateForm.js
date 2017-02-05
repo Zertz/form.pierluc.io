@@ -54,9 +54,9 @@ class CreateForm extends Component {
       isLoading: true,
       form: null,
       isAddFieldModalShown: undefined,
-      isAddCoverImageModalShown: false,
-      isModifyModalShown: false,
-      isRemoveDialogShown: false
+      isAddCoverImageModalShown: undefined,
+      isModifyModalShown: undefined,
+      isRemoveDialogShown: undefined
     }
 
     this.onFormNameChanged = this.onFormNameChanged.bind(this)
@@ -302,7 +302,7 @@ class CreateForm extends Component {
     } = this.state
 
     return isLoading ? <Loading /> : (
-      <form className='CreateForm' onSubmit={this.onSubmit}>
+      <div className='CreateForm'>
         <div className='CreateFormHeader'>
           <FieldRenderer input={{ type: 'text', value: form.name || '' }} onChange={this.onFormNameChanged} />
           <Button text={intl.formatMessage(messages['addField'])} onClick={this.onAddFieldClicked} />
@@ -313,13 +313,12 @@ class CreateForm extends Component {
             onCancelClicked={this.onAddFieldModalCancelClicked}
             onOverlayClicked={this.onAddFieldModalOverlayClicked} />
           <Button text={intl.formatMessage(messages['addCoverImage'])} onClick={this.onAddCoverImageClicked} />
-          {isAddCoverImageModalShown ? (
-            <Modal
-              content={<Uploader base={base} onFileUploaded={this.onCoverImageUploaded} />}
-              actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onAddCoverImageModalSaveClicked} />}
-              onCancelClicked={this.onAddCoverImageModalCancelClicked}
-              onOverlayClicked={this.onAddCoverImageModalOverlayClicked} />
-          ) : null}
+          <Modal
+            isVisible={isAddCoverImageModalShown}
+            content={<Uploader base={base} onFileUploaded={this.onCoverImageUploaded} />}
+            actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onAddCoverImageModalSaveClicked} />}
+            onCancelClicked={this.onAddCoverImageModalCancelClicked}
+            onOverlayClicked={this.onAddCoverImageModalOverlayClicked} />
         </div>
         <ul className='CreateFormInputList'>
           {form.inputs.map((input, index) =>
@@ -327,25 +326,23 @@ class CreateForm extends Component {
               <FieldRenderer input={input} onChange={() => {}} />
               <Button text={intl.formatMessage(messages['modify'])} onClick={this.onModifyClicked(index)} />
               <Button text={intl.formatMessage(messages['remove'])} onClick={this.onRemoveClicked(index)} />
-              {isModifyModalShown === index ? (
-                <Modal
-                  content={<FieldEditor input={input} />}
-                  actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onModifyModalSaveClicked(index)} />}
-                  onCancelClicked={this.onModifyModalCancelClicked}
-                  onOverlayClicked={this.onModifyModalOverlayClicked} />
-              ) : null}
-              {isRemoveDialogShown === index ? (
-                <Dialog
-                  content={intl.formatMessage(messages['confirmRemove'])}
-                  actionButton={<Button text={intl.formatMessage(messages['remove'])} onClick={this.onRemoveDialogConfirmClicked(index)} />}
-                  onCancelClicked={this.onRemoveDialogCancelClicked}
-                  onOverlayClicked={this.onRemoveDialogOverlayClicked} />
-              ) : null}
+              <Modal
+                isVisible={isModifyModalShown === undefined ? undefined : isModifyModalShown === index}
+                content={<FieldEditor input={input} />}
+                actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onModifyModalSaveClicked(index)} />}
+                onCancelClicked={this.onModifyModalCancelClicked}
+                onOverlayClicked={this.onModifyModalOverlayClicked} />
+              <Dialog
+                isVisible={isRemoveDialogShown === undefined ? undefined : isRemoveDialogShown === index}
+                content={intl.formatMessage(messages['confirmRemove'])}
+                actionButton={<Button text={intl.formatMessage(messages['remove'])} onClick={this.onRemoveDialogConfirmClicked(index)} />}
+                onCancelClicked={this.onRemoveDialogCancelClicked}
+                onOverlayClicked={this.onRemoveDialogOverlayClicked} />
             </li>
           )}
         </ul>
-        <Button submit text={isSaving ? intl.formatMessage(messages['saving']) : intl.formatMessage(messages['save'])} />
-      </form>
+        <Button text={isSaving ? intl.formatMessage(messages['saving']) : intl.formatMessage(messages['save'])} onClick={this.onSubmit} />
+      </div>
     )
   }
 }

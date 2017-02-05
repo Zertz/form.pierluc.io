@@ -50,6 +50,7 @@ class Modal extends Component {
 }
 
 Modal.propTypes = {
+  isVisible: PropTypes.bool,
   content: PropTypes.element.isRequired,
   actionButton: PropTypes.element.isRequired,
   onCancelClicked: PropTypes.func.isRequired,

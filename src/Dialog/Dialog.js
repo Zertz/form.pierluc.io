@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {defineMessages, injectIntl} from 'react-intl'
+import classnames from 'classnames'
 
 import './Dialog.css'
 
@@ -17,6 +18,7 @@ class Dialog extends Component {
   render () {
     const {
       intl,
+      isVisible,
       content,
       actionButton,
       onCancelClicked,
@@ -24,12 +26,14 @@ class Dialog extends Component {
     } = this.props
 
     return (
-      <div className='Dialog'>
+      <div className={classnames('Dialog', typeof isVisible === 'undefined' ? null : isVisible ? 'DialogVisible' : 'DialogHidden')}>
         <div className='DialogOverlay' onClick={onOverlayClicked} />
         <div className='DialogWindow'>
-          <div className='DialogWindowContent'><Text content={content} /></div>
+          <div className='DialogWindowContent'>
+            <Text content={content} />
+          </div>
           <div className='DialogWindowButtons'>
-            <Button classnames='Cancel' text={intl.formatMessage(messages['cancel'])} onClick={onCancelClicked} />
+            <Button cancel text={intl.formatMessage(messages['cancel'])} onClick={onCancelClicked} />
             {actionButton}
           </div>
         </div>
@@ -39,6 +43,7 @@ class Dialog extends Component {
 }
 
 Dialog.propTypes = {
+  isVisible: PropTypes.bool,
   content: PropTypes.string.isRequired,
   actionButton: PropTypes.element.isRequired,
   onCancelClicked: PropTypes.func.isRequired,

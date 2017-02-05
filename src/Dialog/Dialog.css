@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  visibility: hidden;
   position: fixed;
   top: 0;
   left: 0;
@@ -9,10 +10,18 @@
   height: 100%;
 }
 
-.Dialog > .DialogOverlay{
-  animation: dialogFadeIn 0.25s ease;
+.Dialog.DialogVisible {
+  visibility: visible;
+}
+
+.Dialog.DialogHidden {
+  visibility: hidden;
+}
+
+.Dialog > .DialogOverlay {
   background-color: #fefefe;
   opacity: 0.75;
+  visibility: hidden;
   position: absolute;
   top: 0;
   left: 0;
@@ -20,12 +29,23 @@
   height: 100%;
 }
 
+.Dialog.DialogVisible > .DialogOverlay {
+  animation: dialogFadeIn 0.25s ease;
+  opacity: 0.75;
+  visibility: visible;
+}
+
+.Dialog.DialogHidden > .DialogOverlay {
+  animation: dialogFadeOut 0.25s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
 .Dialog > .DialogWindow {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  animation: dialogZoomIn 0.25s ease;
   background-color: #fefefe;
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.05);
   padding: 1em;
@@ -34,6 +54,18 @@
   width: 320px;
   height: 160px;
   z-index: 0;
+}
+
+.Dialog.DialogVisible > .DialogWindow {
+  animation: dialogZoomIn 0.25s ease;
+  opacity: 1;
+  visibility: visible;
+}
+
+.Dialog.DialogHidden > .DialogWindow {
+  animation: dialogZoomOut 0.25s ease;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .Dialog > .DialogWindow > .DialogWindowContent {
@@ -48,13 +80,46 @@
   font-size: 1em;
 }
 
-@keyframes dialogFadeIn {
-  from { opacity: 0; }
-  to { opacity: 0.75; }
+@keyframes dialogZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(100%);
+  }
 }
 
-@keyframes dialogZoomIn {
-  0% { width: 0; height: 0; }
-  75% { width: 330px; height: 165px; }
-  100% { width: 320px; height: 160px; }
+@keyframes dialogZoomOut {
+  from {
+    opacity: 1;
+    transform: scale(100%);
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    transform: scale(0);
+    visibility: hidden;
+  }
+}
+
+@keyframes dialogFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.75;
+  }
+}
+
+@keyframes dialogFadeOut {
+  from {
+    opacity: 0.75;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
