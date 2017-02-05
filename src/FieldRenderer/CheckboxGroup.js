@@ -2,6 +2,8 @@ import React, {Component, PropTypes} from 'react'
 
 import './CheckboxGroup.css'
 
+import Text from '../Text'
+
 class CheckboxGroup extends Component {
   render () {
     const { input, onChange } = this.props

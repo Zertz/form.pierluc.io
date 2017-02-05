@@ -2,6 +2,8 @@ import React, {Component, PropTypes} from 'react'
 
 import './RadioGroup.css'
 
+import Text from '../Text'
+
 class RadioGroup extends Component {
   render () {
     const { input, onChange } = this.props
