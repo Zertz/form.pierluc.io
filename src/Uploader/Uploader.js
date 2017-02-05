@@ -81,7 +81,7 @@ class Uploader extends Component {
         {isUploading ? (
           <Loading content={`${parseInt(uploadedPercent, 10)}%`} />
         ) : uploadedImage ? (
-          <img className='UploaderImage' src={uploadedImage} alt='Uploaded' />
+          <div className='UploaderImage' style={{backgroundImage: `url('${uploadedImage}')`}} />
         ) : (
           <input type='file' onChange={this.onFileChanged} multiple={false} />
         )}
