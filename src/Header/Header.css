@@ -17,6 +17,7 @@
 }
 
 .Header > .Title {
+  display: none;
   margin: 0 0 0 0.25em;
 }
 
@@ -25,8 +26,6 @@
   justify-content: flex-end;
   flex-basis: 100%;
   list-style-type: none;
-  margin: 0;
-  padding: 0;
 }
 
 .Header > .HeaderMenu > .HeaderMenuItem {
@@ -37,4 +36,10 @@
   color: #212121;
   font-size: 1.5em;
   text-decoration: none;
+}
+
+@media (min-width: 667px) {
+  .Header > .Title {
+    display: block;
+  }
 }

@@ -21,6 +21,6 @@ body {
   height: 100%;
 }
 
-input {
+form, input {
   box-sizing: border-box;
 }

@@ -4,6 +4,27 @@
   height: 100%;
 }
 
-.Form > * {
+.Form > .FormHeader {
+  background-color: #C2185B;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: -2em 0 2em -2em;
+  padding: 0.5em;
+  width: calc(100% + 4em);
+  height: 200px;
+}
+
+.Form > form {
+  box-shadow: 0 0 5px 0 #BDBDBD;
+  margin: 0 auto;
+  padding: 2em;
+  max-width: 667px;
+  width: 100%;
+}
+
+.Form > form > *:not(:last-child) {
+  border-bottom: 1px solid #BDBDBD;
   margin-bottom: 1.5em;
+  padding-bottom: 1.5em;
 }

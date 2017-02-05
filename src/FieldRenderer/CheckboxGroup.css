@@ -7,8 +7,12 @@
 .CheckboxGroup > .CheckboxGroupLabel {
   display: block;
   font-size: 1.125em;
-  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
   width: 100%;
+}
+
+.CheckboxGroup > .CheckboxGroupButton:not(:last-child) {
+  margin-bottom: 0.25em;
 }
 
 .CheckboxGroup > .CheckboxGroupButton > input {

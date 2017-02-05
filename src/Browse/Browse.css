@@ -12,7 +12,7 @@
 }
 
 .Browse > .BrowseList > .BrowseListItem {
-  box-shadow: 0 0 7.5px 0 #BDBDBD;
+  box-shadow: 0 0 5px 0 #BDBDBD;
   margin-bottom: 2em;
   width: 100%;
 }
