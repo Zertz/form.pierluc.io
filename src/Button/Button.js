@@ -9,13 +9,16 @@ class Button extends Component {
       onClick,
       text,
       classNames,
+      cancel,
       submit
     } = this.props
 
     return submit ? (
       <input type='submit' className={classnames('Button', classNames)} onClick={onClick} value={text} />
     ) : (
-      <button className={classnames('Button', classNames)} onClick={onClick}>{text}</button>
+      <button className={classnames('Button', {
+        cancel: !!cancel
+      })} onClick={onClick}>{text}</button>
     )
   }
 }

@@ -12,12 +12,26 @@ import RegistrationService from '../RegistrationService'
 import Button from '../Button'
 import FieldRenderer from '../FieldRenderer'
 import Loading from '../Loading'
+import Modal from '../Modal'
 import Title from '../Title'
+import Uploader from '../Uploader'
 
 const messages = defineMessages({
+  addCoverImage: {
+    id: 'Form.AddCoverImage',
+    defaultMessage: 'Add cover image'
+  },
+  changeCoverImage: {
+    id: 'Form.ChangeCoverImage',
+    defaultMessage: 'Change cover image'
+  },
   edit: {
     id: 'Form.Edit',
     defaultMessage: 'Edit'
+  },
+  save: {
+    id: 'Form.Save',
+    defaultMessage: 'Save'
   },
   submit: {
     id: 'Form.Submit',
@@ -30,8 +44,15 @@ class Form extends Component {
     super(props)
 
     this.state = {
-      isLoading: true
+      isLoading: true,
+      isCoverImageModalShown: undefined
     }
+
+    this.onCoverImageUploaded = this.onCoverImageUploaded.bind(this)
+    this.onCoverImageClicked = this.onCoverImageClicked.bind(this)
+    this.onCoverImageModalSaveClicked = this.onCoverImageModalSaveClicked.bind(this)
+    this.onCoverImageModalCancelClicked = this.onCoverImageModalCancelClicked.bind(this)
+    this.onCoverImageModalOverlayClicked = this.onCoverImageModalOverlayClicked.bind(this)
 
     this.checkoutCallback = this.checkoutCallback.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
@@ -58,6 +79,40 @@ class Form extends Component {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  onCoverImageUploaded (coverImage) {
+    const { form } = this.state
+
+    this.setState({
+      form: update(form, {
+        coverImage: { $set: coverImage }
+      })
+    })
+  }
+
+  onCoverImageClicked () {
+    this.setState({
+      isCoverImageModalShown: true
+    })
+  }
+
+  onCoverImageModalSaveClicked () {
+    this.setState({
+      isCoverImageModalShown: false
+    })
+  }
+
+  onCoverImageModalCancelClicked () {
+    this.setState({
+      isCoverImageModalShown: false
+    })
+  }
+
+  onCoverImageModalOverlayClicked () {
+    this.setState({
+      isCoverImageModalShown: false
+    })
   }
 
   onInputChanged (index) {
@@ -135,14 +190,23 @@ class Form extends Component {
   }
 
   render () {
-    const { intl, routeParams, user } = this.props
-    const { isLoading, form } = this.state
+    const { base, intl, routeParams, user } = this.props
+    const { isLoading, isCoverImageModalShown, form } = this.state
 
     return isLoading ? <Loading /> : (
       <div className='Form'>
         <div className='FormHeader' style={this.getHeaderStyle(form)}>
           {user && form.user === user.uid ? (
-            <Link className='Button' to={`/browse/${routeParams.form}/edit`}>{intl.formatMessage(messages['edit'])}</Link>
+            <div>
+              <Link className='Button' to={`/browse/${routeParams.form}/edit`}>{intl.formatMessage(messages['edit'])}</Link>
+              <Button text={intl.formatMessage(messages[form.coverImage ? 'changeCoverImage' : 'addCoverImage'])} onClick={this.onCoverImageClicked} />
+              <Modal
+                isVisible={isCoverImageModalShown}
+                content={<Uploader base={base} onFileUploaded={this.onCoverImageUploaded} />}
+                actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onCoverImageModalSaveClicked} />}
+                onCancelClicked={this.onCoverImageModalCancelClicked}
+                onOverlayClicked={this.onCoverImageModalOverlayClicked} />
+            </div>
           ) : null}
         </div>
         { form.name ? <Title content={form.name} /> : null }

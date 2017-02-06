@@ -21,7 +21,7 @@ body {
   height: 100%;
 }
 
-form, input, select {
+form, label, input, select {
   box-sizing: border-box;
   margin: 0;
 }

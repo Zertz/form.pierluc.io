@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import './Uploader.css'
 
 import Loading from '../Loading'
+import Subtitle from '../Subtitle'
+import Text from '../Text'
 
 class Uploader extends Component {
   constructor (props) {
@@ -83,7 +85,11 @@ class Uploader extends Component {
         ) : uploadedImage ? (
           <div className='UploaderImage' style={{backgroundImage: `url('${uploadedImage}')`}} />
         ) : (
-          <input type='file' onChange={this.onFileChanged} multiple={false} />
+          <label className='UploaderLabel'>
+            <input type='file' onChange={this.onFileChanged} multiple={false} />
+            <Subtitle content={'Upload an image'} />
+            <Text content={'Click to choose a file, or drag and drop.'} />
+          </label>
         )}
       </div>
     )
