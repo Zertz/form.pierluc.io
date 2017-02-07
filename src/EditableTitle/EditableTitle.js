@@ -68,11 +68,11 @@ class EditableTitle extends Component {
     const { isEditing, title } = this.state
 
     return (
-      <div className="EditableTitle">
+      <div className='EditableTitle'>
         {isEditing ? (
-          <div className="EditableTitleEditor">
+          <div className='EditableTitleEditor'>
             <FieldRenderer focus input={{ type: 'text', value: title }} onChange={this.onChange} onKeyPress={this.onKeyPress} />
-            <div className="EditableTitleEditorButtons">
+            <div className='EditableTitleEditorButtons'>
               <Button onClick={this.onSaveClicked}>
                 <FormattedMessage id='EditableTitle.Save' defaultMessage='Save' />
               </Button>
@@ -82,7 +82,7 @@ class EditableTitle extends Component {
             </div>
           </div>
         ) : (
-          <div className="EditableTitleViewer">
+          <div className='EditableTitleViewer'>
             <Title>{children}</Title>
             <Button onClick={this.setEditing}>
               {children ? (

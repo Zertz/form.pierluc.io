@@ -224,7 +224,7 @@ class Form extends Component {
             </Button>
           ) : null}
         </div>
-        <div className="FormContent">
+        <div className='FormContent'>
           {this.isOwner() ? (
             <EditableTitle onSave={this.onTitleSaved}>{form.name || ''}</EditableTitle>
           ) : form.name ? <Title>{form.name}</Title> : null}
