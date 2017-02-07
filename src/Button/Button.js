@@ -8,24 +8,25 @@ class Button extends Component {
     const {
       onClick,
       text,
+      children,
       classNames,
       cancel,
       submit
     } = this.props
 
     return submit ? (
-      <input type='submit' className={classnames('Button', classNames)} onClick={onClick} value={text} />
+      <input type='submit' className={classnames('Button', classNames)} value={text} />
     ) : (
       <button className={classnames('Button', {
         cancel: !!cancel
-      })} onClick={onClick}>{text}</button>
+      })} onClick={onClick}>{text || children}</button>
     )
   }
 }
 
 Button.propTypes = {
   onClick: PropTypes.func,
-  text: PropTypes.string.isRequired
+  text: PropTypes.string
 }
 
 export default Button

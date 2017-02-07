@@ -91,6 +91,12 @@ class FormService {
       [`forms/${key}`]: form
     })
   }
+
+  updateField (base, key, field, value) {
+    return base.database().ref().update({
+      [`forms/${key}/${field}`]: value
+    })
+  }
 }
 
 const formService = new FormService()

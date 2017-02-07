@@ -19,7 +19,7 @@
 }
 
 .Dialog > .DialogOverlay {
-  background-color: #fefefe;
+  background-color: #BDBDBD;
   opacity: 0.75;
   visibility: hidden;
   position: absolute;
@@ -47,7 +47,7 @@
   align-items: center;
   justify-content: center;
   background-color: #fefefe;
-  box-shadow: 0 0 30px 0 rgba(33, 33, 33, 0.15);
+  box-shadow: 0 0 30px 0 rgba(33, 33, 33, 0.25);
   padding: 1em;
   max-width: 75%;
   max-height: 75%;

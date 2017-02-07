@@ -1,0 +1,23 @@
+.EditableTitle {
+  position: relative;
+}
+
+.EditableTitle > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2em;
+}
+
+.EditableTitle > .EditableTitleEditor > .EditableTitleEditorButtons {
+  position: absolute;
+  right: 0.25em;
+}
+
+.EditableTitle > .EditableTitleEditor > .EditableTitleEditorButtons > .Button:first-child {
+  margin-right: 0.25em;
+}
+
+.EditableTitle > .EditableTitleViewer > .Title {
+  margin-bottom: 0;
+}

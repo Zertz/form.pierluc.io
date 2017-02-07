@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {defineMessages, injectIntl} from 'react-intl'
-import {browserHistory, Link} from 'react-router'
+import {defineMessages, injectIntl, FormattedMessage} from 'react-intl'
+import {browserHistory} from 'react-router'
 import update from 'immutability-helper'
 
 import './Form.css'
@@ -10,6 +10,7 @@ import PaymentService from '../PaymentService'
 import RegistrationService from '../RegistrationService'
 
 import Button from '../Button'
+import EditableTitle from '../EditableTitle'
 import FieldRenderer from '../FieldRenderer'
 import Loading from '../Loading'
 import Modal from '../Modal'
@@ -17,14 +18,6 @@ import Title from '../Title'
 import Uploader from '../Uploader'
 
 const messages = defineMessages({
-  addCoverImage: {
-    id: 'Form.AddCoverImage',
-    defaultMessage: 'Add cover image'
-  },
-  changeCoverImage: {
-    id: 'Form.ChangeCoverImage',
-    defaultMessage: 'Change cover image'
-  },
   edit: {
     id: 'Form.Edit',
     defaultMessage: 'Edit'
@@ -45,14 +38,21 @@ class Form extends Component {
 
     this.state = {
       isLoading: true,
-      isCoverImageModalShown: undefined
+      isCoverImageModalShown: undefined,
+      checkout: PaymentService.initialize({
+        checkoutCallback: this.checkoutCallback
+      })
     }
+
+    this.isOwner = this.isOwner.bind(this)
 
     this.onCoverImageUploaded = this.onCoverImageUploaded.bind(this)
     this.onCoverImageClicked = this.onCoverImageClicked.bind(this)
     this.onCoverImageModalSaveClicked = this.onCoverImageModalSaveClicked.bind(this)
     this.onCoverImageModalCancelClicked = this.onCoverImageModalCancelClicked.bind(this)
     this.onCoverImageModalOverlayClicked = this.onCoverImageModalOverlayClicked.bind(this)
+
+    this.onTitleSaved = this.onTitleSaved.bind(this)
 
     this.checkoutCallback = this.checkoutCallback.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
@@ -61,24 +61,36 @@ class Form extends Component {
   async componentDidMount () {
     const { base, routeParams } = this.props
 
-    try {
-      const form = await base.database().ref('forms/' + routeParams.form).once('value')
+    base.listenTo(`forms/${routeParams.form}`, {
+      context: this,
+      then (changedForm) {
+        const { form } = this.state
 
-      if (!form.val()) {
-        throw new Error("We can't find this form at the moment, please try again shortly!")
+        if (form) {
+          if (form.name !== changedForm.name) {
+            this.setState({
+              form: update(form, {
+                name: {
+                  $set: changedForm.name
+                }
+              })
+            })
+          }
+        } else {
+          this.setState({
+            isLoading: false,
+            form: changedForm
+          })
+        }
       }
+    })
+  }
 
-      this.setState({
-        isLoading: false,
-        form: form.val(),
-        checkout: PaymentService.initialize({
-          isLive: true,
-          checkoutCallback: this.checkoutCallback
-        })
-      })
-    } catch (error) {
-      console.error(error)
-    }
+  isOwner () {
+    const { user } = this.props
+    const { form } = this.state
+
+    return user && form && form.user === user.uid
   }
 
   onCoverImageUploaded (coverImage) {
@@ -113,6 +125,12 @@ class Form extends Component {
     this.setState({
       isCoverImageModalShown: false
     })
+  }
+
+  onTitleSaved (title) {
+    const { base, routeParams } = this.props
+
+    FormService.updateField(base, routeParams.form, 'name', title)
   }
 
   onInputChanged (index) {
@@ -190,30 +208,39 @@ class Form extends Component {
   }
 
   render () {
-    const { base, intl, routeParams, user } = this.props
+    const { base, intl } = this.props
     const { isLoading, isCoverImageModalShown, form } = this.state
 
     return isLoading ? <Loading /> : (
       <div className='Form'>
         <div className='FormHeader' style={this.getHeaderStyle(form)}>
-          {user && form.user === user.uid ? (
-            <div>
-              <Link className='Button' to={`/browse/${routeParams.form}/edit`}>{intl.formatMessage(messages['edit'])}</Link>
-              <Button text={intl.formatMessage(messages[form.coverImage ? 'changeCoverImage' : 'addCoverImage'])} onClick={this.onCoverImageClicked} />
-              <Modal
-                isVisible={isCoverImageModalShown}
-                content={<Uploader base={base} onFileUploaded={this.onCoverImageUploaded} />}
-                actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onCoverImageModalSaveClicked} />}
-                onCancelClicked={this.onCoverImageModalCancelClicked}
-                onOverlayClicked={this.onCoverImageModalOverlayClicked} />
-            </div>
+          {this.isOwner() ? (
+            <Button onClick={this.onCoverImageClicked}>
+              {form.coverImage ? (
+                <FormattedMessage id='Form.ChangeImage' defaultMessage='Change image' />
+              ) : (
+                <FormattedMessage id='Form.AddImage' defaultMessage='Add image' />
+              )}
+            </Button>
           ) : null}
         </div>
-        { form.name ? <Title content={form.name} /> : null }
-        <form onSubmit={this.onSubmit}>
-          {form.inputs.map((input, index) => <FieldRenderer key={index} input={input} onChange={this.onInputChanged(index)} />)}
-          <Button text={intl.formatMessage(messages['submit'])} />
-        </form>
+        <div className="FormContent">
+          {this.isOwner() ? (
+            <EditableTitle onSave={this.onTitleSaved}>{form.name || ''}</EditableTitle>
+          ) : form.name ? <Title>{form.name}</Title> : null}
+          <form onSubmit={this.onSubmit}>
+            {form.inputs.map((input, index) => <FieldRenderer key={index} input={input} onChange={this.onInputChanged(index)} />)}
+            <Button submit text={intl.formatMessage(messages['submit'])} />
+          </form>
+        </div>
+        {this.isOwner() ? (
+          <Modal
+            isVisible={isCoverImageModalShown}
+            content={<Uploader base={base} onFileUploaded={this.onCoverImageUploaded} />}
+            actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onCoverImageModalSaveClicked} />}
+            onCancelClicked={this.onCoverImageModalCancelClicked}
+            onOverlayClicked={this.onCoverImageModalOverlayClicked} />
+        ) : null}
       </div>
     )
   }

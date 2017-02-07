@@ -15,15 +15,18 @@
   height: 200px;
 }
 
-.Form > form {
-  box-shadow: 0 0 5px 0 #BDBDBD;
+.Form > .FormContent {
   margin: 0 auto;
-  padding: 2em;
   max-width: 667px;
   width: 100%;
 }
 
-.Form > form > *:not(:last-child) {
+.Form > .FormContent > form {
+  box-shadow: 0 0 5px 0 #BDBDBD;
+  padding: 2em;
+}
+
+.Form > .FormContent > form > *:not(:last-child) {
   border-bottom: 1px solid #BDBDBD;
   margin-bottom: 1.5em;
   padding-bottom: 1.5em;
