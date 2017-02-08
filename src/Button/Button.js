@@ -10,6 +10,7 @@ class Button extends Component {
       text,
       children,
       classNames,
+      small,
       cancel,
       submit
     } = this.props
@@ -18,6 +19,7 @@ class Button extends Component {
       <input type='submit' className={classnames('Button', classNames)} value={text} />
     ) : (
       <button className={classnames('Button', {
+        small: !!small,
         cancel: !!cancel
       })} onClick={onClick}>{text || children}</button>
     )

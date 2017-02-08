@@ -4,6 +4,16 @@
   width: 100%;
 }
 
+.CheckboxGroup > .Label:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.CheckboxGroup:hover > .Label > div:first-child {
+  font-weight: 300;
+}
+
 .CheckboxGroup > .CheckboxGroupDescription {
   color: #757575;
   font-size: 1.125em;
@@ -30,7 +40,7 @@
 
 .CheckboxGroup .CheckboxGroupHelp {
   color: #757575;
-  font-size: 0.85em;
+  font-size: 0.875em;
   font-weight: 100;
   margin-top: 0.25em;
 }

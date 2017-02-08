@@ -1,17 +1,38 @@
 import React, {Component, PropTypes} from 'react'
+import {injectIntl, FormattedMessage} from 'react-intl'
 
 import './CheckboxGroup.css'
 
+import Button from '../Button'
+import ButtonGroup from '../ButtonGroup'
 import Label from '../Label'
 import Text from '../Text'
 
 class CheckboxGroup extends Component {
   render () {
-    const { input, onChange } = this.props
+    const {
+      input,
+      edit,
+      onEditClicked,
+      onRemoveClicked,
+      onChange
+    } = this.props
 
     return (
       <div className='CheckboxGroup'>
-        <div className='Label'>{input.label}</div>
+        <div className='Label'>
+          <div>{input.label}</div>
+          {edit ? (
+            <ButtonGroup>
+              <Button small onClick={onEditClicked}>
+                <FormattedMessage id='CheckboxGroup.Edit' defaultMessage='Edit' />
+              </Button>
+              <Button small cancel onClick={onRemoveClicked}>
+                <FormattedMessage id='CheckboxGroup.Remove' defaultMessage='Remove' />
+              </Button>
+            </ButtonGroup>
+          ) : null}
+        </div>
         {input.description && <Text classnames='CheckboxGroupDescription' content={input.description} />}
         {input.choices.map((choice, index) => (
           <Label key={index}>
@@ -30,4 +51,4 @@ CheckboxGroup.propTypes = {
   onChange: PropTypes.func.isRequired
 }
 
-export default CheckboxGroup
+export default injectIntl(CheckboxGroup)

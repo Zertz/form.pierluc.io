@@ -1,22 +1,24 @@
 .TextInput {
-  display: flex;
-  flex-direction: column;
   width: 100%;
 }
 
-.TextInput > .TextInputLabel {
-  order: 0;
+.TextInput > .Label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.TextInput:hover > .Label > div:first-child {
+  font-weight: 300;
 }
 
 .TextInput .TextInputDescription {
-  order: 1;
   color: #757575;
   font-size: 1.125em;
   margin-bottom: 0.5em;
 }
 
 .TextInput > input {
-  order: 2;
   border: 1px solid #BDBDBD;
   border-radius: 0.25em;
   color: #212121;
@@ -28,9 +30,8 @@
 }
 
 .TextInput .TextInputHelp {
-  order: 3;
   color: #757575;
-  font-size: 0.85em;
+  font-size: 0.875em;
   font-weight: 100;
   margin-top: 0.25em;
 }

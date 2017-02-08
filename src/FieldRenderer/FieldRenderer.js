@@ -52,7 +52,16 @@ class FieldRenderer extends Component {
   }
 
   render () {
-    const { intl, input, focus, onChange, onKeyPress } = this.props
+    const {
+      intl,
+      input,
+      edit,
+      focus,
+      onEditClicked,
+      onRemoveClicked,
+      onChange,
+      onKeyPress
+    } = this.props
 
     const Component = this.getComponent(input.type)
 
@@ -62,7 +71,14 @@ class FieldRenderer extends Component {
     input.help = input.help || ''
 
     return Component ? (
-      <Component input={this.props.input} focus={focus} onChange={onChange} onKeyPress={onKeyPress} />
+      <Component
+        input={this.props.input}
+        edit={edit}
+        focus={focus}
+        onEditClicked={onEditClicked}
+        onRemoveClicked={onRemoveClicked}
+        onChange={onChange}
+        onKeyPress={onKeyPress} />
     ) : null
   }
 }

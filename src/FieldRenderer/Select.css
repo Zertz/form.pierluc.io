@@ -1,22 +1,24 @@
 .Select {
-  display: flex;
-  flex-direction: column;
   width: 100%;
 }
 
-.Select > label {
-  order: 0;
+.Select > .Label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Select:hover > .Label > div:first-child {
+  font-weight: 300;
 }
 
 .Select > .SelectDescription {
-  order: 1;
   color: #757575;
   font-size: 1.125em;
   margin-bottom: 0.5em;
 }
 
 .Select > .SelectWrapper {
-  order: 2;
   margin-bottom: 0.25em;
   position: relative;
 }
@@ -44,9 +46,8 @@
 }
 
 .Select .SelectHelp {
-  order: 3;
   color: #757575;
-  font-size: 0.85em;
+  font-size: 0.875em;
   font-weight: 100;
   margin-top: 0.25em;
 }

@@ -6,6 +6,7 @@ import './Profile.css'
 
 import PaymentService from '../PaymentService'
 
+import FormList from '../FormList'
 import Loading from '../Loading'
 import Subtitle from '../Subtitle'
 import Text from '../Text'
@@ -23,69 +24,24 @@ const messages = defineMessages({
   paymentNotConnected: {
     id: 'Profile.PaymentNotConnected',
     defaultMessage: "It looks like you haven't connected your account to our payment provider yet. We'll automatically create an account for you so you can start accepting payments instantly!"
-  },
-  modify: {
-    id: 'Profile.Modify',
-    defaultMessage: 'Modify'
-  },
-  preview: {
-    id: 'Profile.Preview',
-    defaultMessage: 'Preview'
   }
 })
 
 class Profile extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      forms: null,
-      isLoadingForms: true
-    }
-
-    this.bindFormsToState = this.bindFormsToState.bind(this)
-  }
-
-  componentDidMount () {
-    this.bindFormsToState()
-  }
-
-  componentDidUpdate (prevProps, prevState) {
-    this.bindFormsToState()
-  }
-
-  componentWillUnmount () {
-    const { base } = this.props
-
-    base.removeBinding(this.formsRef)
-
-    this.formsRef = null
-  }
-
-  bindFormsToState () {
-    const { base, user } = this.props
-
-    if (!this.formsRef && user) {
-      this.formsRef = base.bindToState('forms', {
-        context: this,
-        state: 'forms',
-        asArray: true,
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user) {
+      this.setState({
         queries: {
           orderByChild: 'user',
-          equalTo: user.uid
-        },
-        then () {
-          this.setState({
-            isLoadingForms: false
-          })
+          equalTo: nextProps.user.uid
         }
       })
     }
   }
 
   render () {
-    const { intl, user } = this.props
-    const { isLoadingForms, forms } = this.state
+    const { base, intl, user } = this.props
+    const { queries } = this.state || {}
 
     return user ? (
       <div className='Profile'>
@@ -109,21 +65,13 @@ class Profile extends Component {
           )
         }
         <hr />
-        <ul className='ProfileFormList'>
-          { isLoadingForms ? <Loading /> : forms.map((form, index) => (
-            <li className='ProfileFormListItem' key={form.key}>
-              <Text content={form.name || form.key} />
-              <Link className='ProfileLink' activeClassName='ProfileLinkActive' to={`/browse/${form.key}/edit`}>{intl.formatMessage(messages['modify'])}</Link>
-              <Link className='ProfileLink' activeClassName='ProfileLinkActive' to={`/browse/${form.key}`}>{intl.formatMessage(messages['preview'])}</Link>
-            </li>
-          ))}
-        </ul>
+        <FormList base={base} queries={queries} />
         <hr />
-        <Link to='/disconnect'>
+        <Link className='Button cancel' to='/disconnect'>
           <FormattedMessage id='Profile.Disconnect' defaultMessage='Disconnect' />
         </Link>
       </div>
-    ) : null
+    ) : <Loading />
   }
 }
 

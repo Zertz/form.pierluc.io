@@ -26,18 +26,15 @@ class Header extends Component {
             </HeaderLink>
           </li>
           <li className='HeaderMenuItem'>
-            <HeaderLink to='/create'>
-              <FormattedMessage id='Header.Create' defaultMessage='Create' />
-            </HeaderLink>
-          </li>
-          <li className='HeaderMenuItem'>
-            { user
-              ? <HeaderLink to='/me'>
-                <FormattedMessage id='Header.MyForm' defaultMessage='My Form' />
+            { user ? (
+              <HeaderLink to='/me'>
+                <div className="ProfileImage" style={{backgroundImage: `url('${user.photoURL || ''}')`}}></div>
               </HeaderLink>
-              : <HeaderLink to='/connect'>
+            ) : (
+              <HeaderLink to='/connect'>
                 <FormattedMessage id='Header.Connect' defaultMessage='Connect' />
-              </HeaderLink> }
+              </HeaderLink>
+            )}
           </li>
         </ul>
       </div>

@@ -1,19 +1,11 @@
 import React, {Component} from 'react'
-import {defineMessages, injectIntl} from 'react-intl'
 import {Link} from 'react-router'
 
 import './FormList.css'
 
 import Loading from '../Loading'
 
-const messages = defineMessages({
-  edit: {
-    id: 'FormList.Edit',
-    defaultMessage: 'Edit'
-  }
-})
-
-class Browse extends Component {
+class FormList extends Component {
   constructor (props) {
     super(props)
 
@@ -23,12 +15,13 @@ class Browse extends Component {
   }
 
   componentDidMount () {
-    const { base } = this.props
+    const { base, queries } = this.props
 
     this.ref = base.syncState('forms', {
       context: this,
       state: 'forms',
       asArray: true,
+      queries: queries || {},
       then () {
         this.setState({
           isLoading: false
@@ -50,18 +43,13 @@ class Browse extends Component {
   }
 
   render () {
-    const { intl, user } = this.props
     const { forms, isLoading } = this.state
 
     return (
       <ul className='FormList'>
         { isLoading ? <Loading /> : forms.map(form => (
           <li className='FormListItem' key={form.key}>
-            <div className='FormListItemHeader' style={this.getHeaderStyle(form)}>
-              {user && form.user === user.uid ? (
-                <Link className='Button' to={`/browse/${form.key}/edit`}>{intl.formatMessage(messages['edit'])}</Link>
-              ) : null}
-            </div>
+            <div className='FormListItemHeader' style={this.getHeaderStyle(form)}></div>
             <div className='FormListItemContent'>
               <Link to={`/browse/${form.key}`}>{form.name || form.key}</Link>
             </div>
@@ -72,4 +60,4 @@ class Browse extends Component {
   }
 }
 
-export default injectIntl(Browse)
+export default FormList

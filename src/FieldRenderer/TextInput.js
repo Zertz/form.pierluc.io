@@ -1,9 +1,12 @@
 import React, {Component, PropTypes} from 'react'
+import {injectIntl, FormattedMessage} from 'react-intl'
 
 import './TextInput.css'
 
 import AppService from '../AppService'
 
+import Button from '../Button'
+import ButtonGroup from '../ButtonGroup'
 import Label from '../Label'
 import Text from '../Text'
 
@@ -31,11 +34,34 @@ class TextInput extends Component {
   }
 
   render () {
-    const { input, onChange, onKeyPress } = this.props
+    const {
+      input,
+      edit,
+      onEditClicked,
+      onRemoveClicked,
+      onChange,
+      onKeyPress
+    } = this.props
+
     const { id } = this.state
 
     return (
       <div className='TextInput'>
+        {input.label && (
+          <Label htmlFor={id}>
+            <div>{input.label}</div>
+            {edit ? (
+              <ButtonGroup>
+                <Button small onClick={onEditClicked}>
+                  <FormattedMessage id='TextInput.Edit' defaultMessage='Edit' />
+                </Button>
+                <Button small cancel onClick={onRemoveClicked}>
+                  <FormattedMessage id='TextInput.Remove' defaultMessage='Remove' />
+                </Button>
+              </ButtonGroup>
+            ) : null}
+          </Label>
+        )}
         <input
           id={id}
           ref={this.setInputRef}
@@ -43,7 +69,6 @@ class TextInput extends Component {
           value={input.value || ''}
           onChange={onChange}
           onKeyPress={onKeyPress} />
-        {input.label && <Label htmlFor={id} content={input.label} />}
         {input.description && <Text classnames='TextInputDescription' content={input.description} />}
         {input.help && <Text classnames='TextInputHelp' content={input.help} />}
       </div>
@@ -62,7 +87,10 @@ TextInput.propTypes = {
     description: PropTypes.string,
     help: PropTypes.string
   }),
-  onChange: PropTypes.func
+  onEditClicked: PropTypes.func,
+  onRemoveClicked: PropTypes.func,
+  onChange: PropTypes.func,
+  onKeyPress: PropTypes.func
 }
 
-export default TextInput
+export default injectIntl(TextInput)

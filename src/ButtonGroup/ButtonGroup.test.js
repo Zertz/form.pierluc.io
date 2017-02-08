@@ -2,9 +2,9 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import BrowseForm from './BrowseForm'
+import ButtonGroup from './ButtonGroup'
 
 it('renders without crashing', () => {
   const div = document.createElement('div')
-  ReactDOM.render(<BrowseForm />, div)
+  ReactDOM.render(<ButtonGroup />, div)
 })

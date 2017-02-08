@@ -14,6 +14,11 @@
   text-transform: uppercase;
 }
 
+.Button.small {
+  font-size: 0.75em;
+  padding: 0.35em 0.5em;
+}
+
 .Button.cancel {
   background-color: #607D8B;
 }

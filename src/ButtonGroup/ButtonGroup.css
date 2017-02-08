@@ -1,0 +1,3 @@
+.ButtonGroup > .Button:not(:last-child) {
+  margin-right: 0.25em
+}

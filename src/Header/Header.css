@@ -23,6 +23,7 @@
 
 .Header > .HeaderMenu {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   flex-basis: 100%;
   list-style-type: none;
