@@ -28,7 +28,7 @@ class Header extends Component {
           <li className='HeaderMenuItem'>
             { user ? (
               <HeaderLink to='/me'>
-                <div className="ProfileImage" style={{backgroundImage: `url('${user.photoURL || ''}')`}}></div>
+                <div className='ProfileImage' style={{backgroundImage: `url('${user.photoURL || ''}')`}} />
               </HeaderLink>
             ) : (
               <HeaderLink to='/connect'>

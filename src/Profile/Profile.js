@@ -28,7 +28,7 @@ const messages = defineMessages({
 })
 
 class Profile extends Component {
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (nextProps.user) {
       this.setState({
         queries: {

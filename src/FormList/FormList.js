@@ -49,7 +49,7 @@ class FormList extends Component {
       <ul className='FormList'>
         { isLoading ? <Loading /> : forms.map(form => (
           <li className='FormListItem' key={form.key}>
-            <div className='FormListItemHeader' style={this.getHeaderStyle(form)}></div>
+            <div className='FormListItemHeader' style={this.getHeaderStyle(form)} />
             <div className='FormListItemContent'>
               <Link to={`/browse/${form.key}`}>{form.name || form.key}</Link>
             </div>
