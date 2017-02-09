@@ -328,7 +328,7 @@ class Form extends Component {
             <EditableTitle onSave={this.onTitleSaved}>{form.name || ''}</EditableTitle>
           ) : form.name ? <Title>{form.name}</Title> : null}
           <form onSubmit={this.onSubmit}>
-            {Object.keys(form.fields).map((key) => form.fields[key] ? (
+            {Object.keys(form.fields || {}).map((key) => form.fields[key] ? (
               <FieldRenderer
                 key={key}
                 input={form.fields[key]}
@@ -350,7 +350,7 @@ class Form extends Component {
         {this.isOwner() && typeof isFieldEditorModalShown !== 'undefined' ? (
           <Modal
             isVisible={isFieldEditorModalShown === false ? isFieldEditorModalShown : true}
-            content={<FieldEditor input={form.inputs[isFieldEditorModalShown]} />}
+            content={<FieldEditor input={form.fields[isFieldEditorModalShown]} />}
             actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onFieldEditorModalSaveClicked(isFieldEditorModalShown)} />}
             onCancelClicked={this.onFieldEditorModalCancelClicked}
             onOverlayClicked={this.onFieldEditorModalOverlayClicked} />
