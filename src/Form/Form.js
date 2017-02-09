@@ -10,6 +10,7 @@ import PaymentService from '../PaymentService'
 import RegistrationService from '../RegistrationService'
 
 import Button from '../Button'
+import ButtonGroup from '../ButtonGroup'
 import Dialog from '../Dialog'
 import EditableTitle from '../EditableTitle'
 import FieldEditor from '../FieldEditor'
@@ -149,17 +150,17 @@ class Form extends Component {
     })
   }
 
-  onFieldEditorClicked (index) {
+  onFieldEditorClicked (key) {
     return (e) => {
       this.setState({
-        isFieldEditorModalShown: index
+        isFieldEditorModalShown: key
       })
 
       e.preventDefault()
     }
   }
 
-  onFieldEditorModalSaveClicked (index) {
+  onFieldEditorModalSaveClicked (key) {
     return () => {
       this.setState({
         isFieldEditorModalShown: false
@@ -179,25 +180,23 @@ class Form extends Component {
     })
   }
 
-  onRemoveFieldClicked (index) {
+  onRemoveFieldClicked (key) {
     return (e) => {
       this.setState({
-        isRemoveFieldDialogShown: index
+        isRemoveFieldDialogShown: key
       })
 
       e.preventDefault()
     }
   }
 
-  onRemoveFieldDialogConfirmClicked (index) {
+  onRemoveFieldDialogConfirmClicked (key) {
     return () => {
       const { form } = this.state
-      const left = form.inputs.slice(0, index)
-      const right = form.inputs.slice(index + 1, form.inputs.length)
 
       this.setState({
         form: update(form, {
-          inputs: { $set: left.concat(right) }
+          fields: { [key]: { $set: undefined } }
         }),
         isRemoveFieldDialogShown: false
       })
@@ -290,6 +289,10 @@ class Form extends Component {
     e.preventDefault()
   }
 
+  onSaveClicked (e) {
+    e.preventDefault()
+  }
+
   getHeaderStyle (form) {
     return form.coverImage ? {
       backgroundImage: `url('${form.coverImage}')`
@@ -325,16 +328,23 @@ class Form extends Component {
             <EditableTitle onSave={this.onTitleSaved}>{form.name || ''}</EditableTitle>
           ) : form.name ? <Title>{form.name}</Title> : null}
           <form onSubmit={this.onSubmit}>
-            {form.inputs.map((input, index) => (
+            {Object.keys(form.fields).map((key) => form.fields[key] ? (
               <FieldRenderer
-                key={index}
-                input={input}
+                key={key}
+                input={form.fields[key]}
                 edit={this.isOwner()}
-                onEditClicked={this.onFieldEditorClicked(index)}
-                onRemoveClicked={this.onRemoveFieldClicked(index)}
-                onChange={this.onInputChanged(index)} />
-            ))}
-            <Button submit text={intl.formatMessage(messages['submit'])} />
+                onEditClicked={this.onFieldEditorClicked(key)}
+                onRemoveClicked={this.onRemoveFieldClicked(key)}
+                onChange={this.onInputChanged(key)} />
+            ) : null)}
+            <ButtonGroup>
+              <Button submit disabled={this.isOwner()} text={intl.formatMessage(messages['submit'])} />
+              {this.isOwner() ? (
+                <Button onClick={this.onSaveClicked}>
+                  <FormattedMessage id='Form.SaveChanges' defaultMessage='Save changes' />
+                </Button>
+              ) : null}
+            </ButtonGroup>
           </form>
         </div>
         {this.isOwner() && typeof isFieldEditorModalShown !== 'undefined' ? (

@@ -21,7 +21,9 @@ class FormList extends Component {
       context: this,
       state: 'forms',
       asArray: true,
-      queries: queries || {},
+      queries: queries || {
+        orderByChild: 'publishedAt'
+      },
       then () {
         this.setState({
           isLoading: false

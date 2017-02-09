@@ -10,13 +10,14 @@ class Button extends Component {
       text,
       children,
       classNames,
+      disabled,
       small,
       cancel,
       submit
     } = this.props
 
     return submit ? (
-      <input type='submit' className={classnames('Button', classNames)} value={text} />
+      <input type='submit' className={classnames('Button', classNames)} value={text} disabled={disabled} />
     ) : (
       <button className={classnames('Button', {
         small: !!small,

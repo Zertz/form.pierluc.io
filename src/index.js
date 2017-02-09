@@ -15,6 +15,7 @@ import './index.css'
 import App from './App'
 import Browse from './Browse'
 import Connect from './Connect'
+import Create from './Create'
 import Form from './Form'
 import FormList from './FormList'
 import Home from './Home'
@@ -36,6 +37,7 @@ ReactDOM.render((
           <IndexRoute component={FormList} />
           <Route path=':form' component={Form} />
         </Route>
+        <Route path='Create' component={Create} />
         <Route path='me' component={Me}>
           <IndexRoute component={Profile} />
           <Route path='connect' component={Connect} />

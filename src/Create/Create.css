@@ -1,0 +1,12 @@
+.Create {
+  height: 100%;
+}
+
+.Create > .Text {
+  text-align: center;
+}
+
+.Create > .ButtonGroup {
+  display: flex;
+  justify-content: space-around;
+}
