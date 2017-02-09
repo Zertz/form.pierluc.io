@@ -22,7 +22,7 @@ class Dialog extends Component {
         <div className='DialogOverlay' onClick={onOverlayClicked} />
         <div className='DialogWindow'>
           <div className='DialogWindowContent'>
-            <Text content={content} />
+            <Text>{content}</Text>
           </div>
           <div className='DialogWindowButtons'>
             <Button cancel onClick={onCancelClicked}>

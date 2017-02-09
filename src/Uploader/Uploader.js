@@ -82,7 +82,7 @@ class Uploader extends Component {
     return (
       <div className='Uploader'>
         {isUploading ? (
-          <Loading content={`${parseInt(uploadedPercent, 10)}%`} />
+          <Loading>{parseInt(uploadedPercent, 10)}%</Loading>
         ) : uploadedImage ? (
           <div className='UploaderImage' style={{backgroundImage: `url('${uploadedImage}')`}} />
         ) : (

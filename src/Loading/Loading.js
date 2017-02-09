@@ -6,7 +6,7 @@ import Text from '../Text'
 
 class Loading extends Component {
   render () {
-    const { percent, content } = this.props
+    const { percent, children } = this.props
 
     return (
       <div className='Loading'>
@@ -15,8 +15,8 @@ class Loading extends Component {
         ) : (
           <div className='LoadingIndeterminate' />
         )}
-        {content ? (
-          <Text content={content} />
+        {children ? (
+          <Text>{children}</Text>
         ) : null}
       </div>
     )
