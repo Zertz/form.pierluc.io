@@ -1,6 +1,7 @@
 .Text {
   color: #212121;
-  font-size: 1em;
+  font-size: 1.125em;
   font-weight: 100;
   line-height: 1.375em;
+  margin-bottom: 1em;
 }
