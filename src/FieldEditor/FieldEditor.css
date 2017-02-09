@@ -16,5 +16,6 @@
 .FieldEditor > .FieldEditorPreview {
   flex-shrink: 0;
   border: 1px solid #eee;
+  margin-bottom: 1px;
   padding: 1em;
 }
