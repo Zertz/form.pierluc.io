@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {injectIntl, FormattedMessage} from 'react-intl'
+import {FormattedMessage} from 'react-intl'
 
 import './TextInput.css'
 
@@ -93,4 +93,4 @@ TextInput.propTypes = {
   onKeyPress: PropTypes.func
 }
 
-export default injectIntl(TextInput)
+export default TextInput

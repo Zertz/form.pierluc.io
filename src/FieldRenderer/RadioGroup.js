@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {injectIntl, FormattedMessage} from 'react-intl'
+import {FormattedMessage} from 'react-intl'
 
 import './RadioGroup.css'
 
@@ -51,4 +51,4 @@ RadioGroup.propTypes = {
   onChange: PropTypes.func.isRequired
 }
 
-export default injectIntl(RadioGroup)
+export default RadioGroup

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {defineMessages, injectIntl} from 'react-intl'
+import {FormattedMessage} from 'react-intl'
 import update from 'immutability-helper'
 
 import './FieldEditor.css'
@@ -10,21 +10,6 @@ import Button from '../Button'
 import FieldRenderer from '../FieldRenderer'
 import Subtitle from '../Subtitle'
 import Title from '../Title'
-
-const messages = defineMessages({
-  field: {
-    id: 'FieldEditor.Field',
-    defaultMessage: 'Field'
-  },
-  choices: {
-    id: 'FieldEditor.Choices',
-    defaultMessage: 'Choices'
-  },
-  addChoice: {
-    id: 'FieldEditor.AddChoice',
-    defaultMessage: 'Add choice'
-  }
-})
 
 class FieldEditor extends Component {
   constructor (props) {
@@ -90,12 +75,13 @@ class FieldEditor extends Component {
   }
 
   render () {
-    const { intl } = this.props
     const { input, editorInputs } = this.state
 
     return (
       <div className='FieldEditor'>
-        <Title content={intl.formatMessage(messages['field'])} />
+        <Title>
+          <FormattedMessage id='FieldEditor.Field' defaultMessage='Field' />
+        </Title>
         <form className='FieldEditorForm' onSubmit={this.onSubmit}>
           {editorInputs.map((editorInput, index) => (
             <FieldRenderer key={index} input={editorInput} onChange={this.onFieldChanged(index)} />
@@ -103,8 +89,12 @@ class FieldEditor extends Component {
         </form>
         {FormService.isMultipleChoices(input.type) ? (
           <div className='FieldEditorChoices'>
-            <Subtitle content={intl.formatMessage(messages['choices'])} />
-            <Button text={intl.formatMessage(messages['addChoice'])} onClick={this.onAddChoiceClicked} />
+            <Subtitle>
+              <FormattedMessage id='FieldEditor.Choices' defaultMessage='Choices' />
+            </Subtitle>
+            <Button onClick={this.onAddChoiceClicked}>
+              <FormattedMessage id='FieldEditor.AddChoice' defaultMessage='Add choice' />
+            </Button>
             {(input.choices || []).map((choice, index) => {
               const inputs = [{
                 type: 'text',
@@ -134,4 +124,4 @@ class FieldEditor extends Component {
   }
 }
 
-export default injectIntl(FieldEditor)
+export default FieldEditor

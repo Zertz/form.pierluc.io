@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
+import {FormattedMessage} from 'react-intl'
 
 import './Uploader.css'
 
@@ -87,8 +88,12 @@ class Uploader extends Component {
         ) : (
           <label className='UploaderLabel'>
             <input type='file' onChange={this.onFileChanged} multiple={false} />
-            <Subtitle content={'Upload an image'} />
-            <Text content={'Click to choose a file, or drag and drop.'} />
+            <Subtitle>
+              <FormattedMessage id='Uploader.UploadAnImage' defaultMessage='Upload an image' />
+            </Subtitle>
+            <Text>
+              <FormattedMessage id='Uploader.ClickOrDrag' defaultMessage='Click to choose a file, or drag and drop.' />
+            </Text>
           </label>
         )}
       </div>

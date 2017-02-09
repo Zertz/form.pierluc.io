@@ -18,11 +18,16 @@ class Header extends Component {
         <Link to='/'>
           <img src={logo} className='HeaderLogo' alt='logo' />
         </Link>
-        <Title content={'Form'} />
+        <Title>Form</Title>
         <ul className='HeaderMenu'>
           <li className='HeaderMenuItem'>
             <HeaderLink to='/browse'>
               <FormattedMessage id='Header.Browse' defaultMessage='Browse' />
+            </HeaderLink>
+          </li>
+          <li className='HeaderMenuItem'>
+            <HeaderLink to='/create'>
+              <FormattedMessage id='Header.Create' defaultMessage='Create' />
             </HeaderLink>
           </li>
           <li className='HeaderMenuItem'>

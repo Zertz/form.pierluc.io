@@ -5,10 +5,8 @@ import './Text.css'
 
 class Text extends Component {
   render () {
-    const { content } = this.props
-
     return (
-      <p className={classnames('Text', this.props.classnames)}>{content}</p>
+      <p className={classnames('Text', this.props.classnames)}>{this.props.children}</p>
     )
   }
 }

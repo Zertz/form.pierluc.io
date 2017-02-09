@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl'
-import { Link } from 'react-router'
+import {FormattedMessage} from 'react-intl'
+import {Link} from 'react-router'
 
 import './Profile.css'
 
@@ -11,21 +11,6 @@ import Loading from '../Loading'
 import Subtitle from '../Subtitle'
 import Text from '../Text'
 import Title from '../Title'
-
-const messages = defineMessages({
-  paymentConnected: {
-    id: 'Profile.PaymentConnected',
-    defaultMessage: "You're ready to start accepting payments!"
-  },
-  paymentDeferred: {
-    id: 'Profile.PaymentDeferred',
-    defaultMessage: "You're ready to start accepting payments!"
-  },
-  paymentNotConnected: {
-    id: 'Profile.PaymentNotConnected',
-    defaultMessage: "It looks like you haven't connected your account to our payment provider yet. We'll automatically create an account for you so you can start accepting payments instantly!"
-  }
-})
 
 class Profile extends Component {
   componentWillReceiveProps (nextProps) {
@@ -40,26 +25,32 @@ class Profile extends Component {
   }
 
   render () {
-    const { base, intl, user } = this.props
+    const { base, user } = this.props
     const { queries } = this.state || {}
 
     return user ? (
       <div className='Profile'>
-        <Title content={user.displayName} />
-        <Subtitle content={user.email} />
+        <Title>{user.displayName}</Title>
+        <Subtitle>{user.email}</Subtitle>
         <hr />
         {
           PaymentService.isConnected(user) ? (
             <div className='ProfilePayment'>
-              <Text content={intl.formatMessage(messages.paymentConnected)} />
+              <Text>
+                <FormattedMessage id='Profile.PaymentConnected' defaultMessage="You're ready to start accepting payments!" />
+              </Text>
             </div>
           ) : PaymentService.isDeferred(user) ? (
             <div className='ProfilePayment'>
-              <Text content={intl.formatMessage(messages.paymentDeferred)} />
+              <Text>
+                <FormattedMessage id='Profile.PaymentDeferred' defaultMessage="You're ready to start accepting payments!" />
+              </Text>
             </div>
           ) : (
             <div className='ProfilePayment'>
-              <Text content={intl.formatMessage(messages.paymentNotConnected)} />
+              <Text>
+                <FormattedMessage id='Profile.PaymentNotConnected' defaultMessage="It looks like you haven't connected your account to our payment provider yet. We'll automatically create an account for you so you can start accepting payments instantly!" />
+              </Text>
               <a href={PaymentService.getConnectLink()}>Get started</a>
             </div>
           )
@@ -76,7 +67,6 @@ class Profile extends Component {
 }
 
 Profile.propTypes = {
-  intl: intlShape.isRequired
 }
 
-export default injectIntl(Profile)
+export default Profile

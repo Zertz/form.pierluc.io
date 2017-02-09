@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {defineMessages, injectIntl} from 'react-intl'
+import {FormattedMessage} from 'react-intl'
 import classnames from 'classnames'
 
 import './Dialog.css'
@@ -7,17 +7,9 @@ import './Dialog.css'
 import Button from '../Button'
 import Text from '../Text'
 
-const messages = defineMessages({
-  cancel: {
-    id: 'Dialog.Cancel',
-    defaultMessage: 'Cancel'
-  }
-})
-
 class Dialog extends Component {
   render () {
     const {
-      intl,
       isVisible,
       content,
       actionButton,
@@ -33,7 +25,9 @@ class Dialog extends Component {
             <Text content={content} />
           </div>
           <div className='DialogWindowButtons'>
-            <Button cancel text={intl.formatMessage(messages['cancel'])} onClick={onCancelClicked} />
+            <Button cancel onClick={onCancelClicked}>
+              <FormattedMessage id='Dialog.Cancel' defaultMessage='Cancel' />
+            </Button>
             {actionButton}
           </div>
         </div>
@@ -50,4 +44,4 @@ Dialog.propTypes = {
   onOverlayClicked: PropTypes.func
 }
 
-export default injectIntl(Dialog)
+export default Dialog

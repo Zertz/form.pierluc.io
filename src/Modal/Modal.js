@@ -1,17 +1,10 @@
 import React, {Component, PropTypes} from 'react'
-import {defineMessages, injectIntl} from 'react-intl'
+import {FormattedMessage} from 'react-intl'
 import classnames from 'classnames'
 
 import './Modal.css'
 
 import Button from '../Button'
-
-const messages = defineMessages({
-  cancel: {
-    id: 'Modal.Cancel',
-    defaultMessage: 'Cancel'
-  }
-})
 
 class Modal extends Component {
   getWrappedComponentName (content) {
@@ -24,7 +17,6 @@ class Modal extends Component {
 
   render () {
     const {
-      intl,
       isVisible,
       content,
       actionButton,
@@ -40,7 +32,9 @@ class Modal extends Component {
         <div className={`ModalWindow ${componentName}ModalWindow`}>
           <div className={`ModalWindowContent ${componentName}ModalWindowContent`}>{content}</div>
           <div className={`ModalWindowButtons ${componentName}ModalWindowButtons`}>
-            <Button cancel text={intl.formatMessage(messages['cancel'])} onClick={onCancelClicked} />
+            <Button cancel onClick={onCancelClicked}>
+              <FormattedMessage id='Modal.Cancel' defaultMessage='Cancel' />
+            </Button>
             {actionButton}
           </div>
         </div>
@@ -57,4 +51,4 @@ Modal.propTypes = {
   onOverlayClicked: PropTypes.func
 }
 
-export default injectIntl(Modal)
+export default Modal

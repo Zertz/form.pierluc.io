@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {injectIntl, FormattedMessage} from 'react-intl'
+import {FormattedMessage} from 'react-intl'
 
 import './CheckboxGroup.css'
 
@@ -51,4 +51,4 @@ CheckboxGroup.propTypes = {
   onChange: PropTypes.func.isRequired
 }
 
-export default injectIntl(CheckboxGroup)
+export default CheckboxGroup

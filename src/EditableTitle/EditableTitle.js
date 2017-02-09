@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {injectIntl, FormattedMessage} from 'react-intl'
+import {FormattedMessage} from 'react-intl'
 
 import './EditableTitle.css'
 
@@ -103,4 +103,4 @@ EditableTitle.propTypes = {
   onSave: PropTypes.func.isRequired
 }
 
-export default injectIntl(EditableTitle)
+export default EditableTitle

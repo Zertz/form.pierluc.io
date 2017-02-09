@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {injectIntl, FormattedMessage} from 'react-intl'
+import {FormattedMessage} from 'react-intl'
 
 import './Select.css'
 
@@ -71,4 +71,4 @@ Select.propTypes = {
   onChange: PropTypes.func
 }
 
-export default injectIntl(Select)
+export default Select
