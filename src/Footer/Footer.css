@@ -7,3 +7,7 @@
   border-top: 1px solid #BDBDBD;
   padding: 1em;
 }
+
+.Footer > .Text {
+  margin-bottom: 0;
+}

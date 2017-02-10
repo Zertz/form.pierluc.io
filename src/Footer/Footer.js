@@ -7,7 +7,7 @@ import Text from '../Text'
 function Footer () {
   return (
     <div className='Footer'>
-      <Text content={'©️ pierluc.io'} />
+      <Text>©️ pierluc.io</Text>
     </div>
   )
 }
