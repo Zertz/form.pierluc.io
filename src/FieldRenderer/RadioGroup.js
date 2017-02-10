@@ -13,13 +13,14 @@ class RadioGroup extends Component {
     const {
       input,
       edit,
+      style,
       onEditClicked,
       onRemoveClicked,
       onChange
     } = this.props
 
     return (
-      <radiogroup className='RadioGroup'>
+      <radiogroup className='RadioGroup' style={style}>
         <div className='Label'>
           <div>{input.label}</div>
           {edit ? (

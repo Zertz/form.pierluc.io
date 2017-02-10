@@ -333,6 +333,7 @@ class Form extends Component {
                 key={key}
                 input={form.fields[key]}
                 edit={this.isOwner()}
+                style={{order: form.fields[key].order - Object.keys(form.fields).length}}
                 onEditClicked={this.onFieldEditorClicked(key)}
                 onRemoveClicked={this.onRemoveFieldClicked(key)}
                 onChange={this.onInputChanged(key)} />

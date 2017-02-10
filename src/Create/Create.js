@@ -29,15 +29,18 @@ class Create extends Component {
     return {
       [AppService.getRandomId()]: {
         type: 'text',
-        label: 'firstname'
+        label: 'firstname',
+        order: 0
       },
       [AppService.getRandomId()]: {
         type: 'text',
-        label: 'lastname'
+        label: 'lastname',
+        order: 1
       },
       [AppService.getRandomId()]: {
         type: 'email',
-        label: 'email'
+        label: 'email',
+        order: 2
       }
     }
   }

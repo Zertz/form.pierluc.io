@@ -9,6 +9,7 @@
   flex-direction: column;
   justify-content: center;
   border: 2px dashed #607D8B;
+  padding: 1em;
   width: 100%;
   height: 100%;
 }

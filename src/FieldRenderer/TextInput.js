@@ -37,6 +37,7 @@ class TextInput extends Component {
     const {
       input,
       edit,
+      style,
       onEditClicked,
       onRemoveClicked,
       onChange,
@@ -46,7 +47,7 @@ class TextInput extends Component {
     const { id } = this.state
 
     return (
-      <div className='TextInput'>
+      <div className='TextInput' style={style}>
         {input.label && (
           <Label htmlFor={id}>
             <div>{input.label}</div>

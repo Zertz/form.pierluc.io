@@ -23,6 +23,7 @@ class Select extends Component {
     const {
       input,
       edit,
+      style,
       onEditClicked,
       onRemoveClicked,
       onChange
@@ -31,7 +32,7 @@ class Select extends Component {
     const { id } = this.state
 
     return (
-      <div className='Select'>
+      <div className='Select' style={style}>
         {input.label && <Label htmlFor={id}>
           <div>{input.label}</div>
           {edit ? (

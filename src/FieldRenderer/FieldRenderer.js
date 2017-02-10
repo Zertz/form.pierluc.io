@@ -57,6 +57,7 @@ class FieldRenderer extends Component {
       input,
       edit,
       focus,
+      style,
       onEditClicked,
       onRemoveClicked,
       onChange,
@@ -75,6 +76,7 @@ class FieldRenderer extends Component {
         input={this.props.input}
         edit={edit}
         focus={focus}
+        style={style}
         onEditClicked={onEditClicked}
         onRemoveClicked={onRemoveClicked}
         onChange={onChange}

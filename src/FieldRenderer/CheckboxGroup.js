@@ -13,13 +13,14 @@ class CheckboxGroup extends Component {
     const {
       input,
       edit,
+      style,
       onEditClicked,
       onRemoveClicked,
       onChange
     } = this.props
 
     return (
-      <div className='CheckboxGroup'>
+      <div className='CheckboxGroup' style={style}>
         <div className='Label'>
           <div>{input.label}</div>
           {edit ? (
