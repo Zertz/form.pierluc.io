@@ -58,6 +58,9 @@ class Form extends Component {
     }
 
     this.isOwner = this.isOwner.bind(this)
+    this.isOwnerAsGuest = this.isOwnerAsGuest.bind(this)
+
+    this.onViewAsGuestClicked = this.onViewAsGuestClicked.bind(this)
 
     this.onCoverImageUploaded = this.onCoverImageUploaded.bind(this)
     this.onCoverImageClicked = this.onCoverImageClicked.bind(this)
@@ -111,9 +114,22 @@ class Form extends Component {
 
   isOwner () {
     const { user } = this.props
-    const { form } = this.state
+    const { form, isGuest } = this.state
 
-    return user && form && form.user === user.uid
+    return user && form && form.user === user.uid && !isGuest
+  }
+
+  isOwnerAsGuest () {
+    const { user } = this.props
+    const { form, isGuest } = this.state
+
+    return user && form && form.user === user.uid && isGuest
+  }
+
+  onViewAsGuestClicked () {
+    this.setState({
+      isGuest: !this.state.isGuest
+    })
   }
 
   onCoverImageUploaded (coverImage) {
@@ -314,12 +330,22 @@ class Form extends Component {
       <div className='Form'>
         <div className='FormHeader' style={this.getHeaderStyle(form)}>
           {this.isOwner() ? (
-            <Button onClick={this.onCoverImageClicked}>
-              {form.coverImage ? (
-                <FormattedMessage id='Form.ChangeImage' defaultMessage='Change image' />
-              ) : (
-                <FormattedMessage id='Form.AddImage' defaultMessage='Add image' />
-              )}
+            <ButtonGroup>
+              <Button onClick={this.onCoverImageClicked}>
+                {form.coverImage ? (
+                  <FormattedMessage id='Form.ChangeImage' defaultMessage='Change image' />
+                ) : (
+                  <FormattedMessage id='Form.AddImage' defaultMessage='Add image' />
+                )}
+              </Button>
+              <Button onClick={this.onViewAsGuestClicked}>
+                <FormattedMessage id='Form.ViewAsGuest' defaultMessage='View as guest' />
+              </Button>
+            </ButtonGroup>
+          ) : null}
+          {this.isOwnerAsGuest() ? (
+            <Button onClick={this.onViewAsGuestClicked}>
+              <FormattedMessage id='Form.ViewAsMyself' defaultMessage='Return to editing' />
             </Button>
           ) : null}
         </div>
@@ -338,14 +364,13 @@ class Form extends Component {
                 onRemoveClicked={this.onRemoveFieldClicked(key)}
                 onChange={this.onInputChanged(key)} />
             ) : null)}
-            <ButtonGroup>
+            {this.isOwner() ? (
+              <Button onClick={this.onSaveClicked}>
+                <FormattedMessage id='Form.SaveChanges' defaultMessage='Save changes' />
+              </Button>
+            ) : (
               <Button submit disabled={this.isOwner()} text={intl.formatMessage(messages['submit'])} />
-              {this.isOwner() ? (
-                <Button onClick={this.onSaveClicked}>
-                  <FormattedMessage id='Form.SaveChanges' defaultMessage='Save changes' />
-                </Button>
-              ) : null}
-            </ButtonGroup>
+            )}
           </form>
         </div>
         {this.isOwner() && typeof isFieldEditorModalShown !== 'undefined' ? (
