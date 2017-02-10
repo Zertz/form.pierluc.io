@@ -1,15 +1,12 @@
 .FormList {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-  align-content: flex-start;
-  align-items: flex-start;
-  justify-content: space-between;
+  width: calc(100% + 2em)
 }
 
 .FormList > .FormListItem {
   box-shadow: 0 0 5px 0 #BDBDBD;
-  margin-bottom: 2em;
+  margin: 0 2em 2em 0;
   width: 100%;
 }
 
@@ -29,18 +26,18 @@
 
 @media (min-width: 667px) {
   .FormList > .FormListItem {
-    width: calc(50% - 1em);
+    width: calc(50% - 2em);
   }
 }
 
 @media (min-width: 1024px) {
   .FormList > .FormListItem {
-    width: calc(33.33% - 1em);
+    width: calc(33.33% - 2em);
   }
 }
 
 @media (min-width: 1440px) {
   .FormList > .FormListItem {
-    width: calc(25% - 1em);
+    width: calc(25% - 2em);
   }
 }
