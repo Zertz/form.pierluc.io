@@ -34,14 +34,14 @@ class RadioGroup extends Component {
             </ButtonGroup>
           ) : null}
         </div>
-        {input.description && <Text classnames='RadioGroupDescription' content={input.description} />}
+        {input.description && <Text classnames='RadioGroupDescription'>{input.description}</Text>}
         {input.choices.map((choice, index) => (
           <Label key={index}>
             <input type='radio' value={choice.value} onChange={onChange} checked={input.value ? choice.value === input.value : choice.value === input.defaultValue} />
             <span>{choice.label}</span>
           </Label>
         ))}
-        {input.help && <Text classnames='RadioGroupHelp' content={input.help} />}
+        {input.help && <Text classnames='RadioGroupHelp'>{input.help}</Text>}
       </radiogroup>
     )
   }

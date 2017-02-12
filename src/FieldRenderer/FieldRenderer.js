@@ -73,7 +73,7 @@ class FieldRenderer extends Component {
 
     return Component ? (
       <Component
-        input={this.props.input}
+        input={input}
         edit={edit}
         focus={focus}
         style={style}

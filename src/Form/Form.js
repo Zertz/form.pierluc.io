@@ -5,6 +5,7 @@ import update from 'immutability-helper'
 
 import './Form.css'
 
+import AppService from '../AppService'
 import FormService from '../FormService'
 import PaymentService from '../PaymentService'
 import RegistrationService from '../RegistrationService'
@@ -13,30 +14,15 @@ import Button from '../Button'
 import ButtonGroup from '../ButtonGroup'
 import Dialog from '../Dialog'
 import EditableTitle from '../EditableTitle'
-import FieldEditor from '../FieldEditor'
 import FieldRenderer from '../FieldRenderer'
 import Loading from '../Loading'
 import Modal from '../Modal'
+import ModalFieldEditor from '../ModalFieldEditor'
+import Text from '../Text'
 import Title from '../Title'
 import Uploader from '../Uploader'
 
 const messages = defineMessages({
-  edit: {
-    id: 'Form.Edit',
-    defaultMessage: 'Edit'
-  },
-  remove: {
-    id: 'Form.Remove',
-    defaultMessage: 'Remove'
-  },
-  confirmRemove: {
-    id: 'Form.ConfirmRemove',
-    defaultMessage: 'Are you sure you want to remove this field?'
-  },
-  save: {
-    id: 'Form.Save',
-    defaultMessage: 'Save'
-  },
   submit: {
     id: 'Form.Submit',
     defaultMessage: 'Submit'
@@ -49,9 +35,11 @@ class Form extends Component {
 
     this.state = {
       isLoading: true,
-      isCoverImageModalShown: undefined,
-      isFieldEditorModalShown: undefined,
-      isRemoveFieldDialogShown: undefined,
+      isAddingField: undefined,
+      isFieldEditorModalVisible: undefined,
+      isEditingField: undefined,
+      isRemovingField: undefined,
+      isUploadingCoverImage: undefined,
       checkout: PaymentService.initialize({
         checkoutCallback: this.checkoutCallback
       })
@@ -60,18 +48,19 @@ class Form extends Component {
     this.isOwner = this.isOwner.bind(this)
     this.isOwnerAsGuest = this.isOwnerAsGuest.bind(this)
 
-    this.onViewAsGuestClicked = this.onViewAsGuestClicked.bind(this)
+    this.onToggleGuestClicked = this.onToggleGuestClicked.bind(this)
 
-    this.onCoverImageUploaded = this.onCoverImageUploaded.bind(this)
     this.onCoverImageClicked = this.onCoverImageClicked.bind(this)
+    this.onCoverImageUploaded = this.onCoverImageUploaded.bind(this)
     this.onCoverImageModalSaveClicked = this.onCoverImageModalSaveClicked.bind(this)
     this.onCoverImageModalCancelClicked = this.onCoverImageModalCancelClicked.bind(this)
     this.onCoverImageModalOverlayClicked = this.onCoverImageModalOverlayClicked.bind(this)
 
-    this.onFieldEditorClicked = this.onFieldEditorClicked.bind(this)
-    this.onFieldEditorModalSaveClicked = this.onFieldEditorModalSaveClicked.bind(this)
-    this.onFieldEditorModalCancelClicked = this.onFieldEditorModalCancelClicked.bind(this)
-    this.onFieldEditorModalOverlayClicked = this.onFieldEditorModalOverlayClicked.bind(this)
+    this.onAddFieldClicked = this.onAddFieldClicked.bind(this)
+
+    this.onEditFieldClicked = this.onEditFieldClicked.bind(this)
+    this.onModalFieldEditorSave = this.onModalFieldEditorSave.bind(this)
+    this.onModalFieldEditorClose = this.onModalFieldEditorClose.bind(this)
 
     this.onRemoveFieldClicked = this.onRemoveFieldClicked.bind(this)
     this.onRemoveFieldDialogConfirmClicked = this.onRemoveFieldDialogConfirmClicked.bind(this)
@@ -87,29 +76,48 @@ class Form extends Component {
   async componentDidMount () {
     const { base, routeParams } = this.props
 
-    base.listenTo(`forms/${routeParams.form}`, {
+    this.ref = base.listenTo(`forms/${routeParams.form}`, {
       context: this,
-      then (changedForm) {
-        const { form } = this.state
-
-        if (form) {
-          if (form.name !== changedForm.name) {
-            this.setState({
-              form: update(form, {
-                name: {
-                  $set: changedForm.name
-                }
-              })
-            })
-          }
+      then (form) {
+        if (this.state.form) {
+          this.setState({
+            isLoading: false,
+            isAddingField: false,
+            isRemovingField: false,
+            isFieldEditorModalVisible: false,
+            isUploadingCoverImage: false,
+            form
+          })
         } else {
           this.setState({
             isLoading: false,
-            form: changedForm
+            form
           })
         }
+      },
+      onFailure (error) {
+        console.error(error)
       }
     })
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    const {
+      isAddingField,
+      isEditingField
+    } = this.state
+
+    if (isAddingField && isAddingField !== isEditingField) {
+      this.setState({
+        isEditingField: isAddingField
+      })
+    }
+  }
+
+  componentWillUnmount () {
+    const { base } = this.props
+
+    base.removeBinding(this.ref)
   }
 
   isOwner () {
@@ -126,115 +134,193 @@ class Form extends Component {
     return user && form && form.user === user.uid && isGuest
   }
 
-  onViewAsGuestClicked () {
+  onToggleGuestClicked () {
     this.setState({
       isGuest: !this.state.isGuest
     })
   }
 
-  onCoverImageUploaded (coverImage) {
-    const { form } = this.state
-
-    this.setState({
-      form: update(form, {
-        coverImage: { $set: coverImage }
-      })
-    })
-  }
-
   onCoverImageClicked () {
     this.setState({
-      isCoverImageModalShown: true
+      isUploadingCoverImage: true
     })
   }
 
-  onCoverImageModalSaveClicked () {
+  onCoverImageUploaded (coverImage) {
     this.setState({
-      isCoverImageModalShown: false
+      isUploadingCoverImage: coverImage
     })
+  }
+
+  async onCoverImageModalSaveClicked () {
+    const { base, routeParams } = this.props
+    const { isUploadingCoverImage, form } = this.state
+
+    if (form.coverImage === isUploadingCoverImage) {
+      return
+    }
+
+    this.setState({
+      isLoading: true
+    })
+
+    try {
+      if (isUploadingCoverImage) {
+        await base.database().ref().update({
+          [`forms/${routeParams.form}/coverImage`]: isUploadingCoverImage
+        })
+      } else {
+        await base.database().ref(`forms/${routeParams.form}/coverImage`).remove()
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   onCoverImageModalCancelClicked () {
     this.setState({
-      isCoverImageModalShown: false
+      isUploadingCoverImage: false
     })
   }
 
   onCoverImageModalOverlayClicked () {
     this.setState({
-      isCoverImageModalShown: false
+      isUploadingCoverImage: false
     })
   }
 
-  onFieldEditorClicked (key) {
-    return (e) => {
-      this.setState({
-        isFieldEditorModalShown: key
-      })
+  onAddFieldClicked () {
+    const { form } = this.state
+    const key = AppService.getRandomId()
 
-      e.preventDefault()
-    }
+    this.setState({
+      isAddingField: key,
+      form: update(form, {
+        fields: {
+          [key]: {
+            $set: {
+              type: 'text',
+              order: Object.keys(form.fields).length
+            }
+          }
+        }
+      })
+    }, () => {
+      this.onEditFieldClicked(key)()
+    })
   }
 
-  onFieldEditorModalSaveClicked (key) {
+  onEditFieldClicked (key) {
     return () => {
       this.setState({
-        isFieldEditorModalShown: false
+        isFieldEditorModalVisible: true,
+        isEditingField: key
       })
     }
   }
 
-  onFieldEditorModalCancelClicked () {
+  async onModalFieldEditorSave (e, field) {
+    const { base, routeParams } = this.props
+    const { isEditingField, form } = this.state
+
+    if (form.fields[isEditingField] === field) {
+      return
+    }
+
     this.setState({
-      isFieldEditorModalShown: false
+      isLoading: true
     })
+
+    try {
+      await base.database().ref().update({
+        [`forms/${routeParams.form}/fields/${isEditingField}`]: field
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
-  onFieldEditorModalOverlayClicked () {
-    this.setState({
-      isFieldEditorModalShown: false
-    })
+  onModalFieldEditorClose () {
+    const { form, isAddingField } = this.state
+
+    if (isAddingField) {
+      this.setState({
+        form: update(form, {
+          fields: { $unset: [isAddingField] }
+        }),
+        isAddingField: false,
+        isFieldEditorModalVisible: false
+      })
+    } else {
+      this.setState({
+        isFieldEditorModalVisible: false
+      })
+    }
   }
 
   onRemoveFieldClicked (key) {
     return (e) => {
       this.setState({
-        isRemoveFieldDialogShown: key
+        isRemovingField: key
       })
-
-      e.preventDefault()
     }
   }
 
   onRemoveFieldDialogConfirmClicked (key) {
-    return () => {
+    return async () => {
+      const { base, routeParams } = this.props
       const { form } = this.state
 
       this.setState({
+        isLoading: true
+      })
+
+      try {
+        await base.database().ref(`forms/${routeParams.form}/fields/${key}`).remove()
+      } catch (error) {
+        console.error(error)
+      }
+
+      this.setState({
         form: update(form, {
-          fields: { [key]: { $set: undefined } }
+          fields: { $unset: [key] }
         }),
-        isRemoveFieldDialogShown: false
+        isRemovingField: false
       })
     }
   }
 
   onRemoveFieldDialogCancelClicked () {
     this.setState({
-      isRemoveFieldDialogShown: false
+      isRemovingField: false
     })
   }
 
   onRemoveFieldDialogOverlayClicked () {
     this.setState({
-      isRemoveFieldDialogShown: false
+      isRemovingField: false
     })
   }
 
-  onTitleSaved (title) {
+  async onTitleSaved (title) {
     const { base, routeParams } = this.props
+    const { form } = this.state
 
-    FormService.updateField(base, routeParams.form, 'name', title)
+    if (form.title === title) {
+      return
+    }
+
+    this.setState({
+      isLoading: true
+    })
+
+    try {
+      await base.database().ref().update({
+        [`forms/${routeParams.form}/title`]: title
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   onInputChanged (index) {
@@ -293,6 +379,12 @@ class Form extends Component {
   }
 
   onSubmit (e) {
+    e.preventDefault()
+
+    if (this.isOwner() || this.isOwnerAsGuest()) {
+      return
+    }
+
     const { checkout } = this.state
 
     checkout.open({
@@ -301,12 +393,6 @@ class Form extends Component {
       currency: 'cad',
       amount: 2000
     })
-
-    e.preventDefault()
-  }
-
-  onSaveClicked (e) {
-    e.preventDefault()
   }
 
   getHeaderStyle (form) {
@@ -320,9 +406,10 @@ class Form extends Component {
 
     const {
       isLoading,
-      isCoverImageModalShown,
-      isFieldEditorModalShown,
-      isRemoveFieldDialogShown,
+      isUploadingCoverImage,
+      isFieldEditorModalVisible,
+      isEditingField,
+      isRemovingField,
       form
     } = this.state
 
@@ -338,21 +425,26 @@ class Form extends Component {
                   <FormattedMessage id='Form.AddImage' defaultMessage='Add image' />
                 )}
               </Button>
-              <Button onClick={this.onViewAsGuestClicked}>
+              <Button onClick={this.onToggleGuestClicked}>
                 <FormattedMessage id='Form.ViewAsGuest' defaultMessage='View as guest' />
               </Button>
             </ButtonGroup>
           ) : null}
           {this.isOwnerAsGuest() ? (
-            <Button onClick={this.onViewAsGuestClicked}>
+            <Button onClick={this.onToggleGuestClicked}>
               <FormattedMessage id='Form.ViewAsMyself' defaultMessage='Return to editing' />
             </Button>
           ) : null}
         </div>
         <div className='FormContent'>
           {this.isOwner() ? (
-            <EditableTitle onSave={this.onTitleSaved}>{form.name || ''}</EditableTitle>
-          ) : form.name ? <Title>{form.name}</Title> : null}
+            <EditableTitle onSave={this.onTitleSaved}>{form.title || ''}</EditableTitle>
+          ) : form.title ? <Title>{form.title}</Title> : null}
+          {this.isOwner() ? (
+            <Button onClick={this.onAddFieldClicked}>
+              <FormattedMessage id='Form.AddField' defaultMessage='Add field' />
+            </Button>
+          ) : null}
           <form onSubmit={this.onSubmit}>
             {Object.keys(form.fields || {}).map((key) => form.fields[key] ? (
               <FieldRenderer
@@ -360,42 +452,41 @@ class Form extends Component {
                 input={form.fields[key]}
                 edit={this.isOwner()}
                 style={{order: form.fields[key].order - Object.keys(form.fields).length}}
-                onEditClicked={this.onFieldEditorClicked(key)}
+                onEditClicked={this.onEditFieldClicked(key)}
                 onRemoveClicked={this.onRemoveFieldClicked(key)}
                 onChange={this.onInputChanged(key)} />
             ) : null)}
-            {this.isOwner() ? (
-              <Button onClick={this.onSaveClicked}>
-                <FormattedMessage id='Form.SaveChanges' defaultMessage='Save changes' />
-              </Button>
-            ) : (
-              <Button submit disabled={this.isOwner()} text={intl.formatMessage(messages['submit'])} />
-            )}
+            <Button submit disabled={this.isOwner() || this.isOwnerAsGuest()} text={intl.formatMessage(messages['submit'])} />
           </form>
         </div>
-        {this.isOwner() && typeof isFieldEditorModalShown !== 'undefined' ? (
-          <Modal
-            isVisible={isFieldEditorModalShown === false ? isFieldEditorModalShown : true}
-            content={<FieldEditor input={form.fields[isFieldEditorModalShown]} />}
-            actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onFieldEditorModalSaveClicked(isFieldEditorModalShown)} />}
-            onCancelClicked={this.onFieldEditorModalCancelClicked}
-            onOverlayClicked={this.onFieldEditorModalOverlayClicked} />
+        {this.isOwner() && isEditingField ? (
+          <ModalFieldEditor
+            isVisible={isFieldEditorModalVisible}
+            field={form.fields[isEditingField]}
+            onSave={this.onModalFieldEditorSave}
+            onClose={this.onModalFieldEditorClose} />
         ) : null}
-        {this.isOwner() && typeof isRemoveFieldDialogShown !== 'undefined' ? (
+        {this.isOwner() && typeof isRemovingField !== 'undefined' ? (
           <Dialog
-            isVisible={isRemoveFieldDialogShown === false ? isRemoveFieldDialogShown : true}
-            content={intl.formatMessage(messages['confirmRemove'])}
-            actionButton={<Button text={intl.formatMessage(messages['remove'])} onClick={this.onRemoveFieldDialogConfirmClicked(isRemoveFieldDialogShown)} />}
+            isVisible={isRemovingField === false ? isRemovingField : true}
+            actionMessage={<FormattedMessage id='Form.Remove' defaultMessage='Remove' />}
+            onActionClicked={this.onRemoveFieldDialogConfirmClicked(isRemovingField)}
             onCancelClicked={this.onRemoveFieldDialogCancelClicked}
-            onOverlayClicked={this.onRemoveFieldDialogOverlayClicked} />
+            onOverlayClicked={this.onRemoveFieldDialogOverlayClicked}>
+            <Text>
+              <FormattedMessage id='Form.ConfirmRemove' defaultMessage='Are you sure you want to remove this field?' />
+            </Text>
+          </Dialog>
         ) : null}
-        {this.isOwner() && typeof isCoverImageModalShown !== 'undefined' ? (
+        {this.isOwner() && typeof isUploadingCoverImage !== 'undefined' ? (
           <Modal
-            isVisible={isCoverImageModalShown}
-            content={<Uploader base={base} onFileUploaded={this.onCoverImageUploaded} />}
-            actionButton={<Button text={intl.formatMessage(messages['save'])} onClick={this.onCoverImageModalSaveClicked} />}
+            isVisible={!!isUploadingCoverImage}
+            actionMessage={<FormattedMessage id='Form.Save' defaultMessage='Save' />}
+            onActionClicked={this.onCoverImageModalSaveClicked}
             onCancelClicked={this.onCoverImageModalCancelClicked}
-            onOverlayClicked={this.onCoverImageModalOverlayClicked} />
+            onOverlayClicked={this.onCoverImageModalOverlayClicked}>
+            <Uploader base={base} onFileUploaded={this.onCoverImageUploaded} />
+          </Modal>
         ) : null}
       </div>
     )

@@ -68,19 +68,19 @@
 .Modal > .ModalWindow > .ModalWindowContent {
   flex-basis: 100%;
   font-size: 1em;
-  padding: 2em 2em 0 2em;
+  padding: 2em 2em 0;
   overflow-x: hidden;
   overflow-y: scroll;
-  width: calc(100% - 4em);
-  height: calc(100% - 4em);
 }
 
 .Modal > .ModalWindow > .ModalWindowButtons {
   display: flex;
   justify-content: space-between;
   flex-shrink: 0;
+  box-shadow: 0 0 15px 0 rgba(33, 33, 33, 0.05);
   font-size: 1em;
-  margin: 2em;
+  padding: 1em 2em;
+  z-index: 2;
 }
 
 @keyframes modalZoomIn {

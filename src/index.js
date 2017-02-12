@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
+import update from 'immutability-helper'
 
 import { IntlProvider, addLocaleData } from 'react-intl'
 import en from 'react-intl/locale-data/en'
@@ -27,6 +28,16 @@ import Profile from './Profile'
 const language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
 const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0]
 const messages = localeData[languageWithoutRegionCode] || localeData[language] || localeData.en
+
+update.extend('$unset', (keysToRemove, original) => {
+  const copy = Object.assign({}, original)
+
+  for (const key of keysToRemove) {
+    delete copy[key]
+  }
+
+  return copy
+})
 
 ReactDOM.render((
   <IntlProvider locale={language} messages={messages}>

@@ -53,7 +53,7 @@ class FormList extends Component {
           <li className='FormListItem' key={form.key}>
             <div className='FormListItemHeader' style={this.getHeaderStyle(form)} />
             <div className='FormListItemContent'>
-              <Link to={`/browse/${form.key}`}>{form.name || form.key}</Link>
+              <Link to={`/browse/${form.key}`}>{form.title || form.key}</Link>
             </div>
           </li>
         ))}

@@ -48,21 +48,20 @@ class TextInput extends Component {
 
     return (
       <div className='TextInput' style={style}>
-        {input.label && (
-          <Label htmlFor={id}>
-            <div>{input.label}</div>
-            {edit ? (
-              <ButtonGroup>
-                <Button small onClick={onEditClicked}>
-                  <FormattedMessage id='TextInput.Edit' defaultMessage='Edit' />
-                </Button>
-                <Button small cancel onClick={onRemoveClicked}>
-                  <FormattedMessage id='TextInput.Remove' defaultMessage='Remove' />
-                </Button>
-              </ButtonGroup>
-            ) : null}
-          </Label>
-        )}
+        <Label htmlFor={id}>
+          <div>{input.label}</div>
+          {edit ? (
+            <ButtonGroup>
+              <Button small onClick={onEditClicked}>
+                <FormattedMessage id='TextInput.Edit' defaultMessage='Edit' />
+              </Button>
+              <Button small cancel onClick={onRemoveClicked}>
+                <FormattedMessage id='TextInput.Remove' defaultMessage='Remove' />
+              </Button>
+            </ButtonGroup>
+          ) : null}
+        </Label>
+        {input.description && <Text classnames='TextInputDescription'>{input.description}</Text>}
         <input
           id={id}
           ref={this.setInputRef}
@@ -70,8 +69,7 @@ class TextInput extends Component {
           value={input.value || ''}
           onChange={onChange}
           onKeyPress={onKeyPress} />
-        {input.description && <Text classnames='TextInputDescription' content={input.description} />}
-        {input.help && <Text classnames='TextInputHelp' content={input.help} />}
+        {input.help && <Text classnames='TextInputHelp'>{input.help}</Text>}
       </div>
     )
   }

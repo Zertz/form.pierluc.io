@@ -5,14 +5,13 @@ import classnames from 'classnames'
 import './Dialog.css'
 
 import Button from '../Button'
-import Text from '../Text'
 
 class Dialog extends Component {
   render () {
     const {
       isVisible,
-      content,
-      actionButton,
+      actionMessage,
+      onActionClicked,
       onCancelClicked,
       onOverlayClicked
     } = this.props
@@ -21,14 +20,12 @@ class Dialog extends Component {
       <div className={classnames('Dialog', typeof isVisible === 'undefined' ? null : isVisible ? 'DialogVisible' : 'DialogHidden')}>
         <div className='DialogOverlay' onClick={onOverlayClicked} />
         <div className='DialogWindow'>
-          <div className='DialogWindowContent'>
-            <Text>{content}</Text>
-          </div>
+          <div className='DialogWindowContent'>{this.props.children}</div>
           <div className='DialogWindowButtons'>
             <Button cancel onClick={onCancelClicked}>
               <FormattedMessage id='Dialog.Cancel' defaultMessage='Cancel' />
             </Button>
-            {actionButton}
+            <Button onClick={onActionClicked}>{actionMessage}</Button>
           </div>
         </div>
       </div>
@@ -38,8 +35,8 @@ class Dialog extends Component {
 
 Dialog.propTypes = {
   isVisible: PropTypes.bool,
-  content: PropTypes.string.isRequired,
-  actionButton: PropTypes.element.isRequired,
+  actionMessage: PropTypes.element.isRequired,
+  onActionClicked: PropTypes.func.isRequired,
   onCancelClicked: PropTypes.func.isRequired,
   onOverlayClicked: PropTypes.func
 }

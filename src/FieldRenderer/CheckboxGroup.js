@@ -34,14 +34,14 @@ class CheckboxGroup extends Component {
             </ButtonGroup>
           ) : null}
         </div>
-        {input.description && <Text classnames='CheckboxGroupDescription' content={input.description} />}
+        {input.description && <Text classnames='CheckboxGroupDescription'>{input.description}</Text>}
         {input.choices.map((choice, index) => (
           <Label key={index}>
             <input type='checkbox' value={choice.value} onChange={onChange} checked={(input.values || []).indexOf(choice.value) >= 0} />
             <span>{choice.label}</span>
           </Label>
         ))}
-        {input.help && <Text classnames='CheckboxGroupHelp' content={input.help} />}
+        {input.help && <Text classnames='CheckboxGroupHelp'>{input.help}</Text>}
       </div>
     )
   }

@@ -28,18 +28,6 @@ class FormService {
       [`users/${user}/forms/${formKey}`]: true
     }).then((data) => Promise.resolve(formKey))
   }
-
-  update (base, key, form) {
-    return base.database().ref().update({
-      [`forms/${key}`]: form
-    })
-  }
-
-  updateField (base, key, field, value) {
-    return base.database().ref().update({
-      [`forms/${key}/${field}`]: value
-    })
-  }
 }
 
 const formService = new FormService()

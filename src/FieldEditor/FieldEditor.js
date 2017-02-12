@@ -17,47 +17,32 @@ class FieldEditor extends Component {
 
     this.state = {
       input: props.input,
-      editorInputs: [{
-        type: 'select',
-        label: 'type',
-        value: props.input.type,
-        choices: FormService.getFieldTypes().map((fieldType) => ({
-          label: fieldType,
-          value: fieldType
-        }))
-      }, {
-        type: 'text',
-        label: 'label',
-        value: props.input.label
-      }, {
-        type: 'text',
-        label: 'description',
-        value: props.input.description
-      }, {
-        type: 'text',
-        label: 'help',
-        value: props.input.help
-      }]
+      editorFields: {
+        type: {
+          type: 'select',
+          label: 'type',
+          choices: FormService.getFieldTypes().map((fieldType) => ({
+            label: fieldType,
+            value: fieldType
+          }))
+        },
+        label: {
+          type: 'text',
+          label: 'label'
+        },
+        description: {
+          type: 'text',
+          label: 'description'
+        },
+        help: {
+          type: 'text',
+          label: 'help'
+        }
+      }
     }
 
-    this.onFieldChanged = this.onFieldChanged.bind(this)
     this.onAddChoiceClicked = this.onAddChoiceClicked.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
-  }
-
-  onFieldChanged (index) {
-    return (e) => {
-      const { input, editorInputs } = this.state
-
-      editorInputs[index].value = e.target.value
-
-      this.setState({
-        input: Object.assign(input, {
-          [editorInputs[index].label]: e.target.value
-        }),
-        editorInputs
-      })
-    }
   }
 
   onAddChoiceClicked () {
@@ -75,7 +60,8 @@ class FieldEditor extends Component {
   }
 
   render () {
-    const { input, editorInputs } = this.state
+    const { onFieldChanged, input } = this.props
+    const { editorFields } = this.state
 
     return (
       <div className='FieldEditor'>
@@ -83,8 +69,8 @@ class FieldEditor extends Component {
           <FormattedMessage id='FieldEditor.Field' defaultMessage='Field' />
         </Title>
         <form className='FieldEditorForm' onSubmit={this.onSubmit}>
-          {editorInputs.map((editorInput, index) => (
-            <FieldRenderer key={index} input={editorInput} onChange={this.onFieldChanged(index)} />
+          {Object.keys(editorFields).map((key) => (
+            <FieldRenderer key={key} input={Object.assign(editorFields[key], { value: input[key] })} onChange={onFieldChanged(key)} />
           ))}
         </form>
         {FormService.isMultipleChoices(input.type) ? (

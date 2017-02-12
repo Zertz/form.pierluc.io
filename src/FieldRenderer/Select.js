@@ -46,7 +46,7 @@ class Select extends Component {
             </ButtonGroup>
           ) : null}
         </Label>}
-        {input.description && <Text classnames='SelectDescription' content={input.description} />}
+        {input.description && <Text classnames='SelectDescription'>{input.description}</Text>}
         <div className='SelectWrapper'>
           <select id={id} value={input.value || input.defaultValue || ''} onChange={onChange}>
             {input.choices.map((choice, index) => (
@@ -54,7 +54,7 @@ class Select extends Component {
             ))}
           </select>
         </div>
-        {input.help && <Text classnames='SelectHelp' content={input.help} />}
+        {input.help && <Text classnames='SelectHelp'>{input.help}</Text>}
       </div>
     )
   }
