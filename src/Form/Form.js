@@ -6,15 +6,15 @@ import update from 'immutability-helper'
 import './Form.css'
 
 import AppService from '../AppService'
-import FormService from '../FormService'
 import PaymentService from '../PaymentService'
 import RegistrationService from '../RegistrationService'
 
 import Button from '../Button'
 import ButtonGroup from '../ButtonGroup'
 import Dialog from '../Dialog'
+import EditableFieldList from '../EditableFieldList'
 import EditableTitle from '../EditableTitle'
-import FieldRenderer from '../FieldRenderer'
+import FieldList from '../FieldList'
 import Loading from '../Loading'
 import Modal from '../Modal'
 import ModalFieldEditor from '../ModalFieldEditor'
@@ -135,9 +135,22 @@ class Form extends Component {
   }
 
   onToggleGuestClicked () {
-    this.setState({
-      isGuest: !this.state.isGuest
-    })
+    const { isGuest } = this.state
+
+    if (isGuest) {
+      this.setState({
+        isGuest: false
+      })
+    } else {
+      this.setState({
+        isGuest: true,
+        isAddingField: undefined,
+        isFieldEditorModalVisible: undefined,
+        isEditingField: undefined,
+        isRemovingField: undefined,
+        isUploadingCoverImage: undefined,
+      })
+    }
   }
 
   onCoverImageClicked () {
@@ -323,29 +336,30 @@ class Form extends Component {
     }
   }
 
-  onInputChanged (index) {
+  onFieldChanged (index) {
     return (e) => {
-      const { inputs } = this.state.form
+      console.warn('TODO: rewrite this code')
+      // const { inputs } = this.state.form
 
-      if (FormService.isMultipleValues(inputs[index].type)) {
-        inputs[index].values = inputs[index].values || []
+      // if (FormService.isMultipleValues(inputs[index].type)) {
+      //   inputs[index].values = inputs[index].values || []
 
-        const valueIndex = inputs[index].values.indexOf(e.target.value)
+      //   const valueIndex = inputs[index].values.indexOf(e.target.value)
 
-        if (valueIndex === -1) {
-          inputs[index].values.push(e.target.value)
-        } else {
-          inputs[index].values.splice(valueIndex, 1)
-        }
-      } else {
-        inputs[index].value = e.target.value
-      }
+      //   if (valueIndex === -1) {
+      //     inputs[index].values.push(e.target.value)
+      //   } else {
+      //     inputs[index].values.splice(valueIndex, 1)
+      //   }
+      // } else {
+      //   inputs[index].value = e.target.value
+      // }
 
-      this.setState({
-        form: update(this.state.form, {
-          inputs: { $set: inputs }
-        })
-      })
+      // this.setState({
+      //   form: update(this.state.form, {
+      //     inputs: { $set: inputs }
+      //   })
+      // })
     }
   }
 
@@ -445,19 +459,21 @@ class Form extends Component {
               <FormattedMessage id='Form.AddField' defaultMessage='Add field' />
             </Button>
           ) : null}
-          <form onSubmit={this.onSubmit}>
-            {Object.keys(form.fields || {}).map((key) => form.fields[key] ? (
-              <FieldRenderer
-                key={key}
-                input={form.fields[key]}
-                edit={this.isOwner()}
-                style={{order: form.fields[key].order - Object.keys(form.fields).length}}
-                onEditClicked={this.onEditFieldClicked(key)}
-                onRemoveClicked={this.onRemoveFieldClicked(key)}
-                onChange={this.onInputChanged(key)} />
-            ) : null)}
-            <Button submit disabled={this.isOwner() || this.isOwnerAsGuest()} text={intl.formatMessage(messages['submit'])} />
-          </form>
+          {this.isOwner() ? (
+            <div className='FormForm'>
+              <EditableFieldList
+                fields={form.fields || {}}
+                onEditClicked={this.onEditFieldClicked}
+                onRemoveClicked={this.onRemoveFieldClicked} />
+            </div>
+          ) : (
+            <form className='FormForm' onSubmit={this.onSubmit}>
+              <FieldList
+                fields={form.fields || {}}
+                onFieldChanged={this.onFieldChanged} />
+              <Button submit disabled={this.isOwnerAsGuest()} text={intl.formatMessage(messages['submit'])} />
+            </form>
+          )}
         </div>
         {this.isOwner() && isEditingField ? (
           <ModalFieldEditor

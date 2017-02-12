@@ -1,0 +1,13 @@
+.FieldList {
+  display: flex;
+  flex-direction: column;
+}
+
+.FieldList > * {
+  margin-bottom: 1.5em;
+}
+
+.FieldList > *:not(:last-child) {
+  border-bottom: 1px solid #BDBDBD;
+  padding-bottom: 1.5em;
+}

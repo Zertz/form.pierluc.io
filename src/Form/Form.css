@@ -21,15 +21,7 @@
   width: 100%;
 }
 
-.Form > .FormContent > form {
-  display: flex;
-  flex-direction: column;
+.Form > .FormContent > .FormForm {
   box-shadow: 0 0 5px 0 #BDBDBD;
   padding: 2em;
-}
-
-.Form > .FormContent > form > *:not(:last-child) {
-  border-bottom: 1px solid #BDBDBD;
-  margin-bottom: 1.5em;
-  padding-bottom: 1.5em;
 }
