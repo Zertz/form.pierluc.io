@@ -36,6 +36,7 @@ class TextInput extends Component {
   render () {
     const {
       input,
+      value,
       edit,
       style,
       onEditClicked,
@@ -66,7 +67,7 @@ class TextInput extends Component {
           id={id}
           ref={this.setInputRef}
           type={input.type}
-          value={input.value || ''}
+          value={value}
           onChange={onChange}
           onKeyPress={onKeyPress} />
         {input.help && <Text classnames='TextInputHelp'>{input.help}</Text>}
@@ -78,14 +79,14 @@ class TextInput extends Component {
 TextInput.propTypes = {
   input: PropTypes.shape({
     type: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string
-    ]),
     label: PropTypes.string.isRequired,
     description: PropTypes.string,
     help: PropTypes.string
   }),
+  value: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
+  ]),
   onEditClicked: PropTypes.func,
   onRemoveClicked: PropTypes.func,
   onChange: PropTypes.func,

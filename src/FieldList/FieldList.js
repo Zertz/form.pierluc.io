@@ -6,7 +6,7 @@ import FieldRenderer from '../FieldRenderer'
 
 class FieldList extends Component {
   render () {
-    const { fields, onFieldChanged } = this.props
+    const { fields, values, onFieldChanged } = this.props
 
     return (
       <div className='FieldList'>
@@ -14,6 +14,7 @@ class FieldList extends Component {
           <FieldRenderer
             key={key}
             input={fields[key]}
+            value={values[key]}
             style={{order: fields[key].order - Object.keys(fields).length}}
             onChange={onFieldChanged(key)} />
         ) : null)}

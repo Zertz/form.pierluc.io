@@ -6,6 +6,7 @@ import update from 'immutability-helper'
 import './Form.css'
 
 import AppService from '../AppService'
+import FormService from '../FormService'
 import PaymentService from '../PaymentService'
 import RegistrationService from '../RegistrationService'
 
@@ -33,6 +34,8 @@ class Form extends Component {
   constructor (props) {
     super(props)
 
+    this.checkoutCallback = this.checkoutCallback.bind(this)
+
     this.state = {
       isLoading: true,
       isAddingField: undefined,
@@ -40,6 +43,9 @@ class Form extends Component {
       isEditingField: undefined,
       isRemovingField: undefined,
       isUploadingCoverImage: undefined,
+      registration: {
+        fields: {}
+      },
       checkout: PaymentService.initialize({
         checkoutCallback: this.checkoutCallback
       })
@@ -69,7 +75,7 @@ class Form extends Component {
 
     this.onTitleSaved = this.onTitleSaved.bind(this)
 
-    this.checkoutCallback = this.checkoutCallback.bind(this)
+    this.onFieldChanged = this.onFieldChanged.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
@@ -79,6 +85,25 @@ class Form extends Component {
     this.ref = base.listenTo(`forms/${routeParams.form}`, {
       context: this,
       then (form) {
+        const { registration } = this.state
+        const fieldsUpdate = {}
+
+        for (const key in form.fields) {
+          if (!form.fields.hasOwnProperty(key)) {
+            continue
+          }
+
+          const value = FormService.isMultipleChoices(form.fields[key].type) ? {
+            values: []
+          } : {
+            value: ''
+          }
+
+          if (!registration[key]) {
+            fieldsUpdate[key] = { $set: value }
+          }
+        }
+
         if (this.state.form) {
           this.setState({
             isLoading: false,
@@ -86,12 +111,18 @@ class Form extends Component {
             isRemovingField: false,
             isFieldEditorModalVisible: false,
             isUploadingCoverImage: false,
-            form
+            form,
+            registration: update(registration, {
+              fields: fieldsUpdate
+            })
           })
         } else {
           this.setState({
             isLoading: false,
-            form
+            form,
+            registration: update(registration, {
+              fields: fieldsUpdate
+            })
           })
         }
       },
@@ -336,36 +367,53 @@ class Form extends Component {
     }
   }
 
-  onFieldChanged (index) {
+  onFieldChanged (key) {
     return (e) => {
-      console.warn('TODO: rewrite this code')
-      // const { inputs } = this.state.form
+      const { form, registration } = this.state
 
-      // if (FormService.isMultipleValues(inputs[index].type)) {
-      //   inputs[index].values = inputs[index].values || []
+      if (FormService.isMultipleValues(form.fields[key].type)) {
+        const valueIndex = registration.fields[key].values.indexOf(e.target.value)
 
-      //   const valueIndex = inputs[index].values.indexOf(e.target.value)
-
-      //   if (valueIndex === -1) {
-      //     inputs[index].values.push(e.target.value)
-      //   } else {
-      //     inputs[index].values.splice(valueIndex, 1)
-      //   }
-      // } else {
-      //   inputs[index].value = e.target.value
-      // }
-
-      // this.setState({
-      //   form: update(this.state.form, {
-      //     inputs: { $set: inputs }
-      //   })
-      // })
+        if (valueIndex === -1) {
+          this.setState({
+            registration: update(registration, {
+              fields: {
+                [key]: {
+                  values: { $push: [e.target.value] }
+                }
+              }
+            })
+          })
+        } else {
+          this.setState({
+            registration: update(registration, {
+              fields: {
+                [key]: {
+                  values: { $splice: [[e.target.value, 1]] }
+                }
+              }
+            })
+          })
+        }
+      } else {
+        this.setState({
+          registration: update(registration, {
+            fields: {
+              [key]: {
+                $set: {
+                  value: e.target.value
+                }
+              }
+            }
+          })
+        })
+      }
     }
   }
 
   async checkoutCallback (token) {
     const { base, routeParams } = this.props
-    const { form } = this.state
+    const { registration } = this.state
 
     try {
       const userToken = await base.auth().currentUser.getToken()
@@ -379,12 +427,10 @@ class Form extends Component {
       })
 
       const charge = await response.json()
-      const registration = {
-        charge,
-        input: form.inputs
-      }
 
-      await RegistrationService.create(base, registration)
+      await RegistrationService.create(base, Object.assign(registration, {
+        charge
+      }))
 
       browserHistory.push('/me')
     } catch (error) {
@@ -424,7 +470,8 @@ class Form extends Component {
       isFieldEditorModalVisible,
       isEditingField,
       isRemovingField,
-      form
+      form,
+      registration
     } = this.state
 
     return isLoading ? <Loading /> : (
@@ -470,6 +517,7 @@ class Form extends Component {
             <form className='FormForm' onSubmit={this.onSubmit}>
               <FieldList
                 fields={form.fields || {}}
+                values={registration.fields || {}}
                 onFieldChanged={this.onFieldChanged} />
               <Button submit disabled={this.isOwnerAsGuest()} text={intl.formatMessage(messages['submit'])} />
             </form>
