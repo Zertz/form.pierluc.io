@@ -148,7 +148,7 @@ class Form extends Component {
         isFieldEditorModalVisible: undefined,
         isEditingField: undefined,
         isRemovingField: undefined,
-        isUploadingCoverImage: undefined,
+        isUploadingCoverImage: undefined
       })
     }
   }

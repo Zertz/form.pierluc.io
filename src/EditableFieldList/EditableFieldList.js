@@ -13,7 +13,7 @@ class EditableFieldList extends Component {
         {Object.keys(fields).map((key) => fields[key] ? (
           <FieldRenderer
             key={key}
-            edit={true}
+            edit
             input={fields[key]}
             style={{order: fields[key].order - Object.keys(fields).length}}
             onEditClicked={onEditClicked(key)}
