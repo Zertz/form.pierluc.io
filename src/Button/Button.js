@@ -8,7 +8,6 @@ class Button extends Component {
     const {
       onClick,
       children,
-      classNames,
       disabled,
       small,
       cancel,
@@ -19,7 +18,7 @@ class Button extends Component {
       <button type={submit ? 'submit' : 'button'} className={classnames('Button', {
         small: !!small,
         cancel: !!cancel
-      })} onClick={onClick}>{children}</button>
+      })} disabled={disabled} onClick={onClick}>{children}</button>
     )
   }
 }
