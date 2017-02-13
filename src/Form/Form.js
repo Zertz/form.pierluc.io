@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {defineMessages, injectIntl, FormattedMessage} from 'react-intl'
+import {FormattedMessage} from 'react-intl'
 import {browserHistory} from 'react-router'
 import update from 'immutability-helper'
 
@@ -22,13 +22,6 @@ import ModalFieldEditor from '../ModalFieldEditor'
 import Text from '../Text'
 import Title from '../Title'
 import Uploader from '../Uploader'
-
-const messages = defineMessages({
-  submit: {
-    id: 'Form.Submit',
-    defaultMessage: 'Submit'
-  }
-})
 
 class Form extends Component {
   constructor (props) {
@@ -519,7 +512,9 @@ class Form extends Component {
                 fields={form.fields || {}}
                 values={registration.fields || {}}
                 onFieldChanged={this.onFieldChanged} />
-              <Button submit disabled={this.isOwnerAsGuest()} text={intl.formatMessage(messages['submit'])} />
+              <Button submit disabled={this.isOwnerAsGuest()}>
+                <FormattedMessage id='Form.Submit' defaultMessage='Submit' />
+              </Button>
             </form>
           )}
         </div>

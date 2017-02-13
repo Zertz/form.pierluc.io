@@ -4,6 +4,7 @@ import {FormattedMessage} from 'react-intl'
 import './Login.css'
 
 import Button from '../Button'
+import ButtonGroup from '../ButtonGroup'
 
 class Login extends Component {
   constructor (props) {
@@ -45,9 +46,11 @@ class Login extends Component {
         <div className='LoginTitle Title'>
           <FormattedMessage id='Login.Connect' defaultMessage='Connect' />
         </div>
-        <Button text='Facebook' onClick={this.onFacebook} />
-        <Button text='Google' onClick={this.onGoogle} />
-        <Button text='GitHub' onClick={this.onGithub} />
+        <ButtonGroup>
+          <Button onClick={this.onFacebook}>Facebook</Button>
+          <Button onClick={this.onGoogle}>Google</Button>
+          <Button onClick={this.onGithub}>GitHub</Button>
+        </ButtonGroup>
       </div>
     )
   }

@@ -79,12 +79,12 @@ class Create extends Component {
 
     return isLoading ? (
       <Loading>
-        <FormattedMessage id='Create.SettingUpYourForm' defaultMessage='Setting up your form...' />
+        <FormattedMessage id='Create.SettingUpYourForm' defaultMessage='Creating up your form...' />
       </Loading>
     ) : (
       <div className='Create'>
         <Title>
-          <FormattedMessage id='Create.CreateAForm' defaultMessage='Create a Form' />
+          <FormattedMessage id='Create.CreateAForm' defaultMessage='Create' />
         </Title>
         <Text>
           <FormattedMessage id='Create.GetStartedQuickly' defaultMessage="We can create a few common fields to help you get started started quickly, or you can do it all by yourself. Either way, you'll be able to tailor your Form according to your needs." />
