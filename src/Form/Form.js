@@ -144,6 +144,12 @@ class Form extends Component {
     base.removeBinding(this.ref)
   }
 
+  scrollIntoView (ref) {
+    if (ref) {
+      ref.scrollIntoView()
+    }
+  }
+
   isOwner () {
     const { user } = this.props
     const { form, isGuest } = this.state
@@ -468,7 +474,7 @@ class Form extends Component {
     } = this.state
 
     return isLoading ? <Loading /> : (
-      <div className='Form'>
+      <div className='Form' ref={this.scrollIntoView}>
         <div className='FormHeader' style={this.getHeaderStyle(form)}>
           {this.isOwner() ? (
             <ButtonGroup>
