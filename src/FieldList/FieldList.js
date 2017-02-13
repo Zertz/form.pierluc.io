@@ -15,7 +15,6 @@ class FieldList extends Component {
             key={key}
             input={fields[key]}
             value={values[key]}
-            style={{order: fields[key].order - Object.keys(fields).length}}
             onChange={onFieldChanged(key)} />
         ) : null)}
       </div>

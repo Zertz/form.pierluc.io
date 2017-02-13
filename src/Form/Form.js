@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import {FormattedMessage} from 'react-intl'
 import {browserHistory} from 'react-router'
+import {DragDropContext} from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 import update from 'immutability-helper'
 
 import './Form.css'
@@ -366,6 +368,21 @@ class Form extends Component {
     }
   }
 
+  onFieldOrderChanged (dragField, hoverField) {
+    const { form } = this.state
+
+    this.setState(form, update(form, {
+      fields: {
+        dragField: {
+          $set: { order: form.fields[hoverField].order }
+        },
+        hoverField: {
+          $set: { order: form.fields[dragField].order }
+        }
+      }
+    }))
+  }
+
   onFieldChanged (key) {
     return (e) => {
       const { form, registration } = this.state
@@ -461,7 +478,7 @@ class Form extends Component {
   }
 
   render () {
-    const { base, intl } = this.props
+    const { base } = this.props
 
     const {
       isLoading,
@@ -558,4 +575,4 @@ class Form extends Component {
   }
 }
 
-export default injectIntl(Form)
+export default DragDropContext(HTML5Backend)(Form)

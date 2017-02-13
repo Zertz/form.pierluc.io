@@ -6,7 +6,7 @@ import FieldRenderer from '../FieldRenderer'
 
 class EditableFieldList extends Component {
   render () {
-    const { fields, onEditClicked, onRemoveClicked } = this.props
+    const { fields, onEditClicked, onRemoveClicked, onOrderChanged } = this.props
 
     return (
       <div className='EditableFieldList'>
@@ -18,6 +18,7 @@ class EditableFieldList extends Component {
             style={{order: fields[key].order - Object.keys(fields).length}}
             onEditClicked={onEditClicked(key)}
             onRemoveClicked={onRemoveClicked(key)}
+            onOrderChanged={onOrderChanged}
             onChange={() => {}} />
         ) : null)}
       </div>
@@ -28,7 +29,8 @@ class EditableFieldList extends Component {
 EditableFieldList.propTypes = {
   fields: PropTypes.object.isRequired,
   onEditClicked: PropTypes.func.isRequired,
-  onRemoveClicked: PropTypes.func.isRequired
+  onRemoveClicked: PropTypes.func.isRequired,
+  onOrderChanged: PropTypes.func.isRequired
 }
 
 export default EditableFieldList

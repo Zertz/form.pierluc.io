@@ -15,7 +15,8 @@ class TextInput extends Component {
     super(props)
 
     this.state = {
-      id: AppService.getRandomId()
+      id: AppService.getRandomId(),
+      tabIndex: parseInt(props.input.order, 10) + 1
     }
 
     this.setInputRef = this.setInputRef.bind(this)
@@ -23,8 +24,9 @@ class TextInput extends Component {
 
   componentDidMount () {
     const { focus } = this.props
+    const { tabIndex } = this.state
 
-    if (focus) {
+    if (focus || tabIndex === 1) {
       this.inputRef.focus()
     }
   }
@@ -38,14 +40,17 @@ class TextInput extends Component {
       input,
       value,
       edit,
-      style,
       onEditClicked,
       onRemoveClicked,
       onChange,
       onKeyPress
     } = this.props
 
-    const { id } = this.state
+    const { id, tabIndex } = this.state
+
+    const style = tabIndex > 0 ? {
+      order: input.order
+    } : {}
 
     return (
       <div className='TextInput' style={style}>
@@ -66,6 +71,7 @@ class TextInput extends Component {
         <input
           id={id}
           ref={this.setInputRef}
+          tabIndex={tabIndex}
           type={input.type}
           value={value}
           onChange={onChange}
@@ -82,7 +88,7 @@ TextInput.propTypes = {
     label: PropTypes.string.isRequired,
     description: PropTypes.string,
     help: PropTypes.string
-  }),
+  }).isRequired,
   value: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string
