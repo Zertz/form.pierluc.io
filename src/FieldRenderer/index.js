@@ -1,3 +1,4 @@
 import FieldRenderer from './FieldRenderer'
+import DraggableFieldRenderer from './DraggableFieldRenderer'
 
-export default FieldRenderer
+export {FieldRenderer, DraggableFieldRenderer}

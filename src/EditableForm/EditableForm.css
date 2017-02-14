@@ -1,0 +1,27 @@
+.EditableForm {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.EditableForm > .EditableFormHeader {
+  background-color: #C2185B;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: -2em 0 2em -2em;
+  padding: 0.5em;
+  width: calc(100% + 4em);
+  height: 200px;
+}
+
+.EditableForm > .EditableFormContent {
+  margin: 0 auto;
+  max-width: 667px;
+  width: 100%;
+}
+
+.EditableForm > .EditableFormContent > .EditableFormForm {
+  box-shadow: 0 0 5px 0 #BDBDBD;
+  padding: 2em;
+}

@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 
 import './FieldList.css'
 
-import FieldRenderer from '../FieldRenderer'
+import {FieldRenderer} from '../FieldRenderer'
 
 class FieldList extends Component {
   render () {

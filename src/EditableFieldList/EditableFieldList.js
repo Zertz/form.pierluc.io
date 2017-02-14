@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 
 import './EditableFieldList.css'
 
-import FieldRenderer from '../FieldRenderer'
+import {DraggableFieldRenderer} from '../FieldRenderer'
 
 class EditableFieldList extends Component {
   render () {
@@ -11,7 +11,7 @@ class EditableFieldList extends Component {
     return (
       <div className='EditableFieldList'>
         {Object.keys(fields).map((key) => fields[key] ? (
-          <FieldRenderer
+          <DraggableFieldRenderer
             key={key}
             edit
             input={fields[key]}
