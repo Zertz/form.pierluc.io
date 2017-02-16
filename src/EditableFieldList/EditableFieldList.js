@@ -6,13 +6,19 @@ import {DraggableFieldRenderer} from '../FieldRenderer'
 
 class EditableFieldList extends Component {
   render () {
-    const { fields, onEditClicked, onRemoveClicked, onOrderChanged } = this.props
+    const {
+      fields,
+      onEditClicked,
+      onRemoveClicked,
+      onOrderChanged
+    } = this.props
 
     return (
       <div className='EditableFieldList'>
         {Object.keys(fields).map((key) => fields[key] ? (
           <DraggableFieldRenderer
             key={key}
+            fieldKey={key}
             edit
             disabled
             input={fields[key]}

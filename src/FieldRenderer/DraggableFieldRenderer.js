@@ -1,6 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 import {DragSource, DropTarget} from 'react-dnd'
+import classnames from 'classnames'
 import flow from 'lodash.flow'
+
+import './DraggableFieldRenderer.css'
 
 import FormService from '../FormService'
 
@@ -14,15 +17,14 @@ import {ItemTypes} from '../Draggable'
 const dragSource = {
   beginDrag (props) {
     return {
-      input: props.input
+      fieldKey: props.fieldKey
     }
   }
 }
 
 const dropTarget = {
-  drop (props) {
-    // TODO: Wire this
-    // onOrderChanged()
+  drop (props, monitor, component) {
+    props.onOrderChanged(monitor.getItem().fieldKey, props.fieldKey)
   }
 }
 
@@ -36,7 +38,8 @@ function collectSource (connect, monitor) {
 function collectTarget (connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver()
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop()
   }
 }
 
@@ -65,7 +68,9 @@ class DraggableFieldRenderer extends Component {
       onRemoveClicked,
       connectDragSource,
       connectDropTarget,
-      isDragging
+      isDragging,
+      isOver,
+      canDrop
     } = this.props
 
     const Component = this.getComponent(input.type)
@@ -75,12 +80,12 @@ class DraggableFieldRenderer extends Component {
     } : {}
 
     return Component ? connectDragSource(connectDropTarget(
-      <div className='DraggableFieldRenderer' style={style}>
+      <div className={classnames('DraggableFieldRenderer', { isDragging, isOver, canDrop })} style={style}>
         <Component
           input={input}
           value={FormService.isMultipleChoices(input.type) ? [] : ''}
-          edit={true}
-          disabled={true}
+          edit
+          disabled
           onEditClicked={onEditClicked}
           onRemoveClicked={onRemoveClicked}
           onChange={() => {}}

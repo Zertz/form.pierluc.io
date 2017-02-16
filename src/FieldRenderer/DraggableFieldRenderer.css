@@ -1,0 +1,11 @@
+.DraggableFieldRenderer.isDragging {
+  opacity: 0.75;
+}
+
+.DraggableFieldRenderer.isOver {
+  opacity: 0.75;
+}
+
+.DraggableFieldRenderer.canDrop {
+  background-color: rgba(0, 255, 0, 0.25);
+}

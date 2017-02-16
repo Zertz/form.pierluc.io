@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl'
-import update from 'immutability-helper'
 
 import './FieldEditor.css'
 
@@ -28,7 +27,7 @@ const messages = defineMessages({
   help: {
     id: 'FieldEditor.Help',
     defaultMessage: 'Help'
-  },
+  }
 })
 
 class FieldEditor extends Component {
@@ -115,7 +114,7 @@ class FieldEditor extends Component {
           </div>
         ) : null}
         <div className='FieldEditorPreview'>
-          <FieldRenderer input={input} value={''} disabled={true} onChange={() => {}} />
+          <FieldRenderer input={input} value={''} disabled onChange={() => {}} />
         </div>
       </div>
     )

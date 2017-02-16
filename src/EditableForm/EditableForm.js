@@ -284,21 +284,26 @@ class Form extends Component {
     }
   }
 
-  onFieldOrderChanged (dragField, dropField) {
+  async onFieldOrderChanged (dragField, dropField) {
+    const { base, routeParams } = this.props
     const { form } = this.state
 
-    console.info(dragField, dropField)
+    if (dragField === dropField) {
+      return
+    }
 
-    this.setState(form, update(form, {
-      fields: {
-        dragField: {
-          $set: { order: form.fields[dropField].order }
-        },
-        dropField: {
-          $set: { order: form.fields[dragField].order }
-        }
-      }
-    }))
+    this.setState({
+      isLoading: true
+    })
+
+    try {
+      await base.database().ref().update({
+        [`forms/${routeParams.form}/fields/${dragField}/order`]: form.fields[dropField].order,
+        [`forms/${routeParams.form}/fields/${dropField}/order`]: form.fields[dragField].order
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   getHeaderStyle (form) {
