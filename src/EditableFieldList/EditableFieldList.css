@@ -3,7 +3,7 @@
   flex-direction: column;
 }
 
-.EditableFieldList > *:not(:last-child) {
+.EditableFieldList > * {
   border-bottom: 1px solid #BDBDBD;
   margin-bottom: 1.5em;
   padding-bottom: 1.5em;

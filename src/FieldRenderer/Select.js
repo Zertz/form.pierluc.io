@@ -22,6 +22,7 @@ class Select extends Component {
   render () {
     const {
       input,
+      value,
       edit,
       style,
       onEditClicked,
@@ -48,7 +49,7 @@ class Select extends Component {
         </Label>}
         {input.description && <Text classnames='SelectDescription'>{input.description}</Text>}
         <div className='SelectWrapper'>
-          <select id={id} value={input.value || input.defaultValue || ''} onChange={onChange}>
+          <select id={id} value={value || input.defaultValue} onChange={onChange}>
             {input.choices.map((choice, index) => (
               <option key={index} value={choice.value}>{choice.label} {choice.amount ? `(${choice.amount})` : ''}</option>
             ))}
@@ -63,12 +64,13 @@ class Select extends Component {
 Select.propTypes = {
   input: PropTypes.shape({
     type: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     choices: PropTypes.array.isRequired,
-    description: PropTypes.string.isRequired,
-    help: PropTypes.string.isRequired
+    defaultValue: PropTypes.string,
+    description: PropTypes.string,
+    help: PropTypes.string
   }),
+  value: PropTypes.string,
   onChange: PropTypes.func
 }
 

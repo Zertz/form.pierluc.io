@@ -21,7 +21,7 @@
   width: 100%;
 }
 
-.EditableForm > .EditableFormContent > .EditableFormForm {
+.EditableForm > .EditableFormContent > .EditableFieldList {
   box-shadow: 0 0 5px 0 #BDBDBD;
   padding: 2em;
 }

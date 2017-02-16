@@ -24,6 +24,7 @@ class FieldList extends Component {
 
 FieldList.propTypes = {
   fields: PropTypes.object.isRequired,
+  values: PropTypes.object.isRequired,
   onFieldChanged: PropTypes.func.isRequired
 }
 

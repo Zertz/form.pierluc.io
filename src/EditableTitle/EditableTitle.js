@@ -4,7 +4,7 @@ import {FormattedMessage} from 'react-intl'
 import './EditableTitle.css'
 
 import Button from '../Button'
-import FieldRenderer from '../FieldRenderer'
+import {FieldRenderer} from '../FieldRenderer'
 import Title from '../Title'
 
 class EditableTitle extends Component {
@@ -64,14 +64,13 @@ class EditableTitle extends Component {
   }
 
   render () {
-    const { children } = this.props
     const { isEditing, title } = this.state
 
     return (
       <div className='EditableTitle'>
         {isEditing ? (
           <div className='EditableTitleEditor'>
-            <FieldRenderer focus input={{ type: 'text', value: title }} onChange={this.onChange} onKeyPress={this.onKeyPress} />
+            <FieldRenderer focus input={{ type: 'text', label: '' }} value={{value: title}} onChange={this.onChange} onKeyPress={this.onKeyPress} />
             <div className='EditableTitleEditorButtons'>
               <Button onClick={this.onSaveClicked}>
                 <FormattedMessage id='EditableTitle.Save' defaultMessage='Save' />
@@ -83,9 +82,9 @@ class EditableTitle extends Component {
           </div>
         ) : (
           <div className='EditableTitleViewer'>
-            <Title>{children}</Title>
+            <Title>{title}</Title>
             <Button onClick={this.setEditing}>
-              {children ? (
+              {title ? (
                 <FormattedMessage id='EditableTitle.Change' defaultMessage='Edit title' />
               ) : (
                 <FormattedMessage id='EditableTitle.Add' defaultMessage='Add title' />

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {FormattedMessage} from 'react-intl'
+import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl'
 import update from 'immutability-helper'
 
 import './FieldEditor.css'
@@ -7,9 +7,29 @@ import './FieldEditor.css'
 import FormService from '../FormService'
 
 import Button from '../Button'
-import FieldRenderer from '../FieldRenderer'
+import FieldList from '../FieldList'
+import {FieldRenderer} from '../FieldRenderer'
 import Subtitle from '../Subtitle'
 import Title from '../Title'
+
+const messages = defineMessages({
+  type: {
+    id: 'FieldEditor.Type',
+    defaultMessage: 'Type'
+  },
+  label: {
+    id: 'FieldEditor.Label',
+    defaultMessage: 'Label'
+  },
+  description: {
+    id: 'FieldEditor.Description',
+    defaultMessage: 'Description'
+  },
+  help: {
+    id: 'FieldEditor.Help',
+    defaultMessage: 'Help'
+  },
+})
 
 class FieldEditor extends Component {
   constructor (props) {
@@ -20,7 +40,7 @@ class FieldEditor extends Component {
       editorFields: {
         type: {
           type: 'select',
-          label: 'type',
+          label: props.intl.formatMessage(messages.type),
           choices: FormService.getFieldTypes().map((fieldType) => ({
             label: fieldType,
             value: fieldType
@@ -28,15 +48,15 @@ class FieldEditor extends Component {
         },
         label: {
           type: 'text',
-          label: 'label'
+          label: props.intl.formatMessage(messages.label)
         },
         description: {
           type: 'text',
-          label: 'description'
+          label: props.intl.formatMessage(messages.description)
         },
         help: {
           type: 'text',
-          label: 'help'
+          label: props.intl.formatMessage(messages.help)
         }
       }
     }
@@ -46,13 +66,7 @@ class FieldEditor extends Component {
   }
 
   onAddChoiceClicked () {
-    const { input } = this.state
-
-    this.setState({
-      input: update(input, {
-        choices: { $push: [{}] }
-      })
-    })
+    // TODO
   }
 
   onSubmit (e) {
@@ -69,9 +83,7 @@ class FieldEditor extends Component {
           <FormattedMessage id='FieldEditor.Field' defaultMessage='Field' />
         </Title>
         <form className='FieldEditorForm' onSubmit={this.onSubmit}>
-          {Object.keys(editorFields).map((key) => (
-            <FieldRenderer key={key} input={Object.assign(editorFields[key], { value: input[key] })} onChange={onFieldChanged(key)} />
-          ))}
+          <FieldList fields={editorFields} values={input} onFieldChanged={onFieldChanged} />
         </form>
         {FormService.isMultipleChoices(input.type) ? (
           <div className='FieldEditorChoices'>
@@ -103,11 +115,15 @@ class FieldEditor extends Component {
           </div>
         ) : null}
         <div className='FieldEditorPreview'>
-          <FieldRenderer input={input} onChange={() => {}} />
+          <FieldRenderer input={input} value={''} disabled={true} onChange={() => {}} />
         </div>
       </div>
     )
   }
 }
 
-export default FieldEditor
+FieldEditor.propTypes = {
+  intl: intlShape.isRequired
+}
+
+export default injectIntl(FieldEditor)

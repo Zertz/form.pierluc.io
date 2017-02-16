@@ -26,7 +26,14 @@ class FieldRenderer extends Component {
   }
 
   render () {
-    const { input, value, focus, onChange, onKeyPress } = this.props
+    const {
+      input,
+      value,
+      focus,
+      disabled,
+      onChange,
+      onKeyPress
+    } = this.props
 
     const Component = this.getComponent(input.type)
 
@@ -38,8 +45,9 @@ class FieldRenderer extends Component {
       <div className='FieldRenderer' style={style}>
         <Component
           input={input}
-          value={FormService.isMultipleChoices(input.type) ? value.values : value.value}
+          value={typeof value === 'string' || Array.isArray(value) ? value : FormService.isMultipleChoices(input.type) ? value.values : value.value}
           focus={focus}
+          disabled={disabled}
           onChange={onChange}
           onKeyPress={onKeyPress} />
       </div>
@@ -49,7 +57,11 @@ class FieldRenderer extends Component {
 
 FieldRenderer.propTypes = {
   input: PropTypes.object.isRequired,
-  value: PropTypes.object,
+  value: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+    PropTypes.string
+  ]).isRequired,
   focus: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   onKeyPress: PropTypes.func

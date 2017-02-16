@@ -29,6 +29,10 @@
   width: 100%;
 }
 
+.TextInput > input:disabled {
+  background-color: #F0F0F0;
+}
+
 .TextInput .TextInputHelp {
   color: #757575;
   font-size: 0.875em;

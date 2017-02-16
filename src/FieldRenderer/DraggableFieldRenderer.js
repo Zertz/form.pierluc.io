@@ -61,12 +61,8 @@ class DraggableFieldRenderer extends Component {
   render () {
     const {
       input,
-      edit,
-      focus,
       onEditClicked,
       onRemoveClicked,
-      onChange,
-      onKeyPress,
       connectDragSource,
       connectDropTarget,
       isDragging
@@ -83,12 +79,11 @@ class DraggableFieldRenderer extends Component {
         <Component
           input={input}
           value={FormService.isMultipleChoices(input.type) ? [] : ''}
-          edit={edit}
-          focus={focus}
+          edit={true}
+          disabled={true}
           onEditClicked={onEditClicked}
           onRemoveClicked={onRemoveClicked}
-          onChange={onChange}
-          onKeyPress={onKeyPress}
+          onChange={() => {}}
           isDragging={isDragging} />
       </div>
     )) : null
@@ -97,13 +92,8 @@ class DraggableFieldRenderer extends Component {
 
 DraggableFieldRenderer.propTypes = {
   input: PropTypes.object.isRequired,
-  value: PropTypes.object,
-  edit: PropTypes.bool,
-  focus: PropTypes.bool,
-  onEditClicked: PropTypes.func,
-  onRemoveClicked: PropTypes.func,
-  onChange: PropTypes.func.isRequired,
-  onKeyPress: PropTypes.func
+  onEditClicked: PropTypes.func.isRequired,
+  onRemoveClicked: PropTypes.func.isRequired
 }
 
 export default flow([

@@ -12,6 +12,7 @@ class CheckboxGroup extends Component {
   render () {
     const {
       input,
+      value,
       edit,
       style,
       onEditClicked,
@@ -35,7 +36,7 @@ class CheckboxGroup extends Component {
           ) : null}
         </div>
         {input.description && <Text classnames='CheckboxGroupDescription'>{input.description}</Text>}
-        {input.choices.map((choice, index) => (
+        {value.map((choice, index) => (
           <Label key={index}>
             <input type='checkbox' value={choice.value} onChange={onChange} checked={(input.values || []).indexOf(choice.value) >= 0} />
             <span>{choice.label}</span>
@@ -48,7 +49,15 @@ class CheckboxGroup extends Component {
 }
 
 CheckboxGroup.propTypes = {
-  input: PropTypes.object.isRequired,
+  input: PropTypes.shape({
+    type: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    choices: PropTypes.array.isRequired,
+    defaultValue: PropTypes.array,
+    description: PropTypes.string,
+    help: PropTypes.string
+  }),
+  value: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired
 }
 

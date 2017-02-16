@@ -63,10 +63,10 @@ class Form extends Component {
         if (this.state.form) {
           this.setState({
             isLoading: false,
-            isAddingField: false,
-            isRemovingField: false,
-            isFieldEditorModalVisible: false,
-            isUploadingCoverImage: false,
+            isAddingField: undefined,
+            isRemovingField: undefined,
+            isFieldEditorModalVisible: undefined,
+            isUploadingCoverImage: undefined,
             form
           })
         } else {
@@ -320,8 +320,8 @@ class Form extends Component {
     } = this.state
 
     return isLoading ? <Loading /> : (
-      <div className='Form' ref={this.scrollIntoView}>
-        <div className='FormHeader' style={this.getHeaderStyle(form)}>
+      <div className='EditableForm' ref={this.scrollIntoView}>
+        <div className='EditableFormHeader' style={this.getHeaderStyle(form)}>
           <ButtonGroup>
             <Button onClick={this.onCoverImageClicked}>
               {form.coverImage ? (
@@ -335,18 +335,16 @@ class Form extends Component {
             </Button>
           </ButtonGroup>
         </div>
-        <div className='FormContent'>
+        <div className='EditableFormContent'>
           <EditableTitle onSave={this.onTitleSaved}>{form.title || ''}</EditableTitle>
           <Button onClick={this.onAddFieldClicked}>
             <FormattedMessage id='Form.AddField' defaultMessage='Add field' />
           </Button>
-          <div className='FormForm'>
-            <EditableFieldList
-              fields={form.fields || {}}
-              onEditClicked={this.onEditFieldClicked}
-              onRemoveClicked={this.onRemoveFieldClicked}
-              onOrderChanged={this.onFieldOrderChanged} />
-          </div>
+          <EditableFieldList
+            fields={form.fields || {}}
+            onEditClicked={this.onEditFieldClicked}
+            onRemoveClicked={this.onRemoveFieldClicked}
+            onOrderChanged={this.onFieldOrderChanged} />
         </div>
         {typeof form.fields[isEditingField] !== 'undefined' ? (
           <ModalFieldEditor

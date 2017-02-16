@@ -40,6 +40,7 @@ class TextInput extends Component {
       input,
       value,
       edit,
+      disabled,
       onEditClicked,
       onRemoveClicked,
       onChange,
@@ -74,6 +75,7 @@ class TextInput extends Component {
           tabIndex={tabIndex}
           type={input.type}
           value={value}
+          disabled={disabled}
           onChange={onChange}
           onKeyPress={onKeyPress} />
         {input.help && <Text classnames='TextInputHelp'>{input.help}</Text>}

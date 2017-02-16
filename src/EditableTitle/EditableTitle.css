@@ -9,6 +9,10 @@
   margin-bottom: 2em;
 }
 
+.EditableTitle > .EditableTitleEditor > .FieldRenderer {
+  width: 100%;
+}
+
 .EditableTitle > .EditableTitleEditor > .EditableTitleEditorButtons {
   position: absolute;
   top: 0.75em;

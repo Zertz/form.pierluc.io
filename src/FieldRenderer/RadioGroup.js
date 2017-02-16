@@ -12,6 +12,7 @@ class RadioGroup extends Component {
   render () {
     const {
       input,
+      value,
       edit,
       style,
       onEditClicked,
@@ -35,7 +36,7 @@ class RadioGroup extends Component {
           ) : null}
         </div>
         {input.description && <Text classnames='RadioGroupDescription'>{input.description}</Text>}
-        {input.choices.map((choice, index) => (
+        {value.map((choice, index) => (
           <Label key={index}>
             <input type='radio' value={choice.value} onChange={onChange} checked={input.value ? choice.value === input.value : choice.value === input.defaultValue} />
             <span>{choice.label}</span>
@@ -48,7 +49,15 @@ class RadioGroup extends Component {
 }
 
 RadioGroup.propTypes = {
-  input: PropTypes.object.isRequired,
+  input: PropTypes.shape({
+    type: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    choices: PropTypes.array.isRequired,
+    defaultValue: PropTypes.string,
+    description: PropTypes.string,
+    help: PropTypes.string
+  }),
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired
 }
 

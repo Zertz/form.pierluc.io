@@ -7,7 +7,7 @@
   margin-bottom: 1.5em;
 }
 
-.FieldList > *:not(:last-child) {
+.FieldList > * {
   border-bottom: 1px solid #BDBDBD;
   padding-bottom: 1.5em;
 }
