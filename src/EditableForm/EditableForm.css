@@ -9,9 +9,9 @@
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-  margin: -2em 0 2em -2em;
+  margin: 0em 0 1em -1em;
   padding: 0.5em;
-  width: calc(100% + 4em);
+  width: calc(100% + 1em);
   height: 200px;
 }
 

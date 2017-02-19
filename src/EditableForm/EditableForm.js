@@ -316,7 +316,7 @@ class Form extends Component {
     } = this.state
 
     return isLoading ? <Loading /> : (
-      <div className='EditableForm' ref={this.scrollIntoView}>
+      <div className='EditableForm'>
         <div className='EditableFormHeader' style={this.getHeaderStyle(form)}>
           <Button onClick={this.onCoverImageClicked}>
             {form.coverImage ? (

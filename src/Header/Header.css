@@ -2,8 +2,6 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #BDBDBD;
   padding: 1em;
 }
 
@@ -13,12 +11,11 @@
 
 .Header > a > .HeaderLogo {
   margin-right: 1em;
-  height: 50px;
+  height: 35px;
 }
 
 .Header > .Title {
   display: none;
-  margin: 0 0 0 0.25em;
 }
 
 .Header > .HeaderMenu {
@@ -42,5 +39,9 @@
 @media (min-width: 667px) {
   .Header > .Title {
     display: block;
+    color: #212121;
+    font-size: 2.5em;
+    line-height: 0.95em;
+    margin: 0 0 0 0.25em;
   }
 }
