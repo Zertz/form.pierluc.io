@@ -52,6 +52,8 @@ class Form extends Component {
     this.onTitleSaved = this.onTitleSaved.bind(this)
 
     this.onFieldOrderChanged = this.onFieldOrderChanged.bind(this)
+
+    this.getNextFieldOrder = this.getNextFieldOrder.bind(this)
     this.updateFieldOrder = this.updateFieldOrder.bind(this)
   }
 
@@ -161,7 +163,7 @@ class Form extends Component {
             $set: {
               type: 'text',
               label: '',
-              order: Object.keys(form.fields).length
+              order: this.getNextFieldOrder()
             }
           }
         }
@@ -305,6 +307,18 @@ class Form extends Component {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  getNextFieldOrder () {
+    const { form } = this.state
+
+    return Object.keys(form.fields).reduce((order, key) => {
+      const field = form.fields[key]
+      const choices = FormService.isMultipleValues(field.type) && field.choices ? field.choices.length : 1
+      const nextOrder = field.order + choices
+
+      return nextOrder > order ? nextOrder : order
+    }, 0)
   }
 
   async updateFieldOrder () {
