@@ -62,7 +62,7 @@ class Form extends Component {
       context: this,
       then (form) {
         const state = { form }
-        let callback = undefined
+        let callback
 
         if (this.state.form) {
           state.isLoading = false
@@ -326,7 +326,7 @@ class Form extends Component {
         if (isMultipleValues && choices && choices.length > 0) {
           order += choices.length
         } else {
-          order++;
+          order++
         }
       }
 

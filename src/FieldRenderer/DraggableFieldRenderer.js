@@ -19,12 +19,20 @@ const dragSource = {
     return {
       fieldKey: props.fieldKey
     }
+  },
+  endDrag (props, monitor) {
+    const drag = monitor.getItem().fieldKey
+    const drop = monitor.getDropResult().fieldKey
+
+    props.onOrderChanged(drag, drop)
   }
 }
 
 const dropTarget = {
-  drop (props, monitor, component) {
-    props.onOrderChanged(monitor.getItem().fieldKey, props.fieldKey)
+  drop (props, monitor) {
+    return {
+      fieldKey: props.fieldKey
+    }
   }
 }
 
