@@ -7,6 +7,7 @@ import update from 'immutability-helper'
 import './EditableForm.css'
 
 import AppService from '../AppService'
+import FormService from '../FormService'
 
 import Button from '../Button'
 import Dialog from '../Dialog'
@@ -51,6 +52,7 @@ class Form extends Component {
     this.onTitleSaved = this.onTitleSaved.bind(this)
 
     this.onFieldOrderChanged = this.onFieldOrderChanged.bind(this)
+    this.updateFieldOrder = this.updateFieldOrder.bind(this)
   }
 
   async componentDidMount () {
@@ -59,10 +61,18 @@ class Form extends Component {
     this.ref = base.listenTo(`forms/${routeParams.form}`, {
       context: this,
       then (form) {
-        this.setState({
-          isLoading: false,
-          form
-        })
+        const state = { form }
+        let callback = undefined
+
+        if (this.state.form) {
+          state.isLoading = false
+        } else {
+          callback = () => {
+            this.updateFieldOrder()
+          }
+        }
+
+        this.setState(state, callback)
       },
       onFailure (error) {
         console.error(error)
@@ -292,6 +302,47 @@ class Form extends Component {
         [`forms/${routeParams.form}/fields/${dragField}/order`]: form.fields[dropField].order,
         [`forms/${routeParams.form}/fields/${dropField}/order`]: form.fields[dragField].order
       })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async updateFieldOrder () {
+    const { base, routeParams } = this.props
+    const { form } = this.state
+
+    const sortedFields = Object.keys(form.fields).sort((a, b) => {
+      return form.fields[a].order > form.fields[b].order
+    })
+
+    const fieldsUpdate = {}
+    let order = 0
+
+    sortedFields.forEach((key, index) => {
+      if (index > 0) {
+        const isMultipleValues = FormService.isMultipleValues(form.fields[sortedFields[index - 1]].type)
+        const choices = form.fields[sortedFields[index - 1]].choices
+
+        if (isMultipleValues && choices && choices.length > 0) {
+          order += choices.length
+        } else {
+          order++;
+        }
+      }
+
+      if (form.fields[key].order !== order) {
+        fieldsUpdate[`forms/${routeParams.form}/fields/${key}/order`] = order
+      }
+    })
+
+    if (Object.keys(fieldsUpdate).length === 0) {
+      return this.setState({
+        isLoading: false
+      })
+    }
+
+    try {
+      await base.database().ref().update(fieldsUpdate)
     } catch (error) {
       console.error(error)
     }

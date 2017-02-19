@@ -30,7 +30,7 @@ class CheckboxGroup extends Component {
       onChange
     } = this.props
 
-    // const { tabIndex } = this.state
+    const { tabIndex } = this.state
 
     return (
       <div className='CheckboxGroup'>
@@ -54,7 +54,7 @@ class CheckboxGroup extends Component {
         {input.description && <Text classnames='CheckboxGroupDescription'>{input.description}</Text>}
         {input.choices.map((choice, index) => (
           <Label key={index}>
-            <input type='checkbox' value={choice.label} disabled={disabled} onChange={onChange} checked={value.indexOf(choice.label) >= 0} />
+            <input type='checkbox' value={choice.label} tabIndex={tabIndex + index} disabled={disabled} onChange={onChange} checked={value.indexOf(choice.label) >= 0} />
             <span>{choice.label} {choice.amountCents ? `(${PaymentService.getCentsAsCurrency(intl, choice.amountCents)})` : ''}</span>
           </Label>
         ))}

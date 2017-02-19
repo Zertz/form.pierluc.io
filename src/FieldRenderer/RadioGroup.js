@@ -30,7 +30,7 @@ class RadioGroup extends Component {
       onChange
     } = this.props
 
-    // const { tabIndex } = this.state
+    const { tabIndex } = this.state
 
     return (
       <radiogroup className='RadioGroup'>
@@ -54,7 +54,7 @@ class RadioGroup extends Component {
         {input.description && <Text classnames='RadioGroupDescription'>{input.description}</Text>}
         {input.choices.map((choice, index) => (
           <Label key={index}>
-            <input type='radio' value={choice.label} disabled={disabled} onChange={onChange} checked={value.indexOf(choice.label) >= 0} />
+            <input type='radio' value={choice.label} tabIndex={tabIndex} disabled={disabled} onChange={onChange} checked={value.indexOf(choice.label) >= 0} />
             <span>{choice.label} {choice.amountCents ? `(${PaymentService.getCentsAsCurrency(intl, choice.amountCents)})` : ''}</span>
           </Label>
         ))}
