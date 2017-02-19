@@ -23,10 +23,9 @@ class TextInput extends Component {
   }
 
   componentDidMount () {
-    const { focus } = this.props
     const { tabIndex } = this.state
 
-    if (focus || tabIndex === 1) {
+    if (tabIndex === 1) {
       this.inputRef.focus()
     }
   }
@@ -39,7 +38,6 @@ class TextInput extends Component {
     const {
       input,
       value,
-      edit,
       disabled,
       onEditClicked,
       onRemoveClicked,
@@ -49,22 +47,22 @@ class TextInput extends Component {
 
     const { id, tabIndex } = this.state
 
-    const style = tabIndex > 0 ? {
-      order: input.order
-    } : {}
-
     return (
-      <div className='TextInput' style={style}>
+      <div className='TextInput'>
         <Label htmlFor={id}>
           <div>{input.label}</div>
-          {edit ? (
+          {onEditClicked || onRemoveClicked ? (
             <ButtonGroup>
-              <Button small onClick={onEditClicked}>
-                <FormattedMessage id='TextInput.Edit' defaultMessage='Edit' />
-              </Button>
-              <Button small cancel onClick={onRemoveClicked}>
-                <FormattedMessage id='TextInput.Remove' defaultMessage='Remove' />
-              </Button>
+              {onEditClicked ? (
+                <Button small onClick={onEditClicked}>
+                  <FormattedMessage id='TextInput.Edit' defaultMessage='Edit' />
+                </Button>
+              ) : null}
+              {onRemoveClicked ? (
+                <Button small cancel onClick={onRemoveClicked}>
+                  <FormattedMessage id='TextInput.Remove' defaultMessage='Remove' />
+                </Button>
+              ) : null}
             </ButtonGroup>
           ) : null}
         </Label>
@@ -90,14 +88,15 @@ TextInput.propTypes = {
     label: PropTypes.string.isRequired,
     description: PropTypes.string,
     help: PropTypes.string
-  }).isRequired,
+  }),
   value: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string
   ]),
+  disabled: PropTypes.bool,
   onEditClicked: PropTypes.func,
   onRemoveClicked: PropTypes.func,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
   onKeyPress: PropTypes.func
 }
 

@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, PropTypes} from 'react'
 import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl'
 
 import './FieldEditor.css'
@@ -27,6 +27,10 @@ const messages = defineMessages({
   help: {
     id: 'FieldEditor.Help',
     defaultMessage: 'Help'
+  },
+  amount: {
+    id: 'FieldEditor.Amount',
+    defaultMessage: 'Amount'
   }
 })
 
@@ -59,21 +63,17 @@ class FieldEditor extends Component {
         }
       }
     }
-
-    this.onAddChoiceClicked = this.onAddChoiceClicked.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
-  }
-
-  onAddChoiceClicked () {
-    // TODO
-  }
-
-  onSubmit (e) {
-    e.preventDefault()
   }
 
   render () {
-    const { onFieldChanged, input } = this.props
+    const {
+      intl,
+      input,
+      onFieldChanged,
+      onAddChoiceClicked,
+      onChoiceChanged
+    } = this.props
+
     const { editorFields } = this.state
 
     return (
@@ -81,40 +81,43 @@ class FieldEditor extends Component {
         <Title>
           <FormattedMessage id='FieldEditor.Field' defaultMessage='Field' />
         </Title>
-        <form className='FieldEditorForm' onSubmit={this.onSubmit}>
+        <div className='FieldEditorForm'>
           <FieldList fields={editorFields} values={input} onFieldChanged={onFieldChanged} />
-        </form>
+        </div>
         {FormService.isMultipleChoices(input.type) ? (
           <div className='FieldEditorChoices'>
             <Subtitle>
               <FormattedMessage id='FieldEditor.Choices' defaultMessage='Choices' />
             </Subtitle>
-            <Button onClick={this.onAddChoiceClicked}>
+            <Button onClick={onAddChoiceClicked}>
               <FormattedMessage id='FieldEditor.AddChoice' defaultMessage='Add choice' />
             </Button>
-            {(input.choices || []).map((choice, index) => {
+            {input.choices.map((choice, choiceIndex) => {
               const inputs = [{
                 type: 'text',
-                label: 'label',
+                label: intl.formatMessage(messages.label),
                 value: choice.label
               }, {
                 type: 'number',
-                label: 'amount',
+                label: intl.formatMessage(messages.amount),
                 value: choice.amount
               }]
 
               return (
-                <div className='FieldEditorChoice' key={index}>
-                  {inputs.map((input, index) => (
-                    <FieldRenderer key={index} input={input} onChange={() => {}} />
+                <div className='FieldEditorChoice' key={choiceIndex}>
+                  {inputs.map((input, inputIndex) => (
+                    <FieldRenderer key={inputIndex} input={input} value={input.value} onChange={onChoiceChanged(choiceIndex, input)} />
                   ))}
                 </div>
               )
             })}
           </div>
         ) : null}
+        <Subtitle>
+          <FormattedMessage id='FieldEditor.Preview' defaultMessage='Preview' />
+        </Subtitle>
         <div className='FieldEditorPreview'>
-          <FieldRenderer input={input} value={''} disabled onChange={() => {}} />
+          <FieldRenderer input={input} value={FormService.isMultipleValues(input.type) ? [] : ''} disabled onChange={() => {}} />
         </div>
       </div>
     )
@@ -122,7 +125,11 @@ class FieldEditor extends Component {
 }
 
 FieldEditor.propTypes = {
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
+  input: PropTypes.object.isRequired,
+  onFieldChanged: PropTypes.func.isRequired,
+  onAddChoiceClicked: PropTypes.func.isRequired,
+  onChoiceChanged: PropTypes.func.isRequired
 }
 
 export default injectIntl(FieldEditor)

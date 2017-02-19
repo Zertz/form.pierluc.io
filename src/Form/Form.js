@@ -50,14 +50,8 @@ class Form extends Component {
             continue
           }
 
-          const value = FormService.isMultipleChoices(form.fields[key].type) ? {
-            values: []
-          } : {
-            value: ''
-          }
-
           if (!registration[key]) {
-            fieldsUpdate[key] = { $set: value }
+            fieldsUpdate[key] = { $set: FormService.isMultipleValues(form.fields[key].type) ? [] : '' }
           }
         }
 
@@ -105,15 +99,13 @@ class Form extends Component {
       const { form, registration } = this.state
 
       if (FormService.isMultipleValues(form.fields[key].type)) {
-        const valueIndex = registration.fields[key].values.indexOf(e.target.value)
+        const valueIndex = registration.fields[key].indexOf(e.target.value)
 
         if (valueIndex === -1) {
           this.setState({
             registration: update(registration, {
               fields: {
-                [key]: {
-                  values: { $push: [e.target.value] }
-                }
+                [key]: { $push: [e.target.value] }
               }
             })
           })
@@ -121,9 +113,7 @@ class Form extends Component {
           this.setState({
             registration: update(registration, {
               fields: {
-                [key]: {
-                  values: { $splice: [[e.target.value, 1]] }
-                }
+                [key]: { $splice: [[valueIndex, 1, e.target.value]] }
               }
             })
           })
@@ -132,11 +122,7 @@ class Form extends Component {
         this.setState({
           registration: update(registration, {
             fields: {
-              [key]: {
-                $set: {
-                  value: e.target.value
-                }
-              }
+              [key]: { $set: e.target.value }
             }
           })
         })
@@ -144,19 +130,19 @@ class Form extends Component {
     }
   }
 
-  async checkoutCallback (token) {
+  async checkoutCallback (checkoutResponse) {
     const { base, routeParams } = this.props
     const { registration } = this.state
 
     try {
-      const userToken = await base.auth().currentUser.getToken()
-      const stripeToken = token.id
-      const formId = routeParams.form
+      const token = await base.auth().currentUser.getToken()
+      const source = checkoutResponse.id
+      const form = routeParams.form
 
       const response = await PaymentService.charge({
-        formId,
-        stripeToken,
-        userToken
+        form,
+        source,
+        token
       })
 
       const charge = await response.json()
@@ -206,8 +192,8 @@ class Form extends Component {
           <Title>{form.title}</Title>
           <form className='FormForm' onSubmit={this.onSubmit}>
             <FieldList
-              fields={form.fields || {}}
-              values={registration.fields || {}}
+              fields={form.fields}
+              values={registration.fields}
               onFieldChanged={this.onFieldChanged} />
             <Button submit>
               <FormattedMessage id='Form.Submit' defaultMessage='Submit' />

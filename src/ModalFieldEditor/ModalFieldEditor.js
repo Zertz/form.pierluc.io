@@ -4,6 +4,8 @@ import update from 'immutability-helper'
 
 import './ModalFieldEditor.css'
 
+import FormService from '../FormService'
+
 import FieldEditor from '../FieldEditor'
 import Modal from '../Modal'
 
@@ -17,6 +19,8 @@ class ModalFieldEditor extends Component {
     }
 
     this.onFieldChanged = this.onFieldChanged.bind(this)
+    this.onAddChoiceClicked = this.onAddChoiceClicked.bind(this)
+    this.onChoiceChanged = this.onChoiceChanged.bind(this)
 
     this.onSaveClicked = this.onSaveClicked.bind(this)
     this.onCancelClicked = this.onCancelClicked.bind(this)
@@ -38,9 +42,49 @@ class ModalFieldEditor extends Component {
     return (e) => {
       const { field } = this.state
 
+      const fieldUpdate = {
+        [key]: { $set: e.target.value }
+      }
+
+      if (key === 'type' && FormService.isMultipleChoices(e.target.value) && !Array.isArray(field.choices)) {
+        fieldUpdate.choices = { $set: [] }
+      }
+
+      this.setState({
+        field: update(field, fieldUpdate)
+      })
+    }
+  }
+
+  onAddChoiceClicked () {
+    const { field } = this.state
+
+    this.setState({
+      field: update(field, {
+        choices: {
+          $push: [{
+            label: ''
+          }]
+        }
+      })
+    })
+  }
+
+  onChoiceChanged (index, input) {
+    return (e) => {
+      const { field } = this.state
+
+      const updatedChoice = update(field.choices[index], {
+        [input.label.toLowerCase()]: {
+          $set: input.type === "number" ? parseInt(e.target.value, 10) : e.target.value
+        }
+      })
+
       this.setState({
         field: update(field, {
-          [key]: { $set: e.target.value }
+          choices: {
+            $splice: [[index, 1, updatedChoice]]
+          }
         })
       })
     }
@@ -50,11 +94,19 @@ class ModalFieldEditor extends Component {
     const { onSave } = this.props
     const { field } = this.state
 
-    this.setState({
+    const state = {
       isModalVisible: false
-    })
+    }
 
-    onSave(e, field)
+    if (!FormService.isMultipleChoices(field.type)) {
+      state.field = update(field, {
+        $unset: ['choices']
+      })
+    }
+
+    this.setState(state, () => {
+      onSave(e, field)
+    })
   }
 
   onCancelClicked (e) {
@@ -90,7 +142,9 @@ class ModalFieldEditor extends Component {
         onOverlayClicked={this.onOverlayClicked}>
         <FieldEditor
           input={field}
-          onFieldChanged={this.onFieldChanged} />
+          onFieldChanged={this.onFieldChanged}
+          onAddChoiceClicked={this.onAddChoiceClicked}
+          onChoiceChanged={this.onChoiceChanged} />
       </Modal>
     )
   }

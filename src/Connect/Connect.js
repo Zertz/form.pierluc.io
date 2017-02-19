@@ -1,9 +1,11 @@
 import React, {Component} from 'react'
+import {FormattedMessage} from 'react-intl'
 
 import './Connect.css'
 
 import PaymentService from '../PaymentService'
 
+import Loading from '../Loading'
 import Text from '../Text'
 
 class Connect extends Component {
@@ -18,19 +20,21 @@ class Connect extends Component {
 
   async componentWillUpdate (nextProps, nextState) {
     const { base, location, user } = nextProps
-    const { isConnected } = nextState
+    const { isConnecting, isConnected } = nextState
 
     const { code } = location.query
 
-    if (this.isConnecting || isConnected || !user) {
+    if (isConnecting || isConnected || !user) {
       return
     }
 
-    this.isConnecting = true
+    this.setState({
+      isConnecting: true
+    })
 
     try {
-      const userToken = await base.auth().currentUser.getToken()
-      const response = await PaymentService.connect({ code, userToken })
+      const token = await base.auth().currentUser.getToken()
+      const response = await PaymentService.connect({ code, token })
       const json = await response.json()
 
       this.setState({
@@ -40,21 +44,31 @@ class Connect extends Component {
     } catch (error) {
       console.error(error)
     } finally {
-      this.isConnecting = false
+      this.setState({
+        isConnecting: false
+      })
     }
   }
 
   render () {
-    const { isConnected, json } = this.state
+    const { isConnecting, isConnected, json } = this.state
 
     return (
       <div className='Connect'>
-        { isConnected ? (
-          <Text content={'Connected!'} />
+        {isConnecting || (!isConnecting && !isConnected) ? (
+          <Loading>
+            <FormattedMessage id='Connect.Connecting' defaultMessage='Connecting...' />
+          </Loading>
+        ) : isConnected ? (
+          <Text>
+            <FormattedMessage id='Connect.Connected' defaultMessage='Connected!' />
+          </Text>
         ) : json && json.error_description ? (
-          <Text content={json.error_description} />
+          <Text>{json.error_description}</Text>
         ) : (
-          <Text content={'Connecting...'} />
+          <Text>
+            <FormattedMessage id='Connect.SadFace' defaultMessage=':(' />
+          </Text>
         )}
       </div>
     )

@@ -9,7 +9,6 @@ import './EditableForm.css'
 import AppService from '../AppService'
 
 import Button from '../Button'
-import ButtonGroup from '../ButtonGroup'
 import Dialog from '../Dialog'
 import EditableFieldList from '../EditableFieldList'
 import EditableTitle from '../EditableTitle'
@@ -60,21 +59,10 @@ class Form extends Component {
     this.ref = base.listenTo(`forms/${routeParams.form}`, {
       context: this,
       then (form) {
-        if (this.state.form) {
-          this.setState({
-            isLoading: false,
-            isAddingField: undefined,
-            isRemovingField: undefined,
-            isFieldEditorModalVisible: undefined,
-            isUploadingCoverImage: undefined,
-            form
-          })
-        } else {
-          this.setState({
-            isLoading: false,
-            form
-          })
-        }
+        this.setState({
+          isLoading: false,
+          form
+        })
       },
       onFailure (error) {
         console.error(error)
@@ -122,7 +110,8 @@ class Form extends Component {
     }
 
     this.setState({
-      isLoading: true
+      isLoading: true,
+      isUploadingCoverImage: false
     })
 
     try {
@@ -161,6 +150,7 @@ class Form extends Component {
           [key]: {
             $set: {
               type: 'text',
+              label: '',
               order: Object.keys(form.fields).length
             }
           }
@@ -189,7 +179,8 @@ class Form extends Component {
     }
 
     this.setState({
-      isLoading: true
+      isLoading: true,
+      isEditingField: false
     })
 
     try {
@@ -327,18 +318,13 @@ class Form extends Component {
     return isLoading ? <Loading /> : (
       <div className='EditableForm' ref={this.scrollIntoView}>
         <div className='EditableFormHeader' style={this.getHeaderStyle(form)}>
-          <ButtonGroup>
-            <Button onClick={this.onCoverImageClicked}>
-              {form.coverImage ? (
-                <FormattedMessage id='Form.ChangeImage' defaultMessage='Change image' />
-              ) : (
-                <FormattedMessage id='Form.AddImage' defaultMessage='Add image' />
-              )}
-            </Button>
-            <Button onClick={this.onToggleGuestClicked}>
-              <FormattedMessage id='Form.ViewAsGuest' defaultMessage='View as guest' />
-            </Button>
-          </ButtonGroup>
+          <Button onClick={this.onCoverImageClicked}>
+            {form.coverImage ? (
+              <FormattedMessage id='Form.ChangeImage' defaultMessage='Change image' />
+            ) : (
+              <FormattedMessage id='Form.AddImage' defaultMessage='Add image' />
+            )}
+          </Button>
         </div>
         <div className='EditableFormContent'>
           <EditableTitle onSave={this.onTitleSaved}>{form.title || ''}</EditableTitle>

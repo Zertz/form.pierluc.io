@@ -15,7 +15,8 @@ class Select extends Component {
     super(props)
 
     this.state = {
-      id: AppService.getRandomId()
+      id: AppService.getRandomId(),
+      tabIndex: parseInt(props.input.order, 10) + 1
     }
   }
 
@@ -23,35 +24,38 @@ class Select extends Component {
     const {
       input,
       value,
-      edit,
-      style,
+      disabled,
       onEditClicked,
       onRemoveClicked,
       onChange
     } = this.props
 
-    const { id } = this.state
+    const { id, tabIndex } = this.state
 
     return (
-      <div className='Select' style={style}>
+      <div className='Select'>
         {input.label && <Label htmlFor={id}>
           <div>{input.label}</div>
-          {edit ? (
+          {onEditClicked || onRemoveClicked ? (
             <ButtonGroup>
-              <Button small onClick={onEditClicked}>
-                <FormattedMessage id='Select.Edit' defaultMessage='Edit' />
-              </Button>
-              <Button small cancel onClick={onRemoveClicked}>
-                <FormattedMessage id='Select.Remove' defaultMessage='Remove' />
-              </Button>
+              {onEditClicked ? (
+                <Button small onClick={onEditClicked}>
+                  <FormattedMessage id='Select.Edit' defaultMessage='Edit' />
+                </Button>
+              ) : null}
+              {onRemoveClicked ? (
+                <Button small cancel onClick={onRemoveClicked}>
+                  <FormattedMessage id='Select.Remove' defaultMessage='Remove' />
+                </Button>
+              ) : null}
             </ButtonGroup>
           ) : null}
         </Label>}
         {input.description && <Text classnames='SelectDescription'>{input.description}</Text>}
         <div className='SelectWrapper'>
-          <select id={id} value={value || input.defaultValue} onChange={onChange}>
+          <select id={id} tabIndex={tabIndex} value={value} disabled={disabled} onChange={onChange}>
             {input.choices.map((choice, index) => (
-              <option key={index} value={choice.value}>{choice.label} {choice.amount ? `(${choice.amount})` : ''}</option>
+              <option key={index} value={choice.label}>{choice.label} {choice.amount ? `(${choice.amount})` : ''}</option>
             ))}
           </select>
         </div>
@@ -65,13 +69,18 @@ Select.propTypes = {
   input: PropTypes.shape({
     type: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    choices: PropTypes.array.isRequired,
-    defaultValue: PropTypes.string,
+    choices: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      amount: PropTypes.number
+    })),
     description: PropTypes.string,
     help: PropTypes.string
   }),
   value: PropTypes.string,
-  onChange: PropTypes.func
+  disabled: PropTypes.bool,
+  onEditClicked: PropTypes.func,
+  onRemoveClicked: PropTypes.func,
+  onChange: PropTypes.func.isRequired
 }
 
 export default Select

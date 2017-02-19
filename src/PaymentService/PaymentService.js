@@ -13,10 +13,6 @@ class PaymentService {
     return AppService.isProduction() ? process.env.REACT_APP_STRIPE_CLIENT_ID_LIVE : process.env.REACT_APP_STRIPE_CLIENT_ID_TEST
   }
 
-  getPaymentUrl () {
-    return AppService.isProduction() ? process.env.REACT_APP_PAYMENT_API_URL_LIVE : process.env.REACT_APP_PAYMENT_API_URL_TEST
-  }
-
   getConnectLink () {
     return `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${this.getClientId()}&scope=read_write`
   }
@@ -28,25 +24,28 @@ class PaymentService {
       throw new Error('options must be specified')
     }
 
-    const { code, userToken } = options
+    const { code, token } = options
 
     if (typeof code !== 'string') {
       throw new Error('options.code must be a string')
     }
 
-    if (typeof userToken !== 'string') {
-      throw new Error('options.userToken must be a string')
+    if (typeof token !== 'string') {
+      throw new Error('options.token must be a string')
     }
 
-    const request = new Request(`${this.getPaymentUrl()}/connect`, {
+    const request = new Request(`${AppService.getApiUrl()}/stripeConnect`, {
       method: 'post',
       mode: 'cors',
       cache: 'no-cache',
       credentials: 'omit',
       headers: new Headers({
-        'Authorization': `Bearer ${userToken}`
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       }),
-      body: JSON.stringify({ code })
+      body: JSON.stringify({
+        code
+      })
     })
 
     return fetch(request)
@@ -78,33 +77,38 @@ class PaymentService {
       throw new Error('options must be specified')
     }
 
-    const { formId, stripeToken, userToken } = options
+    const { form, source, token } = options
 
-    if (typeof formId !== 'string') {
-      throw new Error('options.formId must be a string')
+    if (typeof form !== 'string') {
+      throw new Error('options.form must be a string')
     }
 
-    if (typeof stripeToken !== 'string') {
-      throw new Error('options.stripeToken must be a string')
+    if (typeof source !== 'string') {
+      throw new Error('options.source must be a string')
     }
 
-    if (userToken && typeof userToken !== 'string') {
-      throw new Error('options.userToken must be a string')
+    if (token && typeof token !== 'string') {
+      throw new Error('options.token must be a string')
     }
 
-    const headers = new Headers()
+    const headers = new Headers({
+      'Content-Type': 'application/json'
+    })
 
-    if (userToken) {
-      headers.set('Authorization', `Bearer ${userToken}`)
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`)
     }
 
-    const request = new Request(`${this.getPaymentUrl()}/charge`, {
+    const request = new Request(`${AppService.getApiUrl()}/stripeCharge`, {
       method: 'post',
       mode: 'cors',
       cache: 'no-cache',
       credentials: 'omit',
       headers,
-      body: JSON.stringify({ formId, stripeToken })
+      body: JSON.stringify({
+        form,
+        source
+      })
     })
 
     return fetch(request)

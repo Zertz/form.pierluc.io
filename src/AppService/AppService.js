@@ -5,6 +5,10 @@ class AppService {
     return process.env.NODE_ENV === 'production'
   }
 
+  getApiUrl () {
+    return this.isProduction() ? process.env.REACT_APP_API_URL_LIVE : process.env.REACT_APP_API_URL_TEST
+  }
+
   getRandomId () {
     return uuid.v4()
   }

@@ -9,37 +9,50 @@ import Label from '../Label'
 import Text from '../Text'
 
 class CheckboxGroup extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      tabIndex: parseInt(props.input.order, 10) + 1
+    }
+  }
+
   render () {
     const {
       input,
       value,
-      edit,
-      style,
+      disabled,
       onEditClicked,
       onRemoveClicked,
       onChange
     } = this.props
 
+    // const { tabIndex } = this.state
+
     return (
-      <div className='CheckboxGroup' style={style}>
+      <div className='CheckboxGroup'>
         <div className='Label'>
           <div>{input.label}</div>
-          {edit ? (
+          {onEditClicked || onRemoveClicked ? (
             <ButtonGroup>
-              <Button small onClick={onEditClicked}>
-                <FormattedMessage id='CheckboxGroup.Edit' defaultMessage='Edit' />
-              </Button>
-              <Button small cancel onClick={onRemoveClicked}>
-                <FormattedMessage id='CheckboxGroup.Remove' defaultMessage='Remove' />
-              </Button>
+              {onEditClicked ? (
+                <Button small onClick={onEditClicked}>
+                  <FormattedMessage id='CheckboxGroup.Edit' defaultMessage='Edit' />
+                </Button>
+              ) : null}
+              {onRemoveClicked ? (
+                <Button small cancel onClick={onRemoveClicked}>
+                  <FormattedMessage id='CheckboxGroup.Remove' defaultMessage='Remove' />
+                </Button>
+              ) : null}
             </ButtonGroup>
           ) : null}
         </div>
         {input.description && <Text classnames='CheckboxGroupDescription'>{input.description}</Text>}
-        {value.map((choice, index) => (
+        {input.choices.map((choice, index) => (
           <Label key={index}>
-            <input type='checkbox' value={choice.value} onChange={onChange} checked={(input.values || []).indexOf(choice.value) >= 0} />
-            <span>{choice.label}</span>
+            <input type='checkbox' value={choice.label} disabled={disabled} onChange={onChange} checked={value.indexOf(choice.label) >= 0} />
+            <span>{choice.label} {choice.amount ? `(${choice.amount})` : ''}</span>
           </Label>
         ))}
         {input.help && <Text classnames='CheckboxGroupHelp'>{input.help}</Text>}
@@ -52,12 +65,17 @@ CheckboxGroup.propTypes = {
   input: PropTypes.shape({
     type: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    choices: PropTypes.array.isRequired,
-    defaultValue: PropTypes.array,
+    choices: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      amount: PropTypes.number
+    })),
     description: PropTypes.string,
     help: PropTypes.string
   }),
-  value: PropTypes.array.isRequired,
+  value: PropTypes.arrayOf(PropTypes.string),
+  disabled: PropTypes.bool,
+  onEditClicked: PropTypes.func,
+  onRemoveClicked: PropTypes.func,
   onChange: PropTypes.func.isRequired
 }
 

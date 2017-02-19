@@ -6,7 +6,6 @@
 
 .FieldEditor > .FieldEditorForm {
   flex-basis: 100%;
-  margin-bottom: 2em;
 }
 
 .FieldEditor > .FieldEditorForm > *:not(:last-child) {

@@ -83,13 +83,11 @@ class DraggableFieldRenderer extends Component {
       <div className={classnames('DraggableFieldRenderer', { isDragging, isOver, canDrop })} style={style}>
         <Component
           input={input}
-          value={FormService.isMultipleChoices(input.type) ? [] : ''}
-          edit
-          disabled
+          value={FormService.isMultipleValues(input.type) ? [] : ''}
+          disabled={true}
           onEditClicked={onEditClicked}
           onRemoveClicked={onRemoveClicked}
-          onChange={() => {}}
-          isDragging={isDragging} />
+          onChange={() => {}} />
       </div>
     )) : null
   }
