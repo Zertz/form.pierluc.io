@@ -17,6 +17,10 @@ class FormService {
     return ['checkbox'].indexOf(type) >= 0
   }
 
+  isSelect (type) {
+    return type === 'select'
+  }
+
   create (base, form) {
     const formKey = base.database().ref('forms').push().key
     const user = base.auth().currentUser.uid

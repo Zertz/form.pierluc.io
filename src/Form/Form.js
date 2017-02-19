@@ -51,7 +51,11 @@ class Form extends Component {
           }
 
           if (!registration[key]) {
-            fieldsUpdate[key] = { $set: FormService.isMultipleValues(form.fields[key].type) ? [] : '' }
+            if (FormService.isSelect(form.fields[key].type)) {
+              fieldsUpdate[key] = { $set: form.fields[key].choices[0].label }
+            } else {
+              fieldsUpdate[key] = { $set: FormService.isMultipleValues(form.fields[key].type) ? [] : '' }
+            }
           }
         }
 
@@ -145,11 +149,9 @@ class Form extends Component {
         token
       })
 
-      const charge = await response.json()
+      const json = await response.json()
 
-      await RegistrationService.create(base, Object.assign(registration, {
-        charge
-      }))
+      await RegistrationService.create(base, Object.assign(registration, json))
 
       browserHistory.push('/me')
     } catch (error) {
