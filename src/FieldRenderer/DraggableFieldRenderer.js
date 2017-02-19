@@ -84,7 +84,7 @@ class DraggableFieldRenderer extends Component {
         <Component
           input={input}
           value={FormService.isMultipleValues(input.type) ? [] : ''}
-          disabled={true}
+          disabled
           onEditClicked={onEditClicked}
           onRemoveClicked={onRemoveClicked}
           onChange={() => {}} />
