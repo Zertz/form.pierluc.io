@@ -17,6 +17,13 @@ class PaymentService {
     return `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${this.getClientId()}&scope=read_write`
   }
 
+  getCentsAsCurrency (intl, cents) {
+    return intl.formatNumber(parseInt(cents, 10) / 100, {
+      style: 'currency',
+      currency: 'USD'
+    })
+  }
+
   connect (options) {
     const { Request, Headers, fetch } = window
 

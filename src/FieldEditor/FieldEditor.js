@@ -89,28 +89,30 @@ class FieldEditor extends Component {
             <Subtitle>
               <FormattedMessage id='FieldEditor.Choices' defaultMessage='Choices' />
             </Subtitle>
-            <Button onClick={onAddChoiceClicked}>
+            <Button small onClick={onAddChoiceClicked}>
               <FormattedMessage id='FieldEditor.AddChoice' defaultMessage='Add choice' />
             </Button>
-            {input.choices.map((choice, choiceIndex) => {
-              const inputs = [{
-                type: 'text',
-                label: intl.formatMessage(messages.label),
-                value: choice.label
-              }, {
-                type: 'number',
-                label: intl.formatMessage(messages.amount),
-                value: choice.amount
-              }]
+            <div className='FieldEditorChoicesList'>
+              {input.choices.map((choice, choiceIndex) => {
+                const inputs = [{
+                  type: 'text',
+                  label: intl.formatMessage(messages.label),
+                  value: choice.label
+                }, {
+                  type: 'number',
+                  label: intl.formatMessage(messages.amount),
+                  value: choice.amount
+                }]
 
-              return (
-                <div className='FieldEditorChoice' key={choiceIndex}>
-                  {inputs.map((input, inputIndex) => (
-                    <FieldRenderer key={inputIndex} input={input} value={input.value} onChange={onChoiceChanged(choiceIndex, input)} />
-                  ))}
-                </div>
-              )
-            })}
+                return (
+                  <div className='FieldEditorChoicesListItem' key={choiceIndex}>
+                    {inputs.map((input, inputIndex) => (
+                      <FieldRenderer key={inputIndex} input={input} value={input.value} onChange={onChoiceChanged(choiceIndex, input)} />
+                    ))}
+                  </div>
+                )
+              })}
+            </div>
           </div>
         ) : null}
         <Subtitle>

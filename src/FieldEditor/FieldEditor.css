@@ -12,6 +12,20 @@
   margin-bottom: 1em;
 }
 
+.FieldEditor > .FieldEditorChoices > .FieldEditorChoicesList {
+  margin-bottom: 1em;
+}
+
+.FieldEditor > .FieldEditorChoices > .FieldEditorChoicesList > .FieldEditorChoicesListItem:not(:last-child) {
+  border-bottom: 1px solid #BDBDBD;
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+}
+
+.FieldEditor > .FieldEditorChoices > .FieldEditorChoicesList > .FieldEditorChoicesListItem > *:not(:last-child) {
+  margin-bottom: 1em;
+}
+
 .FieldEditor > .FieldEditorPreview {
   flex-shrink: 0;
   border: 1px solid #eee;

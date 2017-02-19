@@ -1,7 +1,9 @@
 import React, {Component, PropTypes} from 'react'
-import {FormattedMessage} from 'react-intl'
+import {injectIntl, intlShape, FormattedMessage} from 'react-intl'
 
 import './RadioGroup.css'
+
+import PaymentService from '../PaymentService'
 
 import Button from '../Button'
 import ButtonGroup from '../ButtonGroup'
@@ -19,6 +21,7 @@ class RadioGroup extends Component {
 
   render () {
     const {
+      intl,
       input,
       value,
       disabled,
@@ -52,7 +55,7 @@ class RadioGroup extends Component {
         {input.choices.map((choice, index) => (
           <Label key={index}>
             <input type='radio' value={choice.label} disabled={disabled} onChange={onChange} checked={value.indexOf(choice.label) >= 0} />
-            <span>{choice.label} {choice.amount ? `(${choice.amount})` : ''}</span>
+            <span>{choice.label} {choice.amount ? `(${PaymentService.getCentsAsCurrency(intl, choice.amount)})` : ''}</span>
           </Label>
         ))}
         {input.help && <Text classnames='RadioGroupHelp'>{input.help}</Text>}
@@ -62,6 +65,7 @@ class RadioGroup extends Component {
 }
 
 RadioGroup.propTypes = {
+  intl: intlShape.isRequired,
   input: PropTypes.shape({
     type: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
@@ -79,4 +83,4 @@ RadioGroup.propTypes = {
   onChange: PropTypes.func.isRequired
 }
 
-export default RadioGroup
+export default injectIntl(RadioGroup)

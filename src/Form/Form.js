@@ -117,7 +117,7 @@ class Form extends Component {
           this.setState({
             registration: update(registration, {
               fields: {
-                [key]: { $splice: [[valueIndex, 1, e.target.value]] }
+                [key]: { $splice: [[valueIndex, 1]] }
               }
             })
           })

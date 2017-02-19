@@ -1,9 +1,10 @@
 import React, {Component, PropTypes} from 'react'
-import {FormattedMessage} from 'react-intl'
+import {injectIntl, intlShape, FormattedMessage} from 'react-intl'
 
 import './Select.css'
 
 import AppService from '../AppService'
+import PaymentService from '../PaymentService'
 
 import Button from '../Button'
 import ButtonGroup from '../ButtonGroup'
@@ -22,6 +23,7 @@ class Select extends Component {
 
   render () {
     const {
+      intl,
       input,
       value,
       disabled,
@@ -55,7 +57,7 @@ class Select extends Component {
         <div className='SelectWrapper'>
           <select id={id} tabIndex={tabIndex} value={value} disabled={disabled} onChange={onChange}>
             {input.choices.map((choice, index) => (
-              <option key={index} value={choice.label}>{choice.label} {choice.amount ? `(${choice.amount})` : ''}</option>
+              <option key={index} value={choice.label}>{choice.label} {choice.amount ? `(${PaymentService.getCentsAsCurrency(intl, choice.amount)})` : ''}</option>
             ))}
           </select>
         </div>
@@ -66,6 +68,7 @@ class Select extends Component {
 }
 
 Select.propTypes = {
+  intl: intlShape.isRequired,
   input: PropTypes.shape({
     type: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
@@ -83,4 +86,4 @@ Select.propTypes = {
   onChange: PropTypes.func.isRequired
 }
 
-export default Select
+export default injectIntl(Select)

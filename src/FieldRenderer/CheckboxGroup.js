@@ -1,7 +1,9 @@
 import React, {Component, PropTypes} from 'react'
-import {FormattedMessage} from 'react-intl'
+import {injectIntl, intlShape, FormattedMessage} from 'react-intl'
 
 import './CheckboxGroup.css'
+
+import PaymentService from '../PaymentService'
 
 import Button from '../Button'
 import ButtonGroup from '../ButtonGroup'
@@ -19,6 +21,7 @@ class CheckboxGroup extends Component {
 
   render () {
     const {
+      intl,
       input,
       value,
       disabled,
@@ -52,7 +55,7 @@ class CheckboxGroup extends Component {
         {input.choices.map((choice, index) => (
           <Label key={index}>
             <input type='checkbox' value={choice.label} disabled={disabled} onChange={onChange} checked={value.indexOf(choice.label) >= 0} />
-            <span>{choice.label} {choice.amount ? `(${choice.amount})` : ''}</span>
+            <span>{choice.label} {choice.amount ? `(${PaymentService.getCentsAsCurrency(intl, choice.amount)})` : ''}</span>
           </Label>
         ))}
         {input.help && <Text classnames='CheckboxGroupHelp'>{input.help}</Text>}
@@ -62,6 +65,7 @@ class CheckboxGroup extends Component {
 }
 
 CheckboxGroup.propTypes = {
+  intl: intlShape.isRequired,
   input: PropTypes.shape({
     type: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
@@ -79,4 +83,4 @@ CheckboxGroup.propTypes = {
   onChange: PropTypes.func.isRequired
 }
 
-export default CheckboxGroup
+export default injectIntl(CheckboxGroup)
