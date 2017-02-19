@@ -74,9 +74,15 @@ class ModalFieldEditor extends Component {
     return (e) => {
       const { field } = this.state
 
+      const value = input.key === 'amountCents'
+        ? parseInt(e.target.value, 10) * 100
+        : input.type === 'number'
+        ? parseInt(e.target.value, 10)
+        : e.target.value
+
       const updatedChoice = update(field.choices[index], {
-        [input.label.toLowerCase()]: {
-          $set: input.type === 'number' ? parseInt(e.target.value, 10) : e.target.value
+        [input.key]: {
+          $set: value
         }
       })
 

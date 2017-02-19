@@ -55,7 +55,7 @@ class CheckboxGroup extends Component {
         {input.choices.map((choice, index) => (
           <Label key={index}>
             <input type='checkbox' value={choice.label} disabled={disabled} onChange={onChange} checked={value.indexOf(choice.label) >= 0} />
-            <span>{choice.label} {choice.amount ? `(${PaymentService.getCentsAsCurrency(intl, choice.amount)})` : ''}</span>
+            <span>{choice.label} {choice.amountCents ? `(${PaymentService.getCentsAsCurrency(intl, choice.amountCents)})` : ''}</span>
           </Label>
         ))}
         {input.help && <Text classnames='CheckboxGroupHelp'>{input.help}</Text>}
@@ -71,7 +71,7 @@ CheckboxGroup.propTypes = {
     label: PropTypes.string.isRequired,
     choices: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string.isRequired,
-      amount: PropTypes.number
+      amountCents: PropTypes.number
     })),
     description: PropTypes.string,
     help: PropTypes.string

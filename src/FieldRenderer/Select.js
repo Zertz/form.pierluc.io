@@ -57,7 +57,7 @@ class Select extends Component {
         <div className='SelectWrapper'>
           <select id={id} tabIndex={tabIndex} value={value} disabled={disabled} onChange={onChange}>
             {input.choices.map((choice, index) => (
-              <option key={index} value={choice.label}>{choice.label} {choice.amount ? `(${PaymentService.getCentsAsCurrency(intl, choice.amount)})` : ''}</option>
+              <option key={index} value={choice.label}>{choice.label} {choice.amountCents ? `(${PaymentService.getCentsAsCurrency(intl, choice.amountCents)})` : ''}</option>
             ))}
           </select>
         </div>
@@ -74,7 +74,7 @@ Select.propTypes = {
     label: PropTypes.string.isRequired,
     choices: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string.isRequired,
-      amount: PropTypes.number
+      amountCents: PropTypes.number
     })),
     description: PropTypes.string,
     help: PropTypes.string

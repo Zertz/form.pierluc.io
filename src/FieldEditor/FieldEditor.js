@@ -96,18 +96,20 @@ class FieldEditor extends Component {
               {input.choices.map((choice, choiceIndex) => {
                 const inputs = [{
                   type: 'text',
+                  key: 'label',
                   label: intl.formatMessage(messages.label),
                   value: choice.label
                 }, {
                   type: 'number',
+                  key: 'amountCents',
                   label: intl.formatMessage(messages.amount),
-                  value: choice.amount
+                  value: choice.amountCents
                 }]
 
                 return (
                   <div className='FieldEditorChoicesListItem' key={choiceIndex}>
                     {inputs.map((input, inputIndex) => (
-                      <FieldRenderer key={inputIndex} input={input} value={input.value} onChange={onChoiceChanged(choiceIndex, input)} />
+                      <FieldRenderer key={inputIndex} input={input} value={input.value && input.key === 'amountCents' ? parseInt(input.value, 10) / 100 : input.value} onChange={onChoiceChanged(choiceIndex, input)} />
                     ))}
                   </div>
                 )
