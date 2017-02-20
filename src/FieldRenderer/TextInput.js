@@ -23,9 +23,10 @@ class TextInput extends Component {
   }
 
   componentDidMount () {
+    const { focus } = this.props
     const { tabIndex } = this.state
 
-    if (tabIndex === 1) {
+    if (focus || tabIndex === 1) {
       this.inputRef.focus()
     }
   }
@@ -93,6 +94,7 @@ TextInput.propTypes = {
     PropTypes.number,
     PropTypes.string
   ]),
+  focus: PropTypes.bool,
   disabled: PropTypes.bool,
   onEditClicked: PropTypes.func,
   onRemoveClicked: PropTypes.func,

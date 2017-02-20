@@ -24,7 +24,7 @@ const dragSource = {
     const drag = monitor.getItem()
     const drop = monitor.getDropResult()
 
-    if (drag && drop) {
+    if (drag && drop && drag.fieldKey !== drop.fieldKey) {
       props.onOrderChanged(drag.fieldKey, drop.fieldKey)
     }
   }

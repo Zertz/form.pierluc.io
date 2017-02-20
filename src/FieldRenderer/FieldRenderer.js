@@ -29,6 +29,7 @@ class FieldRenderer extends Component {
     const {
       input,
       value,
+      focus,
       disabled,
       onChange,
       onKeyPress
@@ -45,6 +46,7 @@ class FieldRenderer extends Component {
         <Component
           input={input}
           value={typeof value !== 'undefined' ? value : FormService.isMultipleValues(input.type) ? [] : ''}
+          focus={focus}
           disabled={disabled}
           onChange={onChange}
           onKeyPress={onKeyPress} />

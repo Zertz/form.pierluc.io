@@ -1,11 +1,24 @@
-.DraggableFieldRenderer.isDragging {
-  opacity: 0.75;
+.DraggableFieldRenderer {
+  border: 3px dashed transparent;
+  cursor: move;
+  margin: 0.75em;
+  padding: 0.75em;
+  transition: opacity 0.0625s ease;
 }
 
-.DraggableFieldRenderer.isOver {
-  opacity: 0.75;
+.DraggableFieldRenderer.isDragging {
+  opacity: 0.125;
+}
+
+.DraggableFieldRenderer.isOver:not(.isDragging) {
+  border: 3px dashed #607D8B;
+  opacity: 0.25;
 }
 
 .DraggableFieldRenderer.canDrop {
-  background-color: rgba(0, 255, 0, 0.25);
+  background-color: rgba(96, 125, 139, 0.25);
+}
+
+.DraggableFieldRenderer > * {
+  border-bottom: 1px solid #BDBDBD;
 }
