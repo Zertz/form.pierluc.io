@@ -74,6 +74,8 @@ class DraggableFieldRenderer extends Component {
   render () {
     const {
       input,
+      disabled,
+      onChange,
       onEditClicked,
       onRemoveClicked,
       connectDragSource,
@@ -94,10 +96,10 @@ class DraggableFieldRenderer extends Component {
         <Component
           input={input}
           value={FormService.isMultipleValues(input.type) ? [] : ''}
-          disabled
+          disabled={disabled}
+          onChange={typeof onChange === 'function' ? onChange : () => {}}
           onEditClicked={onEditClicked}
-          onRemoveClicked={onRemoveClicked}
-          onChange={() => {}} />
+          onRemoveClicked={onRemoveClicked} />
       </div>
     )) : null
   }
@@ -105,6 +107,8 @@ class DraggableFieldRenderer extends Component {
 
 DraggableFieldRenderer.propTypes = {
   input: PropTypes.object.isRequired,
+  disabled: PropTypes.bool,
+  onChange: PropTypes.func,
   onEditClicked: PropTypes.func.isRequired,
   onRemoveClicked: PropTypes.func.isRequired
 }

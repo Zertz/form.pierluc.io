@@ -314,7 +314,7 @@ class Form extends Component {
 
     return Object.keys(form.fields).reduce((order, key) => {
       const field = form.fields[key]
-      const choices = FormService.isMultipleValues(field.type) && field.choices ? field.choices.length : 1
+      const choices = FormService.isMultipleValues(field.type) && field.choices ? Object.keys(field.choices).length : 1
       const nextOrder = field.order + choices
 
       return nextOrder > order ? nextOrder : order
@@ -337,8 +337,8 @@ class Form extends Component {
         const isMultipleValues = FormService.isMultipleValues(form.fields[sortedFields[index - 1]].type)
         const choices = form.fields[sortedFields[index - 1]].choices
 
-        if (isMultipleValues && choices && choices.length > 0) {
-          order += choices.length
+        if (isMultipleValues && choices && Object.keys(choices).length > 0) {
+          order += Object.keys(choices).length
         } else {
           order++
         }

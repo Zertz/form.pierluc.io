@@ -3,6 +3,7 @@ import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-int
 
 import './FieldEditor.css'
 
+import AppService from '../AppService'
 import FormService from '../FormService'
 
 import Button from '../Button'
@@ -38,16 +39,23 @@ class FieldEditor extends Component {
   constructor (props) {
     super(props)
 
+    const fieldTypes = FormService.getFieldTypes()
+    const typeChoices = {}
+
+    for (let i = 0; i < fieldTypes.length; i++) {
+      typeChoices[AppService.getRandomId()] = {
+        label: fieldTypes[i],
+        value: fieldTypes[i]
+      }
+    }
+
     this.state = {
       input: props.input,
       editorFields: {
         type: {
           type: 'select',
           label: props.intl.formatMessage(messages.type),
-          choices: FormService.getFieldTypes().map((fieldType) => ({
-            label: fieldType,
-            value: fieldType
-          }))
+          choices: typeChoices
         },
         label: {
           type: 'text',
@@ -93,23 +101,23 @@ class FieldEditor extends Component {
               <FormattedMessage id='FieldEditor.AddChoice' defaultMessage='Add choice' />
             </Button>
             <div className='FieldEditorChoicesList'>
-              {input.choices.map((choice, choiceIndex) => {
+              {Object.keys(input.choices).map((key) => {
                 const inputs = [{
                   type: 'text',
                   key: 'label',
                   label: intl.formatMessage(messages.label),
-                  value: choice.label
+                  value: input.choices[key].label
                 }, {
                   type: 'number',
                   key: 'amountCents',
                   label: intl.formatMessage(messages.amount),
-                  value: choice.amountCents
+                  value: input.choices[key].amountCents
                 }]
 
                 return (
-                  <div className='FieldEditorChoicesListItem' key={choiceIndex}>
+                  <div className='FieldEditorChoicesListItem' key={key}>
                     {inputs.map((input, inputIndex) => (
-                      <FieldRenderer key={inputIndex} input={input} value={input.value && input.key === 'amountCents' ? parseInt(input.value, 10) / 100 : input.value} onChange={onChoiceChanged(choiceIndex, input)} />
+                      <FieldRenderer key={inputIndex} input={input} value={input.value && input.key === 'amountCents' ? parseInt(input.value, 10) / 100 : input.value} onChange={onChoiceChanged(key, input)} />
                     ))}
                   </div>
                 )

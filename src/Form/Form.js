@@ -33,6 +33,7 @@ class Form extends Component {
     this.isOwner = this.isOwner.bind(this)
     this.onEditClicked = this.onEditClicked.bind(this)
     this.onFieldChanged = this.onFieldChanged.bind(this)
+    this.getTotalAmount = this.getTotalAmount.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
@@ -52,7 +53,9 @@ class Form extends Component {
 
           if (!registration[key]) {
             if (FormService.isSelect(form.fields[key].type)) {
-              fieldsUpdate[key] = { $set: form.fields[key].choices[0].label }
+              const choiceKeys = Object.keys(form.fields[key].choices)
+
+              fieldsUpdate[key] = { $set: choiceKeys.length > 0 ? form.fields[key].choices[choiceKeys[0]].label : '' }
             } else {
               fieldsUpdate[key] = { $set: FormService.isMultipleValues(form.fields[key].type) ? [] : '' }
             }
@@ -159,16 +162,31 @@ class Form extends Component {
     }
   }
 
+  getTotalAmount () {
+    const { form, registration } = this.state
+
+    console.info(registration.fields)
+    console.info(form.fields)
+
+    return Object.keys(registration.fields).reduce((amount, key) => {
+      return FormService.isMultipleChoices(form.fields[key].type) ? 1 : 0
+    }, 0)
+  }
+
   onSubmit (e) {
     e.preventDefault()
 
-    const { checkout } = this.state
+    const { checkout, form } = this.state
+
+    const amount = this.getTotalAmount()
+
+    console.info(amount)
 
     checkout.open({
       name: 'form.pierluc.io',
-      description: 'hello',
+      description: form.title,
       currency: 'cad',
-      amount: 2000
+      amount
     })
   }
 

@@ -52,10 +52,10 @@ class CheckboxGroup extends Component {
           ) : null}
         </div>
         {input.description && <Text classnames='CheckboxGroupDescription'>{input.description}</Text>}
-        {input.choices.map((choice, index) => (
-          <Label key={index}>
-            <input type='checkbox' value={choice.label} tabIndex={tabIndex + index} disabled={disabled} onChange={onChange} checked={value.indexOf(choice.label) >= 0} />
-            <span>{choice.label} {choice.amountCents ? `(${PaymentService.getCentsAsCurrency(intl, choice.amountCents)})` : ''}</span>
+        {Object.keys(input.choices).map((key, index) => (
+          <Label key={key}>
+            <input type='checkbox' value={input.choices[key].label} tabIndex={tabIndex + index} disabled={disabled} onChange={onChange} checked={value.indexOf(input.choices[key].label) >= 0} />
+            <span>{input.choices[key].label} {input.choices[key].amountCents ? `(${PaymentService.getCentsAsCurrency(intl, input.choices[key].amountCents)})` : ''}</span>
           </Label>
         ))}
         {input.help && <Text classnames='CheckboxGroupHelp'>{input.help}</Text>}
@@ -69,10 +69,7 @@ CheckboxGroup.propTypes = {
   input: PropTypes.shape({
     type: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    choices: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      amountCents: PropTypes.number
-    })),
+    choices: PropTypes.object.isRequired,
     description: PropTypes.string,
     help: PropTypes.string
   }),

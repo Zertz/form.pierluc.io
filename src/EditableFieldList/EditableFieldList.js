@@ -19,10 +19,8 @@ class EditableFieldList extends Component {
           <DraggableFieldRenderer
             key={key}
             fieldKey={key}
-            edit
-            disabled
             input={fields[key]}
-            style={{order: fields[key].order - Object.keys(fields).length}}
+            disabled
             onEditClicked={onEditClicked(key)}
             onRemoveClicked={onRemoveClicked(key)}
             onOrderChanged={onOrderChanged}

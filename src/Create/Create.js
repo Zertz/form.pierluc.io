@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {FormattedMessage} from 'react-intl'
+import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl'
 import {browserHistory} from 'react-router'
 
 import './Create.css'
@@ -12,6 +12,21 @@ import ButtonGroup from '../ButtonGroup'
 import Loading from '../Loading'
 import Text from '../Text'
 import Title from '../Title'
+
+const messages = defineMessages({
+  firstName: {
+    id: 'Create.FirstName',
+    defaultMessage: 'First name'
+  },
+  lastName: {
+    id: 'Create.LastName',
+    defaultMessage: 'Last name'
+  },
+  email: {
+    id: 'Create.Email',
+    defaultMessage: 'Email'
+  }
+})
 
 class Create extends Component {
   constructor (props) {
@@ -26,20 +41,22 @@ class Create extends Component {
   }
 
   getDefaultFields () {
+    const { intl } = this.props
+
     return {
       [AppService.getRandomId()]: {
         type: 'text',
-        label: 'firstname',
+        label: intl.formatMessage(messages.firstName),
         order: 0
       },
       [AppService.getRandomId()]: {
         type: 'text',
-        label: 'lastname',
+        label: intl.formatMessage(messages.lastName),
         order: 1
       },
       [AppService.getRandomId()]: {
         type: 'email',
-        label: 'email',
+        label: intl.formatMessage(messages.email),
         order: 2
       }
     }
@@ -103,6 +120,7 @@ class Create extends Component {
 }
 
 Create.propTypes = {
+  intl: intlShape.isRequired
 }
 
-export default Create
+export default injectIntl(Create)

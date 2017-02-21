@@ -1,9 +1,11 @@
 import React, {Component, PropTypes} from 'react'
 import {FormattedMessage} from 'react-intl'
+import isPlainObject from 'lodash.isplainobject'
 import update from 'immutability-helper'
 
 import './ModalFieldEditor.css'
 
+import AppService from '../AppService'
 import FormService from '../FormService'
 
 import FieldEditor from '../FieldEditor'
@@ -46,8 +48,8 @@ class ModalFieldEditor extends Component {
         [key]: { $set: e.target.value }
       }
 
-      if (key === 'type' && FormService.isMultipleChoices(e.target.value) && !Array.isArray(field.choices)) {
-        fieldUpdate.choices = { $set: [] }
+      if (key === 'type' && FormService.isMultipleChoices(e.target.value) && !isPlainObject(field.choices)) {
+        fieldUpdate.choices = { $set: {} }
       }
 
       this.setState({
@@ -58,19 +60,22 @@ class ModalFieldEditor extends Component {
 
   onAddChoiceClicked () {
     const { field } = this.state
+    const key = AppService.getRandomId()
 
     this.setState({
       field: update(field, {
         choices: {
-          $push: [{
-            label: ''
-          }]
+          [key]: {
+            $set: {
+              label: ''
+            }
+          }
         }
       })
     })
   }
 
-  onChoiceChanged (index, input) {
+  onChoiceChanged (key, input) {
     return (e) => {
       const { field } = this.state
 
@@ -80,16 +85,14 @@ class ModalFieldEditor extends Component {
         ? parseInt(e.target.value, 10)
         : e.target.value
 
-      const updatedChoice = update(field.choices[index], {
-        [input.key]: {
-          $set: value
-        }
-      })
-
       this.setState({
         field: update(field, {
           choices: {
-            $splice: [[index, 1, updatedChoice]]
+            [key]: {
+              [input.key]: {
+                $set: value
+              }
+            }
           }
         })
       })
@@ -100,18 +103,27 @@ class ModalFieldEditor extends Component {
     const { onSave } = this.props
     const { field } = this.state
 
-    const state = {
-      isModalVisible: false
-    }
+    const $unset = []
 
     if (!FormService.isMultipleChoices(field.type)) {
-      state.field = update(field, {
-        $unset: ['choices']
-      })
+      $unset.push('choices')
     }
 
-    this.setState(state, () => {
-      onSave(e, field)
+    if (!field.description) {
+      $unset.push('description')
+    }
+
+    if (!field.help) {
+      $unset.push('help')
+    }
+
+    this.setState({
+      isModalVisible: false,
+      field: update(field, {
+        $unset
+      })
+    }, () => {
+      onSave(e, this.state.field)
     })
   }
 
