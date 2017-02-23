@@ -7,6 +7,7 @@ import AppService from '../AppService'
 import FormService from '../FormService'
 
 import Button from '../Button'
+import DraggableFieldChoice from '../DraggableFieldChoice'
 import FieldList from '../FieldList'
 import {FieldRenderer} from '../FieldRenderer'
 import Subtitle from '../Subtitle'
@@ -75,7 +76,6 @@ class FieldEditor extends Component {
 
   render () {
     const {
-      intl,
       input,
       onFieldChanged,
       onAddChoiceClicked,
@@ -101,27 +101,11 @@ class FieldEditor extends Component {
               <FormattedMessage id='FieldEditor.AddChoice' defaultMessage='Add choice' />
             </Button>
             <div className='FieldEditorChoicesList'>
-              {Object.keys(input.choices).map((key) => {
-                const inputs = [{
-                  type: 'text',
-                  key: 'label',
-                  label: intl.formatMessage(messages.label),
-                  value: input.choices[key].label
-                }, {
-                  type: 'number',
-                  key: 'amountCents',
-                  label: intl.formatMessage(messages.amount),
-                  value: input.choices[key].amountCents
-                }]
-
-                return (
-                  <div className='FieldEditorChoicesListItem' key={key}>
-                    {inputs.map((input, inputIndex) => (
-                      <FieldRenderer key={inputIndex} input={input} value={input.value && input.key === 'amountCents' ? parseInt(input.value, 10) / 100 : input.value} onChange={onChoiceChanged(key, input)} />
-                    ))}
-                  </div>
-                )
-              })}
+              {Object.keys(input.choices).map((key) => (
+                <div className='FieldEditorChoicesListItem' key={key} style={{ order: parseInt(input.choices[key].order, 10) || 0 }}>
+                  <DraggableFieldChoice choice={input.choices[key]} onChange={onChoiceChanged(key)} />
+                </div>
+              ))}
             </div>
           </div>
         ) : null}

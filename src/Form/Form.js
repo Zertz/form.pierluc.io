@@ -53,9 +53,11 @@ class Form extends Component {
 
           if (!registration[key]) {
             if (FormService.isSelect(form.fields[key].type)) {
-              const choiceKeys = Object.keys(form.fields[key].choices)
+              const orderedChoices = Object.keys(form.fields[key].choices).sort((a, b) => {
+                return form.fields[key].choices[a].order > form.fields[key].choices[b].order
+              })
 
-              fieldsUpdate[key] = { $set: choiceKeys.length > 0 ? form.fields[key].choices[choiceKeys[0]].label : '' }
+              fieldsUpdate[key] = { $set: orderedChoices.length > 0 ? form.fields[key].choices[orderedChoices[0]].label : '' }
             } else {
               fieldsUpdate[key] = { $set: FormService.isMultipleValues(form.fields[key].type) ? [] : '' }
             }

@@ -344,6 +344,16 @@ class Form extends Component {
         }
       }
 
+      const sortedChoices = form.fields[key].choices ? Object.keys(form.fields[key].choices).sort((a, b) => {
+        return form.fields[key].choices[a].order > form.fields[key].choices[b].order
+      }) : []
+
+      sortedChoices.forEach((choiceKey, index) => {
+        if (form.fields[key].choices[choiceKey].order !== index) {
+          fieldsUpdate[`forms/${routeParams.form}/fields/${key}/choices/${choiceKey}/order`] = index
+        }
+      })
+
       if (form.fields[key].order !== order) {
         fieldsUpdate[`forms/${routeParams.form}/fields/${key}/order`] = order
       }

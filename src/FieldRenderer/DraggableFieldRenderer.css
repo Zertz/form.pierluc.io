@@ -1,8 +1,8 @@
 .DraggableFieldRenderer {
   border: 3px dashed transparent;
   cursor: move;
-  margin: 0.75em;
-  padding: 0.75em;
+  margin: 0 0.75em;
+  padding: 0 0.75em;
   transition: opacity 0.0625s ease;
 }
 
@@ -21,4 +21,6 @@
 
 .DraggableFieldRenderer > * {
   border-bottom: 1px solid #BDBDBD;
+  margin: 1.5em 0;
+  padding-bottom: 1.5em;
 }

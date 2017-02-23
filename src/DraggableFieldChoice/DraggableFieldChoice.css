@@ -1,0 +1,22 @@
+.DraggableFieldChoice {
+  border: 3px dashed transparent;
+  cursor: move;
+  transition: opacity 0.0625s ease;
+}
+
+.DraggableFieldChoice.isDragging {
+  opacity: 0.125;
+}
+
+.DraggableFieldChoice.isOver:not(.isDragging) {
+  border: 3px dashed #607D8B;
+  opacity: 0.25;
+}
+
+.DraggableFieldChoice.canDrop {
+  background-color: rgba(96, 125, 139, 0.25);
+}
+
+.DraggableFieldChoice > *:not(:last-child) {
+  margin-bottom: 1em;
+}

@@ -67,7 +67,8 @@ class ModalFieldEditor extends Component {
         choices: {
           [key]: {
             $set: {
-              label: ''
+              label: '',
+              order: Object(field.choices).length
             }
           }
         }
@@ -75,27 +76,21 @@ class ModalFieldEditor extends Component {
     })
   }
 
-  onChoiceChanged (key, input) {
-    return (e) => {
-      const { field } = this.state
-
-      const value = input.key === 'amountCents'
-        ? parseInt(e.target.value, 10) * 100
-        : input.type === 'number'
-        ? parseInt(e.target.value, 10)
-        : e.target.value
-
-      this.setState({
-        field: update(field, {
-          choices: {
-            [key]: {
-              [input.key]: {
-                $set: value
+  onChoiceChanged (choice) {
+    return (key) => {
+      return (e) => {
+        this.setState({
+          field: update(this.state.field, {
+            choices: {
+              [choice]: {
+                [key]: {
+                  $set: key === 'amountCents' ? parseInt(e.target.value, 10) * 100 : e.target.value
+                }
               }
             }
-          }
+          })
         })
-      })
+      }
     }
   }
 

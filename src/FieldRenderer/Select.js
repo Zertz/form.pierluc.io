@@ -34,6 +34,10 @@ class Select extends Component {
 
     const { id, tabIndex } = this.state
 
+    const orderedChoices = Object.keys(input.choices).sort((a, b) => {
+      return input.choices[a].order > input.choices[b].order
+    })
+
     return (
       <div className='Select'>
         {input.label && <Label htmlFor={id}>
@@ -55,8 +59,8 @@ class Select extends Component {
         </Label>}
         {input.description && <Text classnames='SelectDescription'>{input.description}</Text>}
         <div className='SelectWrapper'>
-          <select id={id} tabIndex={tabIndex} value={value} disabled={disabled} onChange={onChange}>
-            {Object.keys(input.choices).map((key) => (
+          <select id={id} tabIndex={tabIndex} value={value || orderedChoices.length > 0 ? input.choices[orderedChoices[0]].label : ''} disabled={disabled} onChange={onChange}>
+            {orderedChoices.map((key) => (
               <option key={key} value={input.choices[key].label}>{input.choices[key].label} {input.choices[key].amountCents ? `(${PaymentService.getCentsAsCurrency(intl, input.choices[key].amountCents)})` : ''}</option>
             ))}
           </select>

@@ -56,7 +56,13 @@ class FieldRenderer extends Component {
 }
 
 FieldRenderer.propTypes = {
-  input: PropTypes.object.isRequired,
+  input: PropTypes.shape({
+    type: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    choices: PropTypes.object,
+    description: PropTypes.string,
+    help: PropTypes.string
+  }),
   value: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.number,

@@ -1,3 +1,4 @@
 export const ItemTypes = {
-  FIELD: 'field'
+  FIELD: 'field',
+  CHOICE: 'choice'
 }
