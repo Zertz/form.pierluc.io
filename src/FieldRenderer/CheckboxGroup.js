@@ -15,15 +15,14 @@ class CheckboxGroup extends Component {
     super(props)
 
     this.state = {
-      tabIndex: parseInt(props.input.order, 10) + 1
+      tabIndex: parseInt(props.field.order, 10) + 1
     }
   }
 
   render () {
     const {
       intl,
-      input,
-      value,
+      field,
       disabled,
       onEditClicked,
       onRemoveClicked,
@@ -35,7 +34,7 @@ class CheckboxGroup extends Component {
     return (
       <div className='CheckboxGroup'>
         <div className='Label'>
-          <div>{input.label}</div>
+          <div>{field.label}</div>
           {onEditClicked || onRemoveClicked ? (
             <ButtonGroup>
               {onEditClicked ? (
@@ -51,14 +50,14 @@ class CheckboxGroup extends Component {
             </ButtonGroup>
           ) : null}
         </div>
-        {input.description && <Text classnames='CheckboxGroupDescription'>{input.description}</Text>}
-        {Object.keys(input.choices).map((key, index) => (
+        {field.description && <Text classnames='CheckboxGroupDescription'>{field.description}</Text>}
+        {Object.keys(field.choices).map((key, index) => (
           <Label key={key}>
-            <input type='checkbox' value={input.choices[key].label} tabIndex={tabIndex + index} disabled={disabled} onChange={onChange} checked={value.indexOf(input.choices[key].label) >= 0} />
-            <span>{input.choices[key].label} {input.choices[key].amountCents ? `(${PaymentService.getCentsAsCurrency(intl, input.choices[key].amountCents)})` : ''}</span>
+            <input type='checkbox' value={field.choices[key].label} tabIndex={tabIndex + index} disabled={disabled} onChange={onChange} checked={field.value.indexOf(field.choices[key].label) >= 0} />
+            <span>{field.choices[key].label} {field.choices[key].amountCents ? `(${PaymentService.getCentsAsCurrency(intl, field.choices[key].amountCents)})` : ''}</span>
           </Label>
         ))}
-        {input.help && <Text classnames='CheckboxGroupHelp'>{input.help}</Text>}
+        {field.help && <Text classnames='CheckboxGroupHelp'>{field.help}</Text>}
       </div>
     )
   }
@@ -66,14 +65,14 @@ class CheckboxGroup extends Component {
 
 CheckboxGroup.propTypes = {
   intl: intlShape.isRequired,
-  input: PropTypes.shape({
+  field: PropTypes.shape({
     type: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     choices: PropTypes.object.isRequired,
     description: PropTypes.string,
-    help: PropTypes.string
+    help: PropTypes.string,
+    value: PropTypes.arrayOf(PropTypes.string)
   }),
-  value: PropTypes.arrayOf(PropTypes.string),
   disabled: PropTypes.bool,
   onEditClicked: PropTypes.func,
   onRemoveClicked: PropTypes.func,

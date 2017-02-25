@@ -15,15 +15,14 @@ class RadioGroup extends Component {
     super(props)
 
     this.state = {
-      tabIndex: parseInt(props.input.order, 10) + 1
+      tabIndex: parseInt(props.field.order, 10) + 1
     }
   }
 
   render () {
     const {
       intl,
-      input,
-      value,
+      field,
       disabled,
       onEditClicked,
       onRemoveClicked,
@@ -35,7 +34,7 @@ class RadioGroup extends Component {
     return (
       <radiogroup className='RadioGroup'>
         <div className='Label'>
-          <div>{input.label}</div>
+          <div>{field.label}</div>
           {onEditClicked || onRemoveClicked ? (
             <ButtonGroup>
               {onEditClicked ? (
@@ -51,14 +50,14 @@ class RadioGroup extends Component {
             </ButtonGroup>
           ) : null}
         </div>
-        {input.description && <Text classnames='RadioGroupDescription'>{input.description}</Text>}
-        {Object.keys(input.choices).map((key) => (
+        {field.description && <Text classnames='RadioGroupDescription'>{field.description}</Text>}
+        {Object.keys(field.choices).map((key) => (
           <Label key={key}>
-            <input type='radio' value={input.choices[key].label} tabIndex={tabIndex} disabled={disabled} onChange={onChange} checked={value.indexOf(input.choices[key].label) >= 0} />
-            <span>{input.choices[key].label} {input.choices[key].amountCents ? `(${PaymentService.getCentsAsCurrency(intl, input.choices[key].amountCents)})` : ''}</span>
+            <input type='radio' value={field.choices[key].label} tabIndex={tabIndex} disabled={disabled} onChange={onChange} checked={field.value.indexOf(field.choices[key].label) >= 0} />
+            <span>{field.choices[key].label} {field.choices[key].amountCents ? `(${PaymentService.getCentsAsCurrency(intl, field.choices[key].amountCents)})` : ''}</span>
           </Label>
         ))}
-        {input.help && <Text classnames='RadioGroupHelp'>{input.help}</Text>}
+        {field.help && <Text classnames='RadioGroupHelp'>{field.help}</Text>}
       </radiogroup>
     )
   }
@@ -66,14 +65,14 @@ class RadioGroup extends Component {
 
 RadioGroup.propTypes = {
   intl: intlShape.isRequired,
-  input: PropTypes.shape({
+  field: PropTypes.shape({
     type: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     choices: PropTypes.object.isRequired,
     description: PropTypes.string,
-    help: PropTypes.string
+    help: PropTypes.string,
+    value: PropTypes.string
   }),
-  value: PropTypes.string,
   disabled: PropTypes.bool,
   onEditClicked: PropTypes.func,
   onRemoveClicked: PropTypes.func,

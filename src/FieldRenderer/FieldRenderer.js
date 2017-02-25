@@ -1,7 +1,5 @@
 import React, {Component, PropTypes} from 'react'
 
-import FormService from '../FormService'
-
 import CheckboxGroup from './CheckboxGroup'
 import RadioGroup from './RadioGroup'
 import Select from './Select'
@@ -27,25 +25,23 @@ class FieldRenderer extends Component {
 
   render () {
     const {
-      input,
-      value,
+      field,
       focus,
       disabled,
       onChange,
       onKeyPress
     } = this.props
 
-    const Component = this.getComponent(input.type)
+    const Component = this.getComponent(field.type)
 
-    const style = parseInt(input.order, 10) >= 0 ? {
-      order: input.order
+    const style = parseInt(field.order, 10) >= 0 ? {
+      order: field.order
     } : {}
 
     return Component ? (
       <div className='FieldRenderer' style={style}>
         <Component
-          input={input}
-          value={typeof value !== 'undefined' ? value : FormService.isMultipleValues(input.type) ? [] : ''}
+          field={field}
           focus={focus}
           disabled={disabled}
           onChange={onChange}
@@ -56,19 +52,20 @@ class FieldRenderer extends Component {
 }
 
 FieldRenderer.propTypes = {
-  input: PropTypes.shape({
+  field: PropTypes.shape({
     type: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     choices: PropTypes.object,
     description: PropTypes.string,
-    help: PropTypes.string
+    help: PropTypes.string,
+    value: PropTypes.oneOfType([
+      PropTypes.array,
+      PropTypes.number,
+      PropTypes.string
+    ])
   }),
-  value: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.number,
-    PropTypes.string
-  ]),
   focus: PropTypes.bool,
+  disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   onKeyPress: PropTypes.func
 }

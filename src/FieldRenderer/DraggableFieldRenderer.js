@@ -5,8 +5,6 @@ import flow from 'lodash.flow'
 
 import './DraggableFieldRenderer.css'
 
-import FormService from '../FormService'
-
 import CheckboxGroup from './CheckboxGroup'
 import RadioGroup from './RadioGroup'
 import Select from './Select'
@@ -73,7 +71,7 @@ class DraggableFieldRenderer extends Component {
 
   render () {
     const {
-      input,
+      field,
       disabled,
       onChange,
       onEditClicked,
@@ -85,17 +83,16 @@ class DraggableFieldRenderer extends Component {
       canDrop
     } = this.props
 
-    const Component = this.getComponent(input.type)
+    const Component = this.getComponent(field.type)
 
-    const style = parseInt(input.order, 10) >= 0 ? {
-      order: input.order
+    const style = parseInt(field.order, 10) >= 0 ? {
+      order: field.order
     } : {}
 
     return Component ? connectDragSource(connectDropTarget(
       <div className={classnames('DraggableFieldRenderer', { isDragging, isOver, canDrop })} style={style}>
         <Component
-          input={input}
-          value={FormService.isMultipleValues(input.type) ? [] : ''}
+          field={field}
           disabled={disabled}
           onChange={typeof onChange === 'function' ? onChange : () => {}}
           onEditClicked={onEditClicked}
@@ -106,7 +103,7 @@ class DraggableFieldRenderer extends Component {
 }
 
 DraggableFieldRenderer.propTypes = {
-  input: PropTypes.object.isRequired,
+  field: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
   onEditClicked: PropTypes.func.isRequired,

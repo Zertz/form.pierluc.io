@@ -70,7 +70,7 @@ class EditableTitle extends Component {
       <div className='EditableTitle'>
         {isEditing ? (
           <div className='EditableTitleEditor'>
-            <FieldRenderer focus input={{ type: 'text', label: '' }} value={title} onChange={this.onChange} onKeyPress={this.onKeyPress} />
+            <FieldRenderer focus field={{ type: 'text', label: '', value: title }} onChange={this.onChange} onKeyPress={this.onKeyPress} />
             <div className='EditableTitleEditorButtons'>
               <Button onClick={this.onSaveClicked}>
                 <FormattedMessage id='EditableTitle.Save' defaultMessage='Save' />

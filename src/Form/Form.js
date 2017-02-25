@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {FormattedMessage} from 'react-intl'
 import {browserHistory} from 'react-router'
+import cloneDeep from 'lodash.clonedeep'
 import update from 'immutability-helper'
 
 import './Form.css'
@@ -22,9 +23,6 @@ class Form extends Component {
 
     this.state = {
       isLoading: true,
-      registration: {
-        fields: {}
-      },
       checkout: PaymentService.initialize({
         checkoutCallback: this.checkoutCallback
       })
@@ -43,33 +41,38 @@ class Form extends Component {
     this.ref = base.listenTo(`forms/${routeParams.form}`, {
       context: this,
       then (form) {
-        const { registration } = this.state
-        const fieldsUpdate = {}
+        if (!form || this.state.form) {
+          return this.setState({
+            isLoading: false
+          })
+        }
 
-        for (const key in form.fields) {
-          if (!form.fields.hasOwnProperty(key)) {
+        const registration = {
+          fields: cloneDeep(form.fields)
+        }
+
+        for (const key in registration.fields) {
+          if (!registration.fields.hasOwnProperty(key)) {
             continue
           }
 
-          if (!registration[key]) {
-            if (FormService.isSelect(form.fields[key].type)) {
-              const orderedChoices = Object.keys(form.fields[key].choices).sort((a, b) => {
-                return form.fields[key].choices[a].order > form.fields[key].choices[b].order
-              })
+          const field = registration.fields[key]
 
-              fieldsUpdate[key] = { $set: orderedChoices.length > 0 ? form.fields[key].choices[orderedChoices[0]].label : '' }
-            } else {
-              fieldsUpdate[key] = { $set: FormService.isMultipleValues(form.fields[key].type) ? [] : '' }
-            }
+          if (FormService.isMultipleChoices(field.type)) {
+            const orderedChoices = Object.keys(field.choices).sort((a, b) => {
+              return field.choices[a].order > field.choices[b].order
+            })
+
+            field.value = FormService.isMultipleValues(field.type) ? [] : orderedChoices.length > 0 ? orderedChoices[0] : ''
+          } else {
+            field.value = ''
           }
         }
 
         this.setState({
           isLoading: false,
           form,
-          registration: update(registration, {
-            fields: fieldsUpdate
-          })
+          registration
         })
       },
       onFailure (error) {
@@ -92,9 +95,9 @@ class Form extends Component {
 
   isOwner () {
     const { user } = this.props
-    const { form, isGuest } = this.state
+    const { form } = this.state
 
-    return user && form && form.user === user.uid && !isGuest
+    return user && form && form.user === user.uid
   }
 
   onEditClicked () {
@@ -105,37 +108,26 @@ class Form extends Component {
 
   onFieldChanged (key) {
     return (e) => {
-      const { form, registration } = this.state
+      const { registration } = this.state
 
-      if (FormService.isMultipleValues(form.fields[key].type)) {
-        const valueIndex = registration.fields[key].indexOf(e.target.value)
+      const field = registration.fields[key]
+      const value = (() => {
+        if (FormService.isMultipleValues(field.type)) {
+          const valueIndex = field.indexOf(e.target.value)
 
-        if (valueIndex === -1) {
-          this.setState({
-            registration: update(registration, {
-              fields: {
-                [key]: { $push: [e.target.value] }
-              }
-            })
-          })
+          return valueIndex < 0 ? { $push: [e.target.value] } : { $splice: [[valueIndex, 1]] }
         } else {
-          this.setState({
-            registration: update(registration, {
-              fields: {
-                [key]: { $splice: [[valueIndex, 1]] }
-              }
-            })
-          })
+          return { $set: e.target.value }
         }
-      } else {
-        this.setState({
-          registration: update(registration, {
-            fields: {
-              [key]: { $set: e.target.value }
-            }
-          })
+      })()
+
+      this.setState({
+        registration: update(registration, {
+          fields: {
+            [key]: { value }
+          }
         })
-      }
+      })
     }
   }
 
@@ -165,13 +157,20 @@ class Form extends Component {
   }
 
   getTotalAmount () {
-    const { form, registration } = this.state
+    const { registration } = this.state
 
-    console.info(registration.fields)
-    console.info(form.fields)
+    console.info(registration)
 
     return Object.keys(registration.fields).reduce((amount, key) => {
-      return FormService.isMultipleChoices(form.fields[key].type) ? 1 : 0
+      const field = registration.fields[key]
+
+      if (FormService.isMultipleChoices(field.type)) {
+        const choices = Array.isArray(field.value) ? field.value : [field.value]
+
+        return choices.reduce((amount, key) => field.choices[key].amountCents || 0)
+      }
+
+      return 0
     }, 0)
   }
 
@@ -186,7 +185,7 @@ class Form extends Component {
 
     checkout.open({
       name: 'form.pierluc.io',
-      description: form.title,
+      description: form.title || '',
       currency: 'cad',
       amount
     })
@@ -201,7 +200,7 @@ class Form extends Component {
   render () {
     const { isLoading, form, registration } = this.state
 
-    return isLoading ? <Loading /> : (
+    return isLoading ? <Loading /> : form && registration ? (
       <div className='Form' ref={this.scrollIntoView}>
         <div className='FormHeader' style={this.getHeaderStyle(form)}>
           {this.isOwner() ? (
@@ -213,17 +212,14 @@ class Form extends Component {
         <div className='FormContent'>
           <Title>{form.title}</Title>
           <form className='FormForm' onSubmit={this.onSubmit}>
-            <FieldList
-              fields={form.fields}
-              values={registration.fields}
-              onFieldChanged={this.onFieldChanged} />
+            <FieldList fields={registration.fields} onFieldChanged={this.onFieldChanged} />
             <Button submit>
               <FormattedMessage id='Form.Submit' defaultMessage='Submit' />
             </Button>
           </form>
         </div>
       </div>
-    )
+    ) : null
   }
 }
 

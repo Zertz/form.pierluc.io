@@ -15,17 +15,17 @@ class EditableFieldList extends Component {
 
     return (
       <div className='EditableFieldList'>
-        {Object.keys(fields).map((key) => fields[key] ? (
+        {Object.keys(fields).map((key) => (
           <DraggableFieldRenderer
             key={key}
             fieldKey={key}
-            input={fields[key]}
+            field={fields[key]}
             disabled
             onEditClicked={onEditClicked(key)}
             onRemoveClicked={onRemoveClicked(key)}
             onOrderChanged={onOrderChanged}
             onChange={() => {}} />
-        ) : null)}
+        ))}
       </div>
     )
   }

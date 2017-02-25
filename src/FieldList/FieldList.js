@@ -6,17 +6,16 @@ import {FieldRenderer} from '../FieldRenderer'
 
 class FieldList extends Component {
   render () {
-    const { fields, values, onFieldChanged } = this.props
+    const { fields, onFieldChanged } = this.props
 
     return (
       <div className='FieldList'>
-        {Object.keys(fields).map((key) => fields[key] ? (
+        {Object.keys(fields).map((key) => (
           <FieldRenderer
             key={key}
-            input={fields[key]}
-            value={values[key]}
+            field={fields[key]}
             onChange={onFieldChanged(key)} />
-        ) : null)}
+        ))}
       </div>
     )
   }
@@ -24,7 +23,6 @@ class FieldList extends Component {
 
 FieldList.propTypes = {
   fields: PropTypes.object.isRequired,
-  values: PropTypes.object.isRequired,
   onFieldChanged: PropTypes.func.isRequired
 }
 

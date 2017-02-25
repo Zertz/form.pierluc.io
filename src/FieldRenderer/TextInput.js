@@ -16,10 +16,10 @@ class TextInput extends Component {
 
     this.state = {
       id: AppService.getRandomId(),
-      tabIndex: parseInt(props.input.order, 10) + 1
+      tabIndex: parseInt(props.field.order, 10) + 1
     }
 
-    this.setInputRef = this.setInputRef.bind(this)
+    this.setFieldRef = this.setFieldRef.bind(this)
   }
 
   componentDidMount () {
@@ -27,18 +27,17 @@ class TextInput extends Component {
     const { tabIndex } = this.state
 
     if (focus || tabIndex === 1) {
-      this.inputRef.focus()
+      this.fieldRef.focus()
     }
   }
 
-  setInputRef (ref) {
-    this.inputRef = ref
+  setFieldRef (ref) {
+    this.fieldRef = ref
   }
 
   render () {
     const {
-      input,
-      value,
+      field,
       disabled,
       onEditClicked,
       onRemoveClicked,
@@ -51,7 +50,7 @@ class TextInput extends Component {
     return (
       <div className='TextInput'>
         <Label htmlFor={id}>
-          <div>{input.label}</div>
+          <div>{field.label}</div>
           {onEditClicked || onRemoveClicked ? (
             <ButtonGroup>
               {onEditClicked ? (
@@ -67,33 +66,33 @@ class TextInput extends Component {
             </ButtonGroup>
           ) : null}
         </Label>
-        {input.description && <Text classnames='TextInputDescription'>{input.description}</Text>}
+        {field.description && <Text classnames='TextInputDescription'>{field.description}</Text>}
         <input
           id={id}
-          ref={this.setInputRef}
+          ref={this.setFieldRef}
           tabIndex={tabIndex}
-          type={input.type}
-          value={value}
+          type={field.type}
+          value={field.value}
           disabled={disabled}
           onChange={onChange}
           onKeyPress={onKeyPress} />
-        {input.help && <Text classnames='TextInputHelp'>{input.help}</Text>}
+        {field.help && <Text classnames='TextInputHelp'>{field.help}</Text>}
       </div>
     )
   }
 }
 
 TextInput.propTypes = {
-  input: PropTypes.shape({
+  field: PropTypes.shape({
     type: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     description: PropTypes.string,
-    help: PropTypes.string
+    help: PropTypes.string,
+    value: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string
+    ])
   }),
-  value: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string
-  ]),
   focus: PropTypes.bool,
   disabled: PropTypes.bool,
   onEditClicked: PropTypes.func,

@@ -17,15 +17,14 @@ class Select extends Component {
 
     this.state = {
       id: AppService.getRandomId(),
-      tabIndex: parseInt(props.input.order, 10) + 1
+      tabIndex: parseInt(props.field.order, 10) + 1
     }
   }
 
   render () {
     const {
       intl,
-      input,
-      value,
+      field,
       disabled,
       onEditClicked,
       onRemoveClicked,
@@ -34,14 +33,14 @@ class Select extends Component {
 
     const { id, tabIndex } = this.state
 
-    const orderedChoices = Object.keys(input.choices).sort((a, b) => {
-      return input.choices[a].order > input.choices[b].order
+    const orderedChoices = Object.keys(field.choices).sort((a, b) => {
+      return field.choices[a].order > field.choices[b].order
     })
 
     return (
       <div className='Select'>
-        {input.label && <Label htmlFor={id}>
-          <div>{input.label}</div>
+        {field.label && <Label htmlFor={id}>
+          <div>{field.label}</div>
           {onEditClicked || onRemoveClicked ? (
             <ButtonGroup>
               {onEditClicked ? (
@@ -57,15 +56,15 @@ class Select extends Component {
             </ButtonGroup>
           ) : null}
         </Label>}
-        {input.description && <Text classnames='SelectDescription'>{input.description}</Text>}
+        {field.description && <Text classnames='SelectDescription'>{field.description}</Text>}
         <div className='SelectWrapper'>
-          <select id={id} tabIndex={tabIndex} value={value || orderedChoices.length > 0 ? input.choices[orderedChoices[0]].label : ''} disabled={disabled} onChange={onChange}>
+          <select id={id} tabIndex={tabIndex} value={field.value || (orderedChoices.length > 0 ? orderedChoices[0] : '')} disabled={disabled} onChange={onChange}>
             {orderedChoices.map((key) => (
-              <option key={key} value={input.choices[key].label}>{input.choices[key].label} {input.choices[key].amountCents ? `(${PaymentService.getCentsAsCurrency(intl, input.choices[key].amountCents)})` : ''}</option>
+              <option key={key} value={key}>{field.choices[key].label} {field.choices[key].amountCents ? `(${PaymentService.getCentsAsCurrency(intl, field.choices[key].amountCents)})` : ''}</option>
             ))}
           </select>
         </div>
-        {input.help && <Text classnames='SelectHelp'>{input.help}</Text>}
+        {field.help && <Text classnames='SelectHelp'>{field.help}</Text>}
       </div>
     )
   }
@@ -73,14 +72,14 @@ class Select extends Component {
 
 Select.propTypes = {
   intl: intlShape.isRequired,
-  input: PropTypes.shape({
+  field: PropTypes.shape({
     type: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     choices: PropTypes.object.isRequired,
     description: PropTypes.string,
-    help: PropTypes.string
+    help: PropTypes.string,
+    value: PropTypes.string
   }),
-  value: PropTypes.string,
   disabled: PropTypes.bool,
   onEditClicked: PropTypes.func,
   onRemoveClicked: PropTypes.func,

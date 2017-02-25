@@ -100,7 +100,7 @@ class DraggableFieldChoice extends Component {
         {Object.keys(choiceFields).map((key) => (
           <FieldRenderer
             key={key}
-            input={choiceFields[key]}
+            field={choiceFields[key]}
             value={choice[key] && key === 'amountCents' ? parseInt(choice[key], 10) / 100 : choice[key]}
             onChange={onChange(key)} />
         ))}
