@@ -110,16 +110,15 @@ class Form extends Component {
     return (e) => {
       const { registration } = this.state
 
-      const field = registration.fields[key]
-      const value = (() => {
+      const value = ((field) => {
         if (FormService.isMultipleValues(field.type)) {
-          const valueIndex = field.indexOf(e.target.value)
+          const valueIndex = field.value.indexOf(e.target.value)
 
           return valueIndex < 0 ? { $push: [e.target.value] } : { $splice: [[valueIndex, 1]] }
         } else {
           return { $set: e.target.value }
         }
-      })()
+      })(registration.fields[key])
 
       this.setState({
         registration: update(registration, {

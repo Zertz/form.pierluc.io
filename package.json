@@ -11,8 +11,8 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "immutability-helper": "^2.1.1",
+    "lodash.clonedeep": "^4.5.0",
     "lodash.flow": "^3.5.0",
-    "lodash.isplainobject": "^4.0.6",
     "re-base": "^2.5.2",
     "react": "^15.4.1",
     "react-dnd": "^2.2.3",

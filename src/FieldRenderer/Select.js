@@ -4,6 +4,7 @@ import {injectIntl, intlShape, FormattedMessage} from 'react-intl'
 import './Select.css'
 
 import AppService from '../AppService'
+import FormService from '../FormService'
 import PaymentService from '../PaymentService'
 
 import Button from '../Button'
@@ -33,9 +34,7 @@ class Select extends Component {
 
     const { id, tabIndex } = this.state
 
-    const orderedChoices = Object.keys(field.choices).sort((a, b) => {
-      return field.choices[a].order > field.choices[b].order
-    })
+    const orderedChoices = FormService.getOrderedChoices(field.choices)
 
     return (
       <div className='Select'>

@@ -3,6 +3,7 @@ import {injectIntl, intlShape, FormattedMessage} from 'react-intl'
 
 import './CheckboxGroup.css'
 
+import FormService from '../FormService'
 import PaymentService from '../PaymentService'
 
 import Button from '../Button'
@@ -31,6 +32,8 @@ class CheckboxGroup extends Component {
 
     const { tabIndex } = this.state
 
+    const orderedChoices = FormService.getOrderedChoices(field.choices)
+
     return (
       <div className='CheckboxGroup'>
         <div className='Label'>
@@ -51,9 +54,9 @@ class CheckboxGroup extends Component {
           ) : null}
         </div>
         {field.description && <Text classnames='CheckboxGroupDescription'>{field.description}</Text>}
-        {Object.keys(field.choices).map((key, index) => (
+        {orderedChoices.map((key, index) => (
           <Label key={key}>
-            <input type='checkbox' value={field.choices[key].label} tabIndex={tabIndex + index} disabled={disabled} onChange={onChange} checked={field.value.indexOf(field.choices[key].label) >= 0} />
+            <input type='checkbox' value={key} tabIndex={tabIndex + index} disabled={disabled} onChange={onChange} checked={field.value.indexOf(key) >= 0} />
             <span>{field.choices[key].label} {field.choices[key].amountCents ? `(${PaymentService.getCentsAsCurrency(intl, field.choices[key].amountCents)})` : ''}</span>
           </Label>
         ))}

@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
-import {FormattedMessage} from 'react-intl'
-import isPlainObject from 'lodash.isplainobject'
+import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl'
+import cloneDeep from 'lodash.clonedeep'
 import update from 'immutability-helper'
 
 import './ModalFieldEditor.css'
@@ -11,13 +11,72 @@ import FormService from '../FormService'
 import FieldEditor from '../FieldEditor'
 import Modal from '../Modal'
 
+const messages = defineMessages({
+  type: {
+    id: 'FieldEditor.Type',
+    defaultMessage: 'Type'
+  },
+  label: {
+    id: 'FieldEditor.Label',
+    defaultMessage: 'Label'
+  },
+  description: {
+    id: 'FieldEditor.Description',
+    defaultMessage: 'Description'
+  },
+  help: {
+    id: 'FieldEditor.Help',
+    defaultMessage: 'Help'
+  },
+  amount: {
+    id: 'FieldEditor.Amount',
+    defaultMessage: 'Amount'
+  }
+})
+
 class ModalFieldEditor extends Component {
   constructor (props) {
     super(props)
 
+    const fieldTypes = FormService.getFieldTypes()
+    const typeChoices = {}
+
+    for (let i = 0; i < fieldTypes.length; i++) {
+      typeChoices[fieldTypes[i]] = {
+        label: FormService.getFieldTypeLabel(props.intl, fieldTypes[i]),
+        order: i
+      }
+    }
+
     this.state = {
       isModalVisible: true,
-      field: props.field
+      editedField: Object.assign(cloneDeep(props.field), {
+        description: props.field.description || '',
+        help: props.field.help || ''
+      }),
+      editorFields: {
+        type: {
+          type: 'select',
+          label: props.intl.formatMessage(messages.type),
+          choices: typeChoices,
+          value: props.field.type || ''
+        },
+        label: {
+          type: 'text',
+          label: props.intl.formatMessage(messages.label),
+          value: props.field.label || ''
+        },
+        description: {
+          type: 'text',
+          label: props.intl.formatMessage(messages.description),
+          value: props.field.description || ''
+        },
+        help: {
+          type: 'text',
+          label: props.intl.formatMessage(messages.help),
+          value: props.field.help || ''
+        }
+      }
     }
 
     this.onFieldChanged = this.onFieldChanged.bind(this)
@@ -42,33 +101,48 @@ class ModalFieldEditor extends Component {
 
   onFieldChanged (key) {
     return (e) => {
-      const { field } = this.state
+      const { editedField, editorFields } = this.state
 
-      const fieldUpdate = {
-        [key]: { $set: e.target.value }
-      }
+      const value = ((field) => {
+        // if (FormService.isMultipleChoices(field.type)) {
+        //   return {
+        //     $set: field.choices[e.target.value].value
+        //   }
+        // }
 
-      if (key === 'type' && FormService.isMultipleChoices(e.target.value) && !isPlainObject(field.choices)) {
-        fieldUpdate.choices = { $set: {} }
-      }
+        return {
+          $set: e.target.value
+        }
+      })(editorFields[key])
 
       this.setState({
-        field: update(field, fieldUpdate)
+        editedField: update(editedField, {
+          [key]: value,
+          choices: editedField.choices ? {
+            $set: editedField.choices
+          } : {
+            $set: {}
+          }
+        }),
+        editorFields: update(editorFields, {
+          [key]: { value }
+        })
       })
     }
   }
 
   onAddChoiceClicked () {
-    const { field } = this.state
+    const { editedField } = this.state
+
     const key = AppService.getRandomId()
 
     this.setState({
-      field: update(field, {
+      editedField: update(editedField, {
         choices: {
           [key]: {
             $set: {
               label: '',
-              order: Object(field.choices).length
+              order: Object.keys(editedField.choices).length
             }
           }
         }
@@ -80,7 +154,7 @@ class ModalFieldEditor extends Component {
     return (key) => {
       return (e) => {
         this.setState({
-          field: update(this.state.field, {
+          editedField: update(this.state.editedField, {
             choices: {
               [choice]: {
                 [key]: {
@@ -96,29 +170,29 @@ class ModalFieldEditor extends Component {
 
   onSaveClicked (e) {
     const { onSave } = this.props
-    const { field } = this.state
+    const { editedField } = this.state
 
     const $unset = []
 
-    if (!FormService.isMultipleChoices(field.type)) {
+    if (!FormService.isMultipleChoices(editedField.type)) {
       $unset.push('choices')
     }
 
-    if (!field.description) {
+    if (!editedField.description) {
       $unset.push('description')
     }
 
-    if (!field.help) {
+    if (!editedField.help) {
       $unset.push('help')
     }
 
     this.setState({
       isModalVisible: false,
-      field: update(field, {
+      editedField: update(editedField, {
         $unset
       })
     }, () => {
-      onSave(e, this.state.field)
+      onSave(e, this.state.editedField)
     })
   }
 
@@ -143,7 +217,8 @@ class ModalFieldEditor extends Component {
   }
 
   render () {
-    const { isModalVisible, field } = this.state
+    const { field } = this.props
+    const { isModalVisible, editedField, editorFields } = this.state
 
     return typeof field === 'undefined' ? null : (
       <Modal
@@ -154,7 +229,8 @@ class ModalFieldEditor extends Component {
         onCancelClicked={this.onCancelClicked}
         onOverlayClicked={this.onOverlayClicked}>
         <FieldEditor
-          input={field}
+          field={editedField}
+          editorFields={editorFields}
           onFieldChanged={this.onFieldChanged}
           onAddChoiceClicked={this.onAddChoiceClicked}
           onChoiceChanged={this.onChoiceChanged} />
@@ -164,9 +240,10 @@ class ModalFieldEditor extends Component {
 }
 
 ModalFieldEditor.propTypes = {
+  intl: intlShape.isRequired,
   field: PropTypes.object.isRequired,
   onSave: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired
 }
 
-export default ModalFieldEditor
+export default injectIntl(ModalFieldEditor)

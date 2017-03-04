@@ -192,6 +192,7 @@ class Form extends Component {
 
     this.setState({
       isLoading: true,
+      isAddingField: false,
       isEditingField: false
     })
 

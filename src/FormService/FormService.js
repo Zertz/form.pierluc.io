@@ -1,4 +1,31 @@
+import {defineMessages} from 'react-intl'
+
 class FormService {
+  constructor() {
+    this.messages = defineMessages({
+      text: {
+        id: 'FormService.Text',
+        defaultMessage: 'Text'
+      },
+      email: {
+        id: 'FormService.Email',
+        defaultMessage: 'Email'
+      },
+      radio: {
+        id: 'FormService.Radio',
+        defaultMessage: 'Radio (multiple choices, single answer)'
+      },
+      select: {
+        id: 'FormService.Select',
+        defaultMessage: 'Select (multiple choices, single answer)'
+      },
+      checkbox: {
+        id: 'FormService.Checkbox',
+        defaultMessage: 'Checkbox (multiple choices, multiple answers)'
+      }
+    })
+  }
+
   getFieldTypes () {
     return [
       'text',
@@ -7,6 +34,14 @@ class FormService {
       'select',
       'checkbox'
     ]
+  }
+
+  getFieldTypeLabel (intl, fieldType) {
+    return intl.formatMessage(this.messages[fieldType])
+  }
+
+  getOrderedChoices (choices) {
+    return Object.keys(choices).sort((a, b) => choices[a].order > choices[b].order)
   }
 
   isMultipleChoices (type) {

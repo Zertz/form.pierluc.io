@@ -3,6 +3,7 @@ import {injectIntl, intlShape, FormattedMessage} from 'react-intl'
 
 import './RadioGroup.css'
 
+import FormService from '../FormService'
 import PaymentService from '../PaymentService'
 
 import Button from '../Button'
@@ -31,6 +32,8 @@ class RadioGroup extends Component {
 
     const { tabIndex } = this.state
 
+    const orderedChoices = FormService.getOrderedChoices(field.choices)
+
     return (
       <radiogroup className='RadioGroup'>
         <div className='Label'>
@@ -51,9 +54,9 @@ class RadioGroup extends Component {
           ) : null}
         </div>
         {field.description && <Text classnames='RadioGroupDescription'>{field.description}</Text>}
-        {Object.keys(field.choices).map((key) => (
+        {orderedChoices.map((key) => (
           <Label key={key}>
-            <input type='radio' value={field.choices[key].label} tabIndex={tabIndex} disabled={disabled} onChange={onChange} checked={field.value.indexOf(field.choices[key].label) >= 0} />
+            <input type='radio' value={key} tabIndex={tabIndex} disabled={disabled} onChange={onChange} checked={field.value === key} />
             <span>{field.choices[key].label} {field.choices[key].amountCents ? `(${PaymentService.getCentsAsCurrency(intl, field.choices[key].amountCents)})` : ''}</span>
           </Label>
         ))}
