@@ -56,7 +56,7 @@ class CheckboxGroup extends Component {
         {field.description && <Text classnames='CheckboxGroupDescription'>{field.description}</Text>}
         {orderedChoices.map((key, index) => (
           <Label key={key}>
-            <input type='checkbox' value={key} tabIndex={tabIndex + index} disabled={disabled} onChange={onChange} checked={field.value.indexOf(key) >= 0} />
+            <input type='checkbox' value={key} tabIndex={tabIndex + index} disabled={disabled} onChange={onChange} checked={(field.value || []).indexOf(key) >= 0} />
             <span>{field.choices[key].label} {field.choices[key].amountCents ? `(${PaymentService.getCentsAsCurrency(intl, field.choices[key].amountCents)})` : ''}</span>
           </Label>
         ))}
