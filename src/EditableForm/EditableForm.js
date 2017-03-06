@@ -326,9 +326,7 @@ class Form extends Component {
     const { base, routeParams } = this.props
     const { form } = this.state
 
-    const sortedFields = Object.keys(form.fields).sort((a, b) => {
-      return form.fields[a].order > form.fields[b].order
-    })
+    const sortedFields = FormService.getOrderedChoices(form.fields)
 
     const fieldsUpdate = {}
     let order = 0
@@ -345,11 +343,9 @@ class Form extends Component {
         }
       }
 
-      const sortedChoices = form.fields[key].choices ? Object.keys(form.fields[key].choices).sort((a, b) => {
-        return form.fields[key].choices[a].order > form.fields[key].choices[b].order
-      }) : []
+      const orderedChoices = form.fields[key].choices ? FormService.getOrderedChoices(form.fields[key].choices) : []
 
-      sortedChoices.forEach((choiceKey, index) => {
+      orderedChoices.forEach((choiceKey, index) => {
         if (form.fields[key].choices[choiceKey].order !== index) {
           fieldsUpdate[`forms/${routeParams.form}/fields/${key}/choices/${choiceKey}/order`] = index
         }
