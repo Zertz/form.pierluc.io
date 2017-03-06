@@ -34,12 +34,11 @@ class Connect extends Component {
 
     try {
       const token = await base.auth().currentUser.getToken()
-      const response = await PaymentService.connect({ code, token })
-      const json = await response.json()
+      const connect = await PaymentService.connect({ code, token })
 
       this.setState({
-        isConnected: response.ok,
-        json
+        isConnected: connect.ok,
+        connect
       })
     } catch (error) {
       console.error(error)
@@ -51,7 +50,7 @@ class Connect extends Component {
   }
 
   render () {
-    const { isConnecting, isConnected, json } = this.state
+    const { isConnecting, isConnected, connect } = this.state
 
     return (
       <div className='Connect'>
@@ -63,8 +62,8 @@ class Connect extends Component {
           <Text>
             <FormattedMessage id='Connect.Connected' defaultMessage='Connected!' />
           </Text>
-        ) : json && json.error_description ? (
-          <Text>{json.error_description}</Text>
+        ) : connect && connect.error_description ? (
+          <Text>{connect.error_description}</Text>
         ) : (
           <Text>
             <FormattedMessage id='Connect.SadFace' defaultMessage=':(' />

@@ -13,6 +13,38 @@ class AppService {
     return uuid.v4()
   }
 
+  getRequestHeaders (options = {}) {
+    const { Headers } = window
+
+    if (!options) {
+      throw new Error('options must be specified')
+    }
+
+    const { token } = options
+
+    if (token && typeof token !== 'string') {
+      throw new Error('options.token must be a string')
+    }
+
+    const headers = new Headers({
+      'Content-Type': 'application/json'
+    })
+
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`)
+    }
+
+    return headers
+  }
+
+  getRequestOptions () {
+    return {
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'omit'
+    }
+  }
+
   getUserLocation () {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const queryParams = {

@@ -1,7 +1,7 @@
 import {defineMessages} from 'react-intl'
 
 class FormService {
-  constructor() {
+  constructor () {
     this.messages = defineMessages({
       text: {
         id: 'FormService.Text',

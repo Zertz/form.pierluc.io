@@ -31,7 +31,6 @@ class Form extends Component {
     this.isOwner = this.isOwner.bind(this)
     this.onEditClicked = this.onEditClicked.bind(this)
     this.onFieldChanged = this.onFieldChanged.bind(this)
-    this.getTotalAmount = this.getTotalAmount.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
@@ -59,9 +58,7 @@ class Form extends Component {
           const field = registration.fields[key]
 
           if (FormService.isMultipleChoices(field.type)) {
-            const orderedChoices = Object.keys(field.choices).sort((a, b) => {
-              return field.choices[a].order > field.choices[b].order
-            })
+            const orderedChoices = FormService.getOrderedChoices(field.choices)
 
             field.value = FormService.isMultipleValues(field.type) ? [] : orderedChoices.length > 0 ? orderedChoices[0] : ''
           } else {
@@ -130,64 +127,63 @@ class Form extends Component {
     }
   }
 
-  async checkoutCallback (checkoutResponse) {
-    const { base, routeParams } = this.props
-    const { registration } = this.state
+  async onSubmit (e) {
+    e.preventDefault()
+
+    const { base } = this.props
+    const { checkout, form, registration } = this.state
+
+    this.setState({
+      isLoading: true
+    })
 
     try {
-      const token = await base.auth().currentUser.getToken()
-      const source = checkoutResponse.id
-      const form = routeParams.form
+      const token = base.auth().currentUser ? await base.auth().currentUser.getToken() : undefined
+      const registrationId = await RegistrationService.create(base, registration)
 
-      const response = await PaymentService.charge({
-        form,
-        source,
+      const { amount } = await PaymentService.amount({
+        registrationId,
         token
       })
 
-      const json = await response.json()
-
-      await RegistrationService.create(base, Object.assign(registration, json))
-
-      browserHistory.push('/me')
+      this.setState({
+        isLoading: false,
+        registrationId
+      }, () => {
+        checkout.open({
+          name: 'form.pierluc.io',
+          description: form.title || '',
+          currency: 'cad',
+          amount
+        })
+      })
     } catch (error) {
       console.error(error)
     }
   }
 
-  getTotalAmount () {
-    const { registration } = this.state
+  async checkoutCallback (checkoutResponse) {
+    const { base } = this.props
+    const { registrationId } = this.state
 
-    console.info(registration)
-
-    return Object.keys(registration.fields).reduce((amount, key) => {
-      const field = registration.fields[key]
-
-      if (FormService.isMultipleChoices(field.type)) {
-        const choices = Array.isArray(field.value) ? field.value : [field.value]
-
-        return choices.reduce((amount, key) => field.choices[key].amountCents || 0)
-      }
-
-      return 0
-    }, 0)
-  }
-
-  onSubmit (e) {
-    e.preventDefault()
-
-    const { checkout, form } = this.state
-
-    const amount = this.getTotalAmount()
-
-    console.info(amount)
-
-    checkout.open({
-      name: 'form.pierluc.io',
-      description: form.title || '',
-      currency: 'cad',
-      amount
+    this.setState({
+      isLoading: true
     })
+
+    try {
+      const token = base.auth().currentUser ? await base.auth().currentUser.getToken() : undefined
+      const source = checkoutResponse.id
+
+      await PaymentService.charge({
+        registrationId,
+        source,
+        token
+      })
+
+      browserHistory.push('/me')
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   getHeaderStyle (form) {

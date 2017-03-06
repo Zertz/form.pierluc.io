@@ -24,8 +24,8 @@ class PaymentService {
     })
   }
 
-  connect (options) {
-    const { Request, Headers, fetch } = window
+  async connect (options) {
+    const { Request, fetch } = window
 
     if (!options) {
       throw new Error('options must be specified')
@@ -41,21 +41,21 @@ class PaymentService {
       throw new Error('options.token must be a string')
     }
 
-    const request = new Request(`${AppService.getApiUrl()}/stripeConnect`, {
+    const headers = AppService.getRequestHeaders({
+      token
+    })
+
+    const request = new Request(`${AppService.getApiUrl()}/stripeConnect`,  Object.assign(AppService.getRequestOptions(), {
       method: 'post',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'omit',
-      headers: new Headers({
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }),
+      headers,
       body: JSON.stringify({
         code
       })
-    })
+    }))
 
-    return fetch(request)
+    const response = await fetch(request)
+
+    return response.json()
   }
 
   initialize (options) {
@@ -77,48 +77,69 @@ class PaymentService {
     })
   }
 
-  charge (options) {
-    const { Request, Headers, fetch } = window
+  async amount (options) {
+    const { Request, fetch } = window
 
     if (!options) {
       throw new Error('options must be specified')
     }
 
-    const { form, source, token } = options
+    const { registrationId, token } = options
 
-    if (typeof form !== 'string') {
-      throw new Error('options.form must be a string')
+    if (typeof registrationId !== 'string') {
+      throw new Error('options.registrationId must be a string')
+    }
+
+    const headers = AppService.getRequestHeaders({
+      token
+    })
+
+    const request = new Request(`${AppService.getApiUrl()}/registrationAmount`, Object.assign(AppService.getRequestOptions(), {
+      method: 'post',
+      headers,
+      body: JSON.stringify({
+        registrationId
+      })
+    }))
+
+    const response = await fetch(request)
+
+    return response.json()
+  }
+
+  async charge (options) {
+    const { Request, fetch } = window
+
+    if (!options) {
+      throw new Error('options must be specified')
+    }
+
+    const { registrationId, source, token } = options
+
+    if (typeof registrationId !== 'string') {
+      throw new Error('options.registrationId must be a string')
     }
 
     if (typeof source !== 'string') {
       throw new Error('options.source must be a string')
     }
 
-    if (token && typeof token !== 'string') {
-      throw new Error('options.token must be a string')
-    }
-
-    const headers = new Headers({
-      'Content-Type': 'application/json'
+    const headers = AppService.getRequestHeaders({
+      token
     })
 
-    if (token) {
-      headers.set('Authorization', `Bearer ${token}`)
-    }
-
-    const request = new Request(`${AppService.getApiUrl()}/stripeCharge`, {
+    const request = new Request(`${AppService.getApiUrl()}/stripeCharge`, Object.assign(AppService.getRequestOptions(), {
       method: 'post',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'omit',
       headers,
       body: JSON.stringify({
-        form,
+        registrationId,
         source
       })
-    })
+    }))
 
-    return fetch(request)
+    const response = await fetch(request)
+
+    return response.json()
   }
 }
 
