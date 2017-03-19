@@ -37,7 +37,7 @@ class Connect extends Component {
       const connect = await PaymentService.connect({ code, token })
 
       this.setState({
-        isConnected: connect.ok,
+        isConnected: true,
         connect
       })
     } catch (error) {

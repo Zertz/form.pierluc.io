@@ -34,7 +34,7 @@ class Form extends Component {
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-  async componentDidMount () {
+  componentDidMount () {
     const { base, routeParams } = this.props
 
     this.ref = base.listenTo(`forms/${routeParams.form}`, {
@@ -150,12 +150,16 @@ class Form extends Component {
         isLoading: false,
         registrationId
       }, () => {
-        checkout.open({
-          name: 'form.pierluc.io',
-          description: form.title || '',
-          currency: 'cad',
-          amount
-        })
+        if (amount && Number(amount) > 0) {
+          checkout.open({
+            name: 'form.pierluc.io',
+            description: form.title || '',
+            currency: 'cad',
+            amount
+          })
+        } else {
+          browserHistory.push('/me')
+        }
       })
     } catch (error) {
       console.error(error)

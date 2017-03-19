@@ -8,6 +8,5 @@
 }
 
 .Create > .ButtonGroup {
-  display: flex;
   justify-content: space-around;
 }

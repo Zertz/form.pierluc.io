@@ -57,7 +57,7 @@ class Form extends Component {
     this.updateFieldOrder = this.updateFieldOrder.bind(this)
   }
 
-  async componentDidMount () {
+  componentDidMount () {
     const { base, routeParams } = this.props
 
     this.ref = base.listenTo(`forms/${routeParams.form}`, {

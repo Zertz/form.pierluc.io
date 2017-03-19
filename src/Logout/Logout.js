@@ -1,17 +1,20 @@
 import React, {Component} from 'react'
 import {FormattedMessage} from 'react-intl'
+import {browserHistory} from 'react-router'
 
 import './Logout.css'
 
 class Logout extends Component {
-  componentDidMount () {
+  async componentDidMount () {
     const { base } = this.props
 
-    base.auth().signOut().then(() => {
-      this.props.router.push('/')
-    }, (err) => {
-      console.error(err)
-    })
+    try {
+      await base.auth().signOut()
+
+      browserHistory.push('/')
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   render () {

@@ -36,8 +36,8 @@ class Header extends Component {
                 <div className='ProfileImage' style={{backgroundImage: `url('${user.photoURL || ''}')`}} />
               </HeaderLink>
             ) : (
-              <HeaderLink to='/connect'>
-                <FormattedMessage id='Header.Connect' defaultMessage='Connect' />
+              <HeaderLink to='/sign-in'>
+                <FormattedMessage id='Header.SignIn' defaultMessage='Sign in' />
               </HeaderLink>
             )}
           </li>

@@ -13,6 +13,12 @@ import Text from '../Text'
 import Title from '../Title'
 
 class Profile extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {}
+  }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.user) {
       this.setState({
@@ -26,7 +32,7 @@ class Profile extends Component {
 
   render () {
     const { base, user } = this.props
-    const { queries } = this.state || {}
+    const { queries } = this.state
 
     return user ? (
       <div className='Profile'>
@@ -58,8 +64,8 @@ class Profile extends Component {
         <hr />
         <FormList base={base} queries={queries} />
         <hr />
-        <Link className='Button cancel' to='/disconnect'>
-          <FormattedMessage id='Profile.Disconnect' defaultMessage='Disconnect' />
+        <Link className='Button cancel' to='/sign-out'>
+          <FormattedMessage id='Profile.SignOut' defaultMessage='Sign out' />
         </Link>
       </div>
     ) : <Loading />

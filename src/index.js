@@ -58,8 +58,8 @@ ReactDOM.render((
           <IndexRoute component={Profile} />
           <Route path='connect' component={Connect} />
         </Route>
-        <Route path='connect' component={Login} />
-        <Route path='disconnect' component={Logout} />
+        <Route path='sign-in' component={Login} />
+        <Route path='sign-out' component={Logout} />
       </Route>
     </Router>
   </IntlProvider>

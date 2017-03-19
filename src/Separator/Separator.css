@@ -1,0 +1,15 @@
+.Separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(to right, rgba(33, 33, 33, 0.0625), rgba(33, 33, 33, 0.25), rgba(33, 33, 33, 0.0625));
+  margin: 2em 0;
+  width: 100%;
+  height: 1px;
+}
+
+.Separator > * {
+  background-color: white;
+  margin: 0;
+  padding: 0 0.5em;
+}

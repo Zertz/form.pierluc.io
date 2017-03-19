@@ -1,8 +1,25 @@
+import Rebase from 're-base'
 import uuid from 'uuid'
 
 class AppService {
   isProduction () {
     return process.env.NODE_ENV === 'production'
+  }
+
+  initializeFirebase () {
+    return Rebase.createClass(this.isProduction() ? {
+      apiKey: process.env.REACT_APP_FIREBASE_API_KEY_LIVE,
+      authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN_LIVE,
+      databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL_LIVE,
+      storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET_LIVE,
+      messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_ID_LIVE
+    } : {
+      apiKey: process.env.REACT_APP_FIREBASE_API_KEY_TEST,
+      authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN_TEST,
+      databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL_TEST,
+      storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET_TEST,
+      messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_ID_TEST
+    })
   }
 
   getApiUrl () {

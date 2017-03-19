@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
-import Rebase from 're-base'
 
 import './App.css'
+
+import AppService from '../AppService'
 
 import Header from '../Header'
 import Footer from '../Footer'
@@ -10,13 +11,7 @@ class App extends Component {
   constructor (props) {
     super(props)
 
-    const base = Rebase.createClass({
-      apiKey: 'AIzaSyBH3i6QPS7Dd1Bjs-fdO-Q5oUPMhPtYiPM',
-      authDomain: 'form-pierluc-io-1642a.firebaseapp.com',
-      databaseURL: 'https://form-pierluc-io-1642a.firebaseio.com',
-      storageBucket: 'form-pierluc-io-1642a.appspot.com',
-      messagingSenderId: '1040118765063'
-    })
+    const base = AppService.initializeFirebase()
 
     this.state = { base }
   }

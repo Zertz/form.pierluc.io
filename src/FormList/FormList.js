@@ -17,7 +17,7 @@ class FormList extends Component {
   componentDidMount () {
     const { base, queries } = this.props
 
-    this.ref = base.syncState('forms', {
+    this.ref = base.bindToState('forms', {
       context: this,
       state: 'forms',
       asArray: true,
@@ -28,6 +28,9 @@ class FormList extends Component {
         this.setState({
           isLoading: false
         })
+      },
+      onFailure (error) {
+        console.error(error)
       }
     })
   }

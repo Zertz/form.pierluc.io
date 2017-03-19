@@ -45,7 +45,7 @@ class PaymentService {
       token
     })
 
-    const request = new Request(`${AppService.getApiUrl()}/stripeConnect`,  Object.assign(AppService.getRequestOptions(), {
+    const request = new Request(`${AppService.getApiUrl()}/stripeConnect`, Object.assign(AppService.getRequestOptions(), {
       method: 'post',
       headers,
       body: JSON.stringify({

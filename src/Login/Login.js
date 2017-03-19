@@ -1,59 +1,93 @@
 import React, {Component} from 'react'
-import {FormattedMessage} from 'react-intl'
+import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl'
+import {browserHistory} from 'react-router'
+
+import facebook from './facebook.svg'
+import github from './github.svg'
+import google from './google.svg'
+import twitter from './twitter.svg'
 
 import './Login.css'
 
 import Button from '../Button'
 import ButtonGroup from '../ButtonGroup'
 
+const messages = defineMessages({
+  signInWithFacebook: {
+    id: 'Login.SignInWithFacebook',
+    defaultMessage: 'Sign in with Facebook'
+  },
+  signInWithGitHub: {
+    id: 'Login.SignInWithGitHub',
+    defaultMessage: 'Sign in with GitHub'
+  },
+  signInWithGoogle: {
+    id: 'Login.SignInWithGoogle',
+    defaultMessage: 'Sign in with Google'
+  },
+  signInWithTwitter: {
+    id: 'Login.SignInWithTwitter',
+    defaultMessage: 'Sign in with Twitter'
+  }
+})
+
 class Login extends Component {
   constructor (props) {
     super(props)
 
-    this.onFacebook = this.onFacebook.bind(this)
-    this.onGithub = this.onGithub.bind(this)
-    this.onGoogle = this.onGoogle.bind(this)
-
-    this.connectWith = this.connectWith.bind(this)
+    this.onSignInWith = this.onSignInWith.bind(this)
   }
 
-  onFacebook () {
-    this.connectWith(new this.props.base.auth.FacebookAuthProvider())
-  }
+  onSignInWith (Provider) {
+    return async () => {
+      const { base } = this.props
 
-  onGithub () {
-    this.connectWith(new this.props.base.auth.GithubAuthProvider())
-  }
+      try {
+        await base.auth().signInWithPopup(new Provider())
 
-  onGoogle () {
-    this.connectWith(new this.props.base.auth.GoogleAuthProvider())
-  }
-
-  // Third-party authentication
-  connectWith (provider) {
-    const { base, router } = this.props
-
-    base.auth().signInWithPopup(provider).then((res) => {
-      router.push('/')
-    }).catch((err) => {
-      console.error(err)
-    })
+        browserHistory.push('/me')
+      } catch (error) {
+        console.error(error)
+      }
+    }
   }
 
   render () {
+    const { base, intl } = this.props
+
+    const {
+      FacebookAuthProvider,
+      GithubAuthProvider,
+      GoogleAuthProvider,
+      TwitterAuthProvider
+    } = base.auth
+
     return (
       <div className='Login'>
         <div className='LoginTitle Title'>
-          <FormattedMessage id='Login.Connect' defaultMessage='Connect' />
+          <FormattedMessage id='Login.LogInSignUpWith' defaultMessage='Sign in to get started' />
         </div>
         <ButtonGroup>
-          <Button onClick={this.onFacebook}>Facebook</Button>
-          <Button onClick={this.onGoogle}>Google</Button>
-          <Button onClick={this.onGithub}>GitHub</Button>
+          <Button className='LoginButton Facebook' onClick={this.onSignInWith(FacebookAuthProvider)}>
+            <img src={facebook} alt={intl.formatMessage(messages.signInWithFacebook)} />
+          </Button>
+          <Button className='LoginButton Google' onClick={this.onSignInWith(GoogleAuthProvider)}>
+            <img src={google} alt={intl.formatMessage(messages.signInWithGoogle)} />
+          </Button>
+          <Button className='LoginButton Twitter' onClick={this.onSignInWith(TwitterAuthProvider)}>
+            <img src={twitter} alt={intl.formatMessage(messages.signInWithTwitter)} />
+          </Button>
+          <Button className='LoginButton GitHub' onClick={this.onSignInWith(GithubAuthProvider)}>
+            <img src={github} alt={intl.formatMessage(messages.signInWithGitHub)} />
+          </Button>
         </ButtonGroup>
       </div>
     )
   }
 }
 
-export default Login
+Login.propTypes = {
+  intl: intlShape.isRequired
+}
+
+export default injectIntl(Login)
