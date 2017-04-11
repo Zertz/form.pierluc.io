@@ -18,8 +18,6 @@ class FieldRenderer extends Component {
         return Select
       case 'checkbox':
         return CheckboxGroup
-      default:
-        return
     }
   }
 
