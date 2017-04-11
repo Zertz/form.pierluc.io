@@ -1,17 +1,17 @@
-.FormList {
+.RegistrationList {
   display: flex;
   flex-wrap: wrap;
   padding-top: 1em;
   width: calc(100% + 2em)
 }
 
-.FormList > .FormListItem {
+.RegistrationList > .RegistrationListItem {
   box-shadow: 0 0 5px 0 #BDBDBD;
   margin: 0 2em 2em 0;
   width: 100%;
 }
 
-.FormList > .FormListItem > .FormListItemHeader {
+.RegistrationList > .RegistrationListItem > .RegistrationListItemHeader {
   background-color: #C2185B;
   background-position: center center;
   background-repeat: no-repeat;
@@ -20,31 +20,25 @@
   height: 150px;
 }
 
-.FormList > .FormListItem > .FormListItemContent {
-  display: flex;
-  flex-direction: column;
+.RegistrationList > .RegistrationListItem > .RegistrationListItemContent {
   padding: 0.5em;
   height: 75px;
 }
 
-.FormList > .FormListItem > .FormListItemContent > *:not(:last-child) {
-  margin-bottom: 0.5em
-}
-
 @media (min-width: 667px) {
-  .FormList > .FormListItem {
+  .RegistrationList > .RegistrationListItem {
     width: calc(50% - 2em);
   }
 }
 
 @media (min-width: 1024px) {
-  .FormList > .FormListItem {
+  .RegistrationList > .RegistrationListItem {
     width: calc(33.33% - 2em);
   }
 }
 
 @media (min-width: 1440px) {
-  .FormList > .FormListItem {
+  .RegistrationList > .RegistrationListItem {
     width: calc(25% - 2em);
   }
 }

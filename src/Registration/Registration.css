@@ -1,0 +1,27 @@
+.Registration {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.Registration > .RegistrationHeader {
+  background-color: #C2185B;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0 0 1em -1em;
+  padding: 0.5em;
+  width: calc(100% + 1em);
+  height: 200px;
+}
+
+.Registration > .RegistrationContent {
+  margin: 0 auto;
+  max-width: 667px;
+  width: 100%;
+}
+
+.Registration > .RegistrationContent > .RegistrationForm {
+  box-shadow: 0 0 2.5px 0 #BDBDBD;
+  padding: 1em;
+}

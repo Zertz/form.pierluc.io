@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {FormattedMessage} from 'react-intl'
 import {Link} from 'react-router'
 
 import './FormList.css'
@@ -17,7 +18,7 @@ class FormList extends Component {
   componentDidMount () {
     const { base, queries } = this.props
 
-    this.ref = base.bindToState('forms', {
+    this.formsRef = base.bindToState('forms', {
       context: this,
       state: 'forms',
       asArray: true,
@@ -38,7 +39,7 @@ class FormList extends Component {
   componentWillUnmount () {
     const { base } = this.props
 
-    base.removeBinding(this.ref)
+    base.removeBinding(this.formsRef)
   }
 
   getHeaderStyle (form) {
@@ -57,6 +58,12 @@ class FormList extends Component {
             <div className='FormListItemHeader' style={this.getHeaderStyle(form)} />
             <div className='FormListItemContent'>
               <Link to={`/browse/${form.key}`}>{form.title || form.key}</Link>
+              <Link to={`/browse/${form.key}/edit`}>
+                <FormattedMessage id='FormList.Edit' defaultMessage='Edit' />
+              </Link>
+              <Link to={`/browse/${form.key}/registrations`}>
+                <FormattedMessage id='FormList.Registrations' defaultMessage='Registrations' />
+              </Link>
             </div>
           </li>
         ))}

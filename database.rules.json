@@ -3,7 +3,7 @@
     "forms": {
       ".read": true,
       ".write": "auth != null",
-      ".indexOn": "user",
+      ".indexOn": ["user"],
       "$id": {
         ".write": "auth.uid === data.child('user').val()"
       }
@@ -11,7 +11,7 @@
     "registrations": {
       ".read": true,
       ".write": "auth != null",
-      ".indexOn": "user",
+      ".indexOn": ["form", "user"],
       "$id": {
         ".read": "auth.uid === data.child('user').val() || root.child('users/' + auth.uid + '/forms/' + $id).exists()",
         ".write": "auth.uid === data.child('user').val()"

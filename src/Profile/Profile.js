@@ -20,14 +20,12 @@ class Profile extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.user) {
-      this.setState({
-        queries: {
-          orderByChild: 'user',
-          equalTo: nextProps.user.uid
-        }
-      })
-    }
+    this.setState({
+      queries: {
+        orderByChild: 'user',
+        equalTo: nextProps.user ? nextProps.user.uid : undefined
+      }
+    })
   }
 
   render () {

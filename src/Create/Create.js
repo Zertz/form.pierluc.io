@@ -11,7 +11,6 @@ import Button from '../Button'
 import ButtonGroup from '../ButtonGroup'
 import Loading from '../Loading'
 import Text from '../Text'
-import Title from '../Title'
 
 const messages = defineMessages({
   firstName: {
@@ -100,9 +99,6 @@ class Create extends Component {
       </Loading>
     ) : (
       <div className='Create'>
-        <Title>
-          <FormattedMessage id='Create.CreateAForm' defaultMessage='Create' />
-        </Title>
         <Text>
           <FormattedMessage id='Create.GetStartedQuickly' defaultMessage="We can create a few common fields to help you get started started quickly, or you can do it all by yourself. Either way, you'll be able to tailor your Form according to your needs." />
         </Text>

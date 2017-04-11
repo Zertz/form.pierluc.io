@@ -16,6 +16,7 @@ import './index.css'
 import App from './App'
 import Browse from './Browse'
 import BrowseForm from './BrowseForm'
+import BrowseRegistration from './BrowseRegistration'
 import Connect from './Connect'
 import Create from './Create'
 import EditableForm from './EditableForm'
@@ -26,6 +27,8 @@ import Login from './Login'
 import Logout from './Logout'
 import Me from './Me'
 import Profile from './Profile'
+import Registration from './Registration'
+import RegistrationList from './RegistrationList'
 
 const language = (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
 const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0]
@@ -51,6 +54,10 @@ ReactDOM.render((
           <Route path=':form' component={BrowseForm}>
             <IndexRoute component={Form} />
             <Route path='edit' component={EditableForm} />
+            <Route path='registrations' component={BrowseRegistration}>
+              <IndexRoute component={RegistrationList} />
+              <Route path=':registration' component={Registration} />
+            </Route>
           </Route>
         </Route>
         <Route path='Create' component={Create} />

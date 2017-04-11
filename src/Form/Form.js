@@ -35,9 +35,9 @@ class Form extends Component {
   }
 
   componentDidMount () {
-    const { base, routeParams } = this.props
+    const { base, params } = this.props
 
-    this.ref = base.listenTo(`forms/${routeParams.form}`, {
+    this.formRef = base.listenTo(`forms/${params.form}`, {
       context: this,
       then (form) {
         if (!form || this.state.form) {
@@ -47,6 +47,7 @@ class Form extends Component {
         }
 
         const registration = {
+          form: params.form,
           fields: cloneDeep(form.fields)
         }
 
@@ -81,7 +82,7 @@ class Form extends Component {
   componentWillUnmount () {
     const { base } = this.props
 
-    base.removeBinding(this.ref)
+    base.removeBinding(this.formRef)
   }
 
   scrollIntoView (ref) {
@@ -98,9 +99,9 @@ class Form extends Component {
   }
 
   onEditClicked () {
-    const { routeParams } = this.props
+    const { params } = this.props
 
-    browserHistory.push(`/browse/${routeParams.form}/edit`)
+    browserHistory.push(`/browse/${params.form}/edit`)
   }
 
   onFieldChanged (key) {

@@ -58,9 +58,9 @@ class Form extends Component {
   }
 
   componentDidMount () {
-    const { base, routeParams } = this.props
+    const { base, params } = this.props
 
-    this.ref = base.listenTo(`forms/${routeParams.form}`, {
+    this.formRef = base.listenTo(`forms/${params.form}`, {
       context: this,
       then (form) {
         const state = { form }
@@ -98,7 +98,7 @@ class Form extends Component {
   componentWillUnmount () {
     const { base } = this.props
 
-    base.removeBinding(this.ref)
+    base.removeBinding(this.formRef)
   }
 
   onCoverImageClicked () {
@@ -114,7 +114,7 @@ class Form extends Component {
   }
 
   async onCoverImageModalSaveClicked () {
-    const { base, routeParams } = this.props
+    const { base, params } = this.props
     const { isUploadingCoverImage, form } = this.state
 
     if (form.coverImage === isUploadingCoverImage) {
@@ -129,10 +129,10 @@ class Form extends Component {
     try {
       if (isUploadingCoverImage) {
         await base.database().ref().update({
-          [`forms/${routeParams.form}/coverImage`]: isUploadingCoverImage
+          [`forms/${params.form}/coverImage`]: isUploadingCoverImage
         })
       } else {
-        await base.database().ref(`forms/${routeParams.form}/coverImage`).remove()
+        await base.database().ref(`forms/${params.form}/coverImage`).remove()
       }
     } catch (error) {
       console.error(error)
@@ -183,7 +183,7 @@ class Form extends Component {
   }
 
   async onModalFieldEditorSave (e, field) {
-    const { base, routeParams } = this.props
+    const { base, params } = this.props
     const { isEditingField, form } = this.state
 
     if (form.fields[isEditingField] === field) {
@@ -198,7 +198,7 @@ class Form extends Component {
 
     try {
       await base.database().ref().update({
-        [`forms/${routeParams.form}/fields/${isEditingField}`]: field
+        [`forms/${params.form}/fields/${isEditingField}`]: field
       })
     } catch (error) {
       console.error(error)
@@ -233,7 +233,7 @@ class Form extends Component {
 
   onRemoveFieldDialogConfirmClicked (key) {
     return async () => {
-      const { base, routeParams } = this.props
+      const { base, params } = this.props
       const { form } = this.state
 
       this.setState({
@@ -241,7 +241,7 @@ class Form extends Component {
       })
 
       try {
-        await base.database().ref(`forms/${routeParams.form}/fields/${key}`).remove()
+        await base.database().ref(`forms/${params.form}/fields/${key}`).remove()
       } catch (error) {
         console.error(error)
       }
@@ -268,7 +268,7 @@ class Form extends Component {
   }
 
   async onTitleSaved (title) {
-    const { base, routeParams } = this.props
+    const { base, params } = this.props
     const { form } = this.state
 
     if (form.title === title) {
@@ -281,7 +281,7 @@ class Form extends Component {
 
     try {
       await base.database().ref().update({
-        [`forms/${routeParams.form}/title`]: title
+        [`forms/${params.form}/title`]: title
       })
     } catch (error) {
       console.error(error)
@@ -289,7 +289,7 @@ class Form extends Component {
   }
 
   async onFieldOrderChanged (dragField, dropField) {
-    const { base, routeParams } = this.props
+    const { base, params } = this.props
     const { form } = this.state
 
     if (dragField === dropField) {
@@ -302,8 +302,8 @@ class Form extends Component {
 
     try {
       await base.database().ref().update({
-        [`forms/${routeParams.form}/fields/${dragField}/order`]: form.fields[dropField].order,
-        [`forms/${routeParams.form}/fields/${dropField}/order`]: form.fields[dragField].order
+        [`forms/${params.form}/fields/${dragField}/order`]: form.fields[dropField].order,
+        [`forms/${params.form}/fields/${dropField}/order`]: form.fields[dragField].order
       })
     } catch (error) {
       console.error(error)
@@ -323,7 +323,7 @@ class Form extends Component {
   }
 
   async updateFieldOrder () {
-    const { base, routeParams } = this.props
+    const { base, params } = this.props
     const { form } = this.state
 
     const sortedFields = FormService.getOrderedChoices(form.fields)
@@ -347,12 +347,12 @@ class Form extends Component {
 
       orderedChoices.forEach((choiceKey, index) => {
         if (form.fields[key].choices[choiceKey].order !== index) {
-          fieldsUpdate[`forms/${routeParams.form}/fields/${key}/choices/${choiceKey}/order`] = index
+          fieldsUpdate[`forms/${params.form}/fields/${key}/choices/${choiceKey}/order`] = index
         }
       })
 
       if (form.fields[key].order !== order) {
-        fieldsUpdate[`forms/${routeParams.form}/fields/${key}/order`] = order
+        fieldsUpdate[`forms/${params.form}/fields/${key}/order`] = order
       }
     })
 

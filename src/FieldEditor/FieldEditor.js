@@ -22,8 +22,6 @@ class FieldEditor extends Component {
       onChoiceChanged
     } = this.props
 
-    const orderedChoices = FormService.getOrderedChoices(field.choices)
-
     return (
       <div className='FieldEditor'>
         <Title>
@@ -41,7 +39,7 @@ class FieldEditor extends Component {
               <FormattedMessage id='FieldEditor.AddChoice' defaultMessage='Add choice' />
             </Button>
             <div className='FieldEditorChoicesList'>
-              {orderedChoices.map((key) => (
+              {FormService.getOrderedChoices(field.choices).map((key) => (
                 <div className='FieldEditorChoicesListItem' key={key}>
                   <DraggableFieldChoice choice={field.choices[key]} onChange={onChoiceChanged(key)} />
                 </div>
